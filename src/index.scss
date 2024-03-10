@@ -1,0 +1,135 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:wght@600&display=swap");
+@import "assets/styles/_reset.scss";
+
+:root {
+  --font-inter: "Inter", sans-serif;
+  --font-lora: "Lora", serif;
+  --primary-900: #002324;
+  --primary-800: #004548;
+  --primary-700: #00686c;
+  --primary-600: #008287;
+  --primary-500: #00adb4;
+  --primary-400: #33bdc3;
+  --primary-300: #66ced2;
+  --primary-200: #99dee1;
+  --primary-100: #cceff0;
+
+  --secondary-900: #33150a;
+  --secondary-800: #662914;
+  --secondary-700: #983e1e;
+  --secondary-600: #cb5228;
+  --secondary-500: #fe6732;
+  --secondary-400: #fe855b;
+  --secondary-300: #fea484;
+  --secondary-200: #ffc2ad;
+  --secondary-100: #ffe1d6;
+
+  --tertiary-900: #33270d;
+  --tertiary-800: #664f19;
+  --tertiary-700: #997626;
+  --tertiary-600: #cc9e32;
+  --tertiary-500: #ffc53f;
+  --tertiary-400: #ffd165;
+  --tertiary-300: #ffdc8c;
+  --tertiary-200: #ffe8b2;
+  --tertiary-100: #fff3d9;
+
+  --gray-900: #263238;
+  --gray-800: #424242;
+  --gray-700: #616161;
+  --gray-600: #546e7a;
+  --gray-500: #757575;
+  --gray-400: #78909c;
+  --gray-300: #90a4ae;
+  --gray-200: #b0bec5;
+  --gray-100: #d0d9dd;
+
+  --black: #000000;
+  --white: #ffffff;
+
+  --error: #d32f2f;
+  --error-: #ffe5e8;
+
+  --success: #2e7d32;
+  --success-: #dcefdd;
+}
+
+html[data-theme="primary"] {
+  --th-font-lora: var(--font-lora);
+  --th-font-inter: var(--font-inter);
+
+  --th-img-background: url("assets/images/background.png");
+  --th-color-background: var(--primary-500);
+
+  --th-color-card: var(--white);
+  --th-color-button: var(--primary-600);
+  --th-color-button-focus: var(--primary-700);
+  --th-color-button-back: var(--white);
+  --th-color-button-hover: var(--primary-500);
+  --th-color-input-focus: var(--gray-800);
+  --th-color-text-button: var(--white);
+  --th-color-text-button-back: var(--primary-600);
+  --th-color-text-forgotten-password: var(--primary-500);
+  --th-color-text-label: var(--gray-800);
+  --th-color-text-input: var(--gray-500);
+  --th-color-text-footer: var(--gray-700);
+  --th-color-text-link: var(--primary-600);
+  --th-color-text-card-header: var(--gray-500);
+  --th-color-text-highlight: var(--primary-500);
+  --th-color-text-warning: var(--gray-700);
+  --th-shadow: 0px 2px 4px var(--gray-400);
+  --th-icon-eye: var(--gray-500);
+  --th-color-input-select: var(--white);
+  --th-color-text-input-selected: var(--gray-500);
+  --th-color-text-error: var(--error);
+}
+
+// html[data-theme='secondary'] {
+// }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 120%;
+  font-weight: 600;
+  font-family: var(--font-inter);
+}
+h1 {
+  font-size: 64px;
+}
+h2 {
+  font-size: 56px;
+}
+h3 {
+  font-size: 48px;
+}
+h4 {
+  font-size: 40px;
+}
+h5 {
+  font-size: 32px;
+}
+h6 {
+  font-size: 24px;
+}
+body {
+  font-family: var(--th-font-inter);
+  font-weight: 400;
+  font-weight: 150%;
+  height: 100%;
+}
+button {
+  font-family: var(--th-font-inter);
+  font-weight: 600;
+  line-height: 150%;
+}
+
+@mixin text-button($size) {
+  font-family: var(--th-font-inter);
+  font-weight: 600;
+  line-height: 150%;
+  font-size: $size;
+}
