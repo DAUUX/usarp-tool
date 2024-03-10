@@ -1,0 +1,34 @@
+.input__password {
+  display: flex;
+  align-items: center;
+  border-radius: 1rem;
+  border: 2px solid var(--th-color-text-input);
+  input {
+    padding: 0.8rem;
+    font-size: 1rem;
+    width: 90%;
+    border: none;
+    margin: 0.2rem;
+    color: var(--th-color-text-input);
+    &:focus {
+      outline: none;
+      color: var(--th-color-text-selected);
+    }
+  }
+  &:focus-within {
+    outline: var(--th-color-input-focus) auto 2px;
+  }
+  button {
+    width: 10%;
+    background: transparent;
+    height: 3rem;
+    border-radius: 1rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:focus-within {
+      outline: var(--th-color-input-focus) auto 1px;
+    }
+  }
+}

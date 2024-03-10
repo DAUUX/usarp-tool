@@ -1,0 +1,47 @@
+.InputDropdown {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 12vh;
+
+  label {
+    margin-bottom: 1rem;
+    color: var(--th-color-text-label);
+    /* Body/Medium */
+    font-family: Inter;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 1.5rem */
+  }
+  select {
+    border-radius: 1rem;
+    border: 1px solid var(--th-color-text-input);
+    padding: 1rem;
+    font-size: 1rem;
+    &:focus {
+      outline: var(--th-color-input-focus) auto 1px;
+      color: var(--th-color-text-label);
+    }
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("/src/assets/icons/arrow.svg");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem top 50%;
+    background-size: 1.65rem auto;
+    cursor: pointer;
+    background-color: var(--th-color-input-select);
+
+    &::after {
+      border-radius: 1rem !important;
+      border: 1px solid var(--th-color-text-input);
+    }
+    &::before {
+      border-radius: 1rem !important;
+      border: 1px solid var(--th-color-text-input);
+    }
+  }
+  select {
+    color: var(--th-color-text-input-selected);
+  }
+}

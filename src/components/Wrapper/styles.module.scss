@@ -1,0 +1,21 @@
+.wrapper {
+  background: var(--th-color-background);
+  background-image: var(--th-img-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+.card {
+  background: var(--th-color-card);
+  box-shadow: var(--th-shadow);
+  border-radius: 1.5rem;
+  padding: 3rem;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
