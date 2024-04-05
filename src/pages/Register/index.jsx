@@ -7,8 +7,9 @@ import toast, { Toaster } from "react-hot-toast";
 import StepThree from "./StepThree";
 import axios from "axios";
 import { StepStatus } from "../../components/StepStatus";
-const baseURL =
-  "https://3821-2804-29b8-5004-40de-f4cf-ca85-a939-f924.ngrok-free.app";
+import { URL as baseURL } from "../../utils/base";
+import { IconChoice } from "../../utils/IconChoice";
+import { Toast } from "../../components/Toast";
 
 export default function Register() {
   const [steps, setSteps] = useState([]);
@@ -32,7 +33,28 @@ export default function Register() {
     axios
       .post(baseURL + "/users", body)
       .then(() => {
-        toast.success("Cadastro realizado com sucesso!");
+        toast(
+          (t) => (
+            <Toast
+              type={"success"}
+              message={"Cadastro realizado com sucesso!"}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              <IconChoice
+                icon="check"
+                width="24px"
+                height="24px"
+                color="#fff"
+              />
+            </Toast>
+          ),
+          {
+            style: {
+              backgroundColor: "var(--th-color-text-success)",
+              borderRadius: "10px",
+            },
+          }
+        );
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -40,7 +62,28 @@ export default function Register() {
       .catch((err) => {
         console.log(err);
         setSteps(steps.splice(steps.length, steps.length - 1));
-        toast.error("Error Inesperado!");
+        toast(
+          (t) => (
+            <Toast
+              type={"error"}
+              message={"Error Inesperado!"}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              <IconChoice
+                icon="close"
+                width="24px"
+                height="24px"
+                color="#fff"
+              />
+            </Toast>
+          ),
+          {
+            style: {
+              backgroundColor: "var(--th-color-text-error)",
+              borderRadius: "10px",
+            },
+          }
+        );
       });
   };
 
@@ -63,8 +106,8 @@ export default function Register() {
             <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
             <StepStatus.Circle
               text={"3"}
-              color={steps.length >= 2  ? "#ffff" : "#004548"}
-              background={steps.length >= 2  ? "#00686C" : "#CCEFF0"}
+              color={steps.length >= 2 ? "#ffff" : "#004548"}
+              background={steps.length >= 2 ? "#00686C" : "#CCEFF0"}
             />
           </StepStatus.Root>
         </StepOne>
@@ -115,8 +158,8 @@ export default function Register() {
             <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
             <StepStatus.Circle
               text={"2"}
-              color={steps.length === 1  ? "#ffff" : "#004548"}
-              background={steps.length === 1  ? "#00686C" : "#CCEFF0"}
+              color={steps.length === 1 ? "#ffff" : "#004548"}
+              background={steps.length === 1 ? "#00686C" : "#CCEFF0"}
             />
             <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
             <StepStatus.Circle
@@ -153,4 +196,3 @@ export default function Register() {
     </Wrapper>
   );
 }
-

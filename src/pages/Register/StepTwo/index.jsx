@@ -36,13 +36,13 @@ export default function StepTwo({ fullName, next, previous, children }) {
 
   return (
     <div className={styles.card__container}>
+      {children}
       <section className={styles.card__header}>
         <h6>
           Muito bem, <b>{fullName}!</b> Estamos quase lá, agora crie uma{" "}
           <b>senha</b> segura para proteger sua conta.
         </h6>
       </section>
-      {children}
       <section className={styles.card__body}>
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
@@ -54,6 +54,8 @@ export default function StepTwo({ fullName, next, previous, children }) {
               name="password"
               id="password"
               placeholder="•••••••••"
+              minLength="6"
+              required={errors.password ? true : false}
             />
             {errors.password && (
               <p hidden className={styles.card__error}>
@@ -66,7 +68,11 @@ export default function StepTwo({ fullName, next, previous, children }) {
             </p>
             <PasswordStrengthLevel password={getValues("password")} />
           </div>
-          <button className={styles.card__button} type="submit">
+          <button
+            className={styles.card__button}
+            type="submit"
+            disabled={!formState.isValid}
+          >
             CONTINUAR
           </button>
           <button

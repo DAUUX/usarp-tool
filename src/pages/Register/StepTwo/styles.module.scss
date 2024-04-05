@@ -2,7 +2,7 @@
   width: 25rem;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   flex-wrap: wrap;
   align-content: space-between;
 }
@@ -13,7 +13,7 @@
   width: 100%;
   h6 {
     text-align: start;
-    font-size: 1.5rem;
+    font-size: 1.125rem;
   }
   b {
     color: var(--th-color-text-highlight);
@@ -31,9 +31,8 @@
 
     label {
       color: var(--th-color-text-label);
-      /* Body/Medium */
       font-family: Inter;
-      font-size: 1rem;
+      font-size: 0.875rem;
       font-style: normal;
       font-weight: 400;
       line-height: 1.5rem;
@@ -48,8 +47,9 @@
     margin-top: 1rem;
     width: 100%;
     border-radius: 1rem;
-    border: 1px solid var(--th-color-button);
+    border: 2px solid var(--th-color-button);
     cursor: pointer;
+    font-size: 1rem;
   }
 }
 .card__button[type="submit"] {
@@ -58,9 +58,16 @@
 
   &:hover {
     background-color: var(--th-color-button-hover);
+    border-color: var(--th-color-button-hover);
   }
   &:focus {
-    outline: var(--th-color-button-focus) auto 1px;
+    outline: 2px solid var(--th-color-button-focus);
+  }
+  &:disabled {
+    border: none;
+    background-color: var(--th-color-button-disabled);
+    color: var(--th-color-text-button-disabled);
+    cursor: not-allowed;
   }
 }
 
@@ -69,22 +76,23 @@
   color: var(--th-color-text-button-back);
   &:hover {
     background-color: var(--th-color-button-hover);
+    border-color: var(--th-color-button-hover);
     color: var(--th-color-text-button);
   }
   &:focus {
-    outline: var(--th-color-button-focus) auto 1px;
+    outline: 2px solid var(--th-color-button-focus);
   }
 }
 .card__warning {
   color: var(--th-color-text-warning);
-  /* Body/Small */
   font-family: Inter;
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 1.3125rem */
+  line-height: 150%;
 }
 .card__error {
+  font-size: 0.875rem;
   padding-left: 5px;
   color: var(--th-color-text-error);
 }

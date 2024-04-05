@@ -2,7 +2,7 @@
   width: 25rem;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   flex-wrap: wrap;
   align-content: space-between;
 }
@@ -13,7 +13,7 @@
   width: 100%;
   h6 {
     text-align: start;
-    font-size: 1.5rem;
+    font-size: 1.125rem;
   }
   b {
     color: var(--th-color-text-highlight);
@@ -41,22 +41,34 @@
         label {
           margin-bottom: 1rem;
           color: var(--th-color-text-label);
-          /* Body/Medium */
           font-family: Inter;
-          font-size: 1rem;
+          font-size: 0.875rem;
           font-style: normal;
           font-weight: 400;
-          line-height: 150%; /* 1.5rem */
+          line-height: 150%;
         }
         input {
           border-radius: 1rem;
           padding: 0.9rem;
-          font-size: 1rem;
+          font-size: 0.875rem;
           color: var(--th-color-text-input);
           border: 1px solid var(--th-color-text-input);
           &:focus {
             outline: var(--th-color-input-focus) auto 1px;
             color: var(--th-color-text-selected);
+          }
+          &:invalid {
+            outline: 2px solid var(--th-color-focus-error);
+            color: var(--th-color-focus-error);
+            border-color: transparent;
+          }
+          &:focus-within {
+            outline: 2px solid var(--th-color-input-focus);
+            border: none;
+            color: var(--th-color-text-input);
+            svg {
+              color: var(--th-color-input-focus);
+            }
           }
         }
       }
@@ -68,12 +80,11 @@
       label {
         margin-bottom: 1rem;
         color: var(--th-color-text-label);
-        /* Body/Medium */
         font-family: Inter;
-        font-size: 1rem;
+        font-size: 0.875rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 150%; /* 1.5rem */
+        line-height: 150%;
       }
     }
     div:nth-child(3) {
@@ -82,22 +93,34 @@
       label {
         margin-bottom: 1rem;
         color: var(--th-color-text-label);
-        /* Body/Medium */
         font-family: Inter;
-        font-size: 1rem;
+        font-size: 0.875rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 150%; /* 1.5rem */
+        line-height: 150%;
       }
       input {
         border-radius: 1rem;
         border: 1px solid var(--th-color-text-input);
         padding: 1rem;
-        font-size: 1rem;
+        font-size: 0.875rem;
         color: var(--th-color-text-input);
         &:focus {
           outline: var(--th-color-input-focus) auto 1px;
           color: var(--th-color-text-selected);
+        }
+        &:invalid {
+          outline: 2px solid var(--th-color-focus-error);
+          color: var(--th-color-focus-error);
+          border-color: transparent;
+        }
+        &:focus-within {
+          outline: 2px solid var(--th-color-input-focus);
+          border: none;
+          color: var(--th-color-text-input);
+          svg {
+            color: var(--th-color-input-focus);
+          }
         }
       }
     }
@@ -112,18 +135,25 @@
       cursor: pointer;
       border: 1px solid var(--th-color-button);
       margin-top: -0.5rem;
+      font-size: 1rem;
     }
   }
 }
 .card__button[type="submit"] {
   background: var(--th-color-button);
   color: var(--th-color-text-button);
-
   &:hover {
     background-color: var(--th-color-button-hover);
+    border-color: var(--th-color-button-hover);
   }
   &:focus {
-    outline: var(--th-color-button-focus) auto 1px;
+    outline: 2px solid var(--th-color-button-focus);
+  }
+  &:disabled {
+    border: none;
+    background-color: var(--th-color-button-disabled);
+    color: var(--th-color-text-button-disabled);
+    cursor: not-allowed;
   }
 }
 
@@ -135,11 +165,22 @@
     color: var(--th-color-text-button);
   }
   &:focus {
-    outline: var(--th-color-button-focus) auto 1px;
+    outline: 2px solid var(--th-color-button-focus);
   }
 }
 .card__error {
   padding-top: 0.5rem;
   padding-left: 5px;
+  font-size: 0.875rem;
   color: var(--th-color-text-error);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  // display: none;
+}
+input[type="date"]::-moz-calendar-box {
+  display: none;
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  display: none;
 }

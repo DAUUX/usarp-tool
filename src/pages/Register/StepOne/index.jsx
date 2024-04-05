@@ -25,13 +25,13 @@ export default function StepOne({ next, children }) {
 
   return (
     <div className={styles.card__container}>
+      {children}
       <section className={styles.card__header}>
         <h6>
-          Comece um <b>brainstorm</b> em menos <br />
-          de <b>5 minutos</b> com o seu time
+          Comece um <b>brainstorm</b> em menos de <b>5 minutos</b> com o seu
+          time
         </h6>
       </section>
-      {children}
       <section className={styles.card__body}>
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
@@ -39,10 +39,11 @@ export default function StepOne({ next, children }) {
             <input
               {...register("email")}
               autoFocus={true}
-              type="text"
+              type="email"
               name="email"
               id="email"
               placeholder="exemplo@usarp.com"
+              required={errors.email ? true : false}
             />
             {errors.email && (
               <p className={styles.card__error}>{errors.email.message}</p>
@@ -56,12 +57,17 @@ export default function StepOne({ next, children }) {
               name="fullName"
               id="fullName"
               placeholder="Fulano..."
+              required={errors.fullName ? true : false}
             />
             {errors.fullName && (
               <p className={styles.card__error}>{errors.fullName.message}</p>
             )}
           </div>
-          <button className={styles.card__button} type="submit">
+          <button
+            className={styles.card__button}
+            disabled={!formState.isValid}
+            type="submit"
+          >
             PROSSEGUIR COM O CADASTRO
           </button>
         </form>

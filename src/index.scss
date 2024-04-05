@@ -42,7 +42,7 @@
   --gray-400: #78909c;
   --gray-300: #90a4ae;
   --gray-200: #b0bec5;
-  --gray-100: #d0d9dd;
+  --gray-100: #EEEEEE;
 
   --black: #000000;
   --white: #ffffff;
@@ -50,7 +50,7 @@
   --error: #d32f2f;
   --error-: #ffe5e8;
 
-  --success: #2e7d32;
+  --success: #00ADB4;
   --success-: #dcefdd;
 }
 
@@ -60,18 +60,22 @@ html[data-theme="primary"] {
 
   --th-img-background: url("assets/images/background.png");
   --th-color-background: var(--primary-500);
+  --th-color-focus-error:  var(--error);
 
   --th-color-card: var(--white);
   --th-color-button: var(--primary-600);
-  --th-color-button-focus: var(--primary-700);
+  --th-color-button-focus: var(--primary-700); 
   --th-color-button-back: var(--white);
   --th-color-button-hover: var(--primary-500);
-  --th-color-input-focus: var(--gray-800);
+  --th-color-button-disabled: var(--gray-100);
+  --th-color-text-button-disabled: var(--gray-800);
+
+  --th-color-input-focus: var(--primary-600);
+  --th-color-text-input: var(--gray-700);
   --th-color-text-button: var(--white);
   --th-color-text-button-back: var(--primary-600);
   --th-color-text-forgotten-password: var(--primary-500);
   --th-color-text-label: var(--gray-800);
-  --th-color-text-input: var(--gray-500);
   --th-color-text-footer: var(--gray-700);
   --th-color-text-link: var(--primary-600);
   --th-color-text-card-header: var(--gray-500);
@@ -82,6 +86,7 @@ html[data-theme="primary"] {
   --th-color-input-select: var(--white);
   --th-color-text-input-selected: var(--gray-500);
   --th-color-text-error: var(--error);
+  --th-color-text-success: var(--success);
 }
 
 // html[data-theme='secondary'] {
