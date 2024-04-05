@@ -50,6 +50,7 @@ export default function StepThree({ fullName, next, previous, children }) {
                 autoFocus={true}
                 name="birthdate"
                 id="birthdate"
+                required={errors.birthdate ? true : false}
               />
               {errors.birthdate && (
                 <p className={styles.card__error}>{errors.birthdate.message}</p>
@@ -67,6 +68,7 @@ export default function StepThree({ fullName, next, previous, children }) {
                 { label: "Transexual", value: "transexual" },
                 { label: "Não-binário", value: "nao-binário" },
               ]}
+              required={errors.gender ? true : false}
             >
               {errors.gender && (
                 <p className={styles.card__error}>{errors.gender.message}</p>
@@ -83,6 +85,7 @@ export default function StepThree({ fullName, next, previous, children }) {
               { label: "Estudante", value: "Estudante" },
               { label: "Professor", value: "Professor" },
             ]}
+            required={errors.profile ? true : false}
           >
             {errors.profile && (
               <p className={styles.card__error}>{errors.profile.message}</p>
@@ -96,6 +99,7 @@ export default function StepThree({ fullName, next, previous, children }) {
               name="organization"
               id="organization"
               placeholder="Ex: Instituição de ensino, empresa..."
+              required={errors.organization ? true : false}
             />
             {errors.organization && (
               <p className={styles.card__error}>
@@ -103,7 +107,11 @@ export default function StepThree({ fullName, next, previous, children }) {
               </p>
             )}
           </div>
-          <button className={styles.card__button} type="submit">
+          <button
+            className={styles.card__button}
+            type="submit"
+            disabled={!formState.isValid}
+          >
             CONCLUIR CADASTRO
           </button>
           <button

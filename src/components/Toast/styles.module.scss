@@ -1,0 +1,32 @@
+.toast__error {
+  background-color: var(--th-color-text-error);
+  color: #fff;
+  width: 20rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-weight: 400;
+  button {
+    background-color: transparent;
+    height: 1.5rem;
+    border: none;
+  }
+}
+.toast__success {
+  background-color: var(--th-color-text-success);
+  color: #fff;
+  width: 20rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-weight: 400;
+  button {
+    background-color: transparent;
+    height: 1.5rem;
+    border: none;
+  }
+}

@@ -4,7 +4,7 @@
   gap: 1.5rem;
 
   div:first-child {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   form > div {
@@ -14,9 +14,8 @@
 
     label {
       color: var(--th-color-text-label);
-      /* Body/Medium */
       font-family: Inter;
-      font-size: 1rem;
+      font-size: 0.875rem;
       font-style: normal;
       font-weight: 400;
       line-height: 1.5rem;
@@ -24,18 +23,25 @@
     input[id="email"] {
       border-radius: 1rem;
       padding: 1rem;
-      font-size: 1rem;
-      border: 1px solid var(--th-color-text-input);
+      font-size: 0.875rem;
+      border: 2px solid var(--th-color-text-input);
       color: var(--th-color-text-input);
+      background: transparent;
+      &:invalid {
+        outline: 2px solid var(--th-color-focus-error);
+        color: var(--th-color-focus-error);
+        border-color: transparent;
+      }
       &:focus {
-        outline: var(--th-color-input-focus) auto 1px;
+        outline: 2px solid var(--th-color-input-focus);
         color: var(--th-color-text-selected);
+        border: none;
       }
     }
   }
 
   b {
-    font-size: 1rem;
+    font-size: 0.875rem;
     align-self: flex-end;
     color: var(--th-color-text-forgotten-password);
     margin: 0.5rem 0 2.5rem 0;
@@ -51,23 +57,19 @@
 }
 .card__footer {
   p {
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: var(--th-color-text-footer);
 
-    /* Body/Big */
     font-family: Inter;
-    font-size: 1.125rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; /* 1.6875rem */
+    line-height: 150%;
     text-align: center;
 
     a,
     b {
       color: var(--th-color-text-link);
-      /* Button/Big */
       font-family: Inter;
-      font-size: 1.125rem;
       font-style: normal;
       font-weight: 600;
       line-height: 150%;
@@ -83,6 +85,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  font-size: 1rem;
 
   border-radius: 1rem;
   border: 1 solid var(--th-color-button);
@@ -95,10 +98,16 @@
     background-color: var(--th-color-button-hover);
   }
   &:focus {
-    outline: var(--th-color-button-focus) auto 1px;
+    outline: 2px solid var(--th-color-button-focus);
+  }
+  &:disabled {
+    background-color: var(--th-color-button-disabled);
+    color: var(--th-color-text-button-disabled);
+    cursor: not-allowed;
   }
 }
 .card__error {
   padding-left: 5px;
+  font-size: 0.875rem;
   color: var(--th-color-text-error);
 }

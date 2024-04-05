@@ -2,7 +2,7 @@
   width: 25rem;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
   flex-wrap: wrap;
   align-content: space-between;
 }
@@ -13,7 +13,7 @@
   width: 100%;
   h6 {
     text-align: start;
-    font-size: 1.5rem;
+    font-size: 1.125rem;
   }
   b {
     color: var(--th-color-text-highlight);
@@ -26,7 +26,7 @@
   gap: 1.5rem;
 
   div:first-child {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   form > div {
@@ -38,21 +38,30 @@
       color: var(--th-color-text-label);
       /* Body/Medium */
       font-family: Inter;
-      font-size: 1rem;
+      font-size: 0.875rem;
       font-style: normal;
       font-weight: 400;
       line-height: 1.5rem;
     }
     input {
+      background: transparent;
       border-radius: 1rem;
-      border: 1px solid var(--th-color-text-input);
+      border: 2px solid var(--th-color-text-input);
       padding: 1rem;
-      font-size: 1rem;
+      font-size: 0.875rem;
       color: var(--th-color-text-input);
-      border: 1px solid var(--th-color-text-input);
-      &:focus {
-        outline: var(--th-color-input-focus) auto 1px;
-        color: var(--th-color-text-selected);
+      &:invalid {
+        outline: 2px solid var(--th-color-focus-error);
+        color: var(--th-color-focus-error);
+        border-color: transparent;
+      }
+      &:focus-within {
+        outline: 2px solid var(--th-color-input-focus);
+        border: none;
+        color: var(--th-color-text-input);
+        svg {
+          color: var(--th-color-input-focus);
+        }
       }
     }
   }
@@ -66,7 +75,7 @@
       margin-top: 2rem;
       width: 100%;
       border-radius: 1rem;
-      border: 1px solid var(--th-color-button);
+      border: none;
       cursor: pointer;
     }
   }
@@ -75,12 +84,11 @@
   color: var(--th-color-text-footer);
   text-align: center;
 
-  /* Caption/Regular */
   font-family: Inter;
   font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 1.125rem */
+  line-height: 150%;
 
   b {
     color: var(--th-color-text-highlight);
@@ -97,20 +105,17 @@
   p {
     font-size: 1rem;
     color: var(--th-color-text-footer);
-
-    /* Body/Big */
     font-family: Inter;
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; /* 1.6875rem */
+    line-height: 150%;
 
     a,
     b {
       color: var(--th-color-text-link);
-      /* Button/Big */
       font-family: Inter;
-      font-size: 1.125rem;
+      font-size: 0.875rem;
       font-style: normal;
       font-weight: 600;
       line-height: 150%;
@@ -122,14 +127,23 @@
 .card__button {
   background: var(--th-color-button);
   color: var(--th-color-text-button);
+  cursor: pointer;
+
   &:hover {
     background-color: var(--th-color-button-hover);
   }
   &:focus {
-    outline: var(--th-color-button-focus) auto 1px;
+    outline: 2px solid var(--th-color-button-focus);
+  }
+  &:disabled {
+    border: none;
+    background-color: var(--th-color-button-disabled);
+    color: var(--th-color-text-button-disabled);
+    cursor: not-allowed;
   }
 }
 .card__error {
   padding-left: 5px;
+  font-size: 0.875rem;
   color: var(--th-color-text-error);
 }

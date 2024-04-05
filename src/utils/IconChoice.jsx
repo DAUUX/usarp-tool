@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Dash } from "../assets/icons/dash";
 import { EyeOn } from "../assets/icons/EyeOn";
 import { EyeOff } from "../assets/icons/EyeOff";
+import { Close } from "../assets/icons/close";
+import { Check } from "../assets/icons/Check";
 
 export function IconChoice({ icon, color }) {
   switch (icon) {
@@ -14,6 +16,10 @@ export function IconChoice({ icon, color }) {
       return <EyeOff color={color} />;
     case "dash":
       return <Dash color={color} />;
+    case "close":
+      return <Close color={color} />;
+    case "check":
+      return <Check color={color} />;
     default:
       return null;
   }

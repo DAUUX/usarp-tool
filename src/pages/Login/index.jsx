@@ -7,7 +7,9 @@ import Wrapper from "../../components/Wrapper";
 import toast, { Toaster } from "react-hot-toast";
 import InputPassword from "../../components/InputPassword";
 import axios from "axios";
-const baseURL = "https://675f-2804-29b8-5004-40de-7009-d2fd-ff3c-e84d.ngrok-free.app";
+import { URL as baseURL } from "../../utils/base";
+import { IconChoice } from "../../utils/IconChoice";
+import { Toast } from "../../components/Toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,16 +32,58 @@ export default function Login() {
 
   const handleSubmitForm = (body) => {
     axios
-      .post(baseURL+"/login", body)
+      .post(baseURL + "/login", body)
       .then(() => {
-        toast.success("Login realizado com sucesso!");
+        toast(
+          (t) => (
+            <Toast
+              type={"success"}
+              message={"Login realizado com sucesso!"}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              <IconChoice
+                icon="check"
+                width="24px"
+                height="24px"
+                color="#fff"
+              />
+            </Toast>
+          ),
+          {
+            style: {
+              backgroundColor: "var(--th-color-text-success)",
+              borderRadius: "10px",
+            },
+          }
+        );
         setTimeout(() => {
           navigate("/home");
         }, 2000);
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Error Inesperado!");
+        toast(
+          (t) => (
+            <Toast
+              type={"error"}
+              message={"E-mail e/ou senha incorretos"}
+              onClick={() => toast.dismiss(t.id)}
+            >
+              <IconChoice
+                icon="close"
+                width="24px"
+                height="24px"
+                color="#fff"
+              />
+            </Toast>
+          ),
+          {
+            style: {
+              backgroundColor: "var(--th-color-text-error)",
+              borderRadius: "10px",
+            },
+          }
+        );
       });
   };
 
@@ -53,10 +97,11 @@ export default function Login() {
               <input
                 {...register("email")}
                 autoFocus={true}
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 placeholder="exemplo@usarp.com"
+                required
               />
               {errors.email && (
                 <p className={styles.card__error}>{errors.email.message}</p>
@@ -70,7 +115,8 @@ export default function Login() {
                 type="password"
                 name="password"
                 id="password"
-                autoComplete="on"
+                minLength="6"
+                required={errors.password ? true : false}
                 placeholder="•••••••••"
               />
               {errors.password && (
@@ -78,8 +124,12 @@ export default function Login() {
               )}
               <b>Esqueci minha senha</b>
             </div>
-            <button className={styles.card__button} type="submit">
-              ACESSAR CONTA
+            <button
+              disabled={!formState.isValid}
+              className={styles.card__button}
+              type="submit"
+            >
+              ENTRAR
             </button>
           </form>
         </section>
@@ -95,22 +145,11 @@ export default function Login() {
       <Toaster
         position="top-center"
         reverseOrder={false}
-        gutter={8}
-        containerClassName=""
         containerStyle={{
-          top: 200,
-          left: 20,
-          bottom: 20,
-          right: 20,
-        }}
-        toastOptions={{
-          // Define default options
-          className: "",
-          duration: 3000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
+          top: 314,
+          left: 120,
+          bottom: 120,
+          right: 120,
         }}
       />
     </Wrapper>

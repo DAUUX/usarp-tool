@@ -6,23 +6,25 @@ export default function InputDropdown({
   register,
   data,
   children,
-  ...props
+  ...rest
 }) {
   return (
-    <div  className={styles.InputDropdown}>
+    <fieldset {...rest} className={styles.InputDropdown}>
       <label htmlFor="">{label}</label>
-      <select {...props} {...register(registerName)}>
-        <option value="" disabled hidden>Escolhar...</option>
+      <select {...rest} {...register(registerName)}>
+        <option value="" disabled hidden>
+          Escolhar...
+        </option>
         {data.map((item) => {
           return (
-              <option key={item.label} aria-label={item.label} value={item.value}>
-                {item.label}
-              </option>
+            <option key={item.label} aria-label={item.label} value={item.value}>
+              {item.label}
+            </option>
           );
         })}
       </select>
       {children}
-    </div>
+    </fieldset>
   );
 }
 

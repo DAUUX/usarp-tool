@@ -3,26 +3,26 @@
   display: flex;
   flex-direction: column;
   height: 12vh;
-
+border: none;
   label {
     margin-bottom: 1rem;
     color: var(--th-color-text-label);
-    /* Body/Medium */
     font-family: Inter;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; /* 1.5rem */
+    line-height: 150%;
   }
   select {
     border-radius: 1rem;
     border: 1px solid var(--th-color-text-input);
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 0.875rem;
     &:focus {
-      outline: var(--th-color-input-focus) auto 1px;
+      outline:2px solid  var(--th-color-input-focus);
       color: var(--th-color-text-label);
     }
+
     appearance: none;
     -webkit-appearance: none;
     background-image: url("/src/assets/icons/arrow.svg");
@@ -34,11 +34,27 @@
 
     &::after {
       border-radius: 1rem !important;
-      border: 1px solid var(--th-color-text-input);
+      border: 2px solid var(--th-color-text-input);
     }
     &::before {
       border-radius: 1rem !important;
-      border: 1px solid var(--th-color-text-input);
+      border: 2px solid var(--th-color-text-input);
+    }
+    &:invalid {
+      outline: 2px solid var(--th-color-focus-error);
+      color: var(--th-color-focus-error);
+      border-color: transparent;
+      svg {
+        color: var(--th-color-focus-error);
+      }
+    }
+    &:focus-within {
+      outline: 2px solid var(--th-color-input-focus);
+      border: none;
+      color: var(--th-color-text-input);
+      svg {
+        color: var(--th-color-input-focus);
+      }
     }
   }
   select {
