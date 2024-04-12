@@ -1,0 +1,50 @@
+@import "../../index.scss";
+
+#AccountMenu {
+  position: absolute;
+  right: 0;
+  display: inline-flex;
+  display: inline flex;
+  align-items: center;
+  flex: none;
+  flex-grow: 0;
+  cursor: pointer;
+
+  span {
+    color: var(--th-color-text-name-toggle-menu);
+    font-family: var(--th-font-inter);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
+    letter-spacing: 0%;
+    text-align: justify;
+    margin-right: 16px;
+    margin-left: 8px;
+  }
+
+  .ArrowIcon {
+    margin: 0;
+  }
+
+  #DropDown {
+    cursor: default;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    width: 188px;
+    height: 114px;
+    right: 0px;
+    top: 44.5px;
+    padding: 0;
+    box-sizing: border-box;
+    border: var(--th-color-border-toggle-menu);
+    border-radius: 16px;
+    box-shadow: var(--th-shadow-toggle-menu);
+    background: var(--th-color-background-toggle-menu);
+  
+    ul {
+      margin: 8px;
+    }
+  }
+  
+}
