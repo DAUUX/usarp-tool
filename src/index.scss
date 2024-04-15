@@ -90,10 +90,10 @@ html[data-theme="primary"] {
 
   --th-color-text-header: #212121;
   --th-color-text-header-highlight: var(--primary-600);
-  --th-color-text-name-toggle-menu: var(--gray-800);
-  --th-shadow-toggle-menu: 1px 1px 24px 0px rgba(0, 0, 0, 0.08);
-  --th-color-background-toggle-menu: var(--white);
-  --th-color-border-toggle-menu: 1px solid rgb(224, 224, 224);
+  --th-shadow-dropdownmenu: 1px 1px 24px 0px rgba(0, 0, 0, 0.08);
+  --th-color-background-dropdownmenu: var(--white);
+  --th-color-border-dropdownmenu: 1px solid rgb(224, 224, 224);
+  --th-color-text-dropdownmenu-option: var(--primary-800);
 }
 
 // html[data-theme='secondary'] {

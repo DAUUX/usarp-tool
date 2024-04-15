@@ -2,11 +2,9 @@
 
 header {
   margin: 32px 32px 40px 32px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+
   position: relative;
-  align-items: center;
+  
 
   h6 {
     display: inline-block;
@@ -17,6 +15,7 @@ header {
     line-height: 120%;
     letter-spacing: 0%;
     text-align: justify;
+    
 
     span {
       color: var(--th-color-text-header-highlight);
