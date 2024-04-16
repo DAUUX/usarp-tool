@@ -87,6 +87,13 @@ html[data-theme="primary"] {
   --th-color-text-input-selected: var(--gray-500);
   --th-color-text-error: var(--error);
   --th-color-text-success: var(--success);
+
+  --th-color-text-header: #212121;
+  --th-color-text-header-highlight: var(--primary-600);
+  --th-shadow-dropdownmenu: 1px 1px 24px 0px rgba(0, 0, 0, 0.08);
+  --th-color-background-dropdownmenu: var(--white);
+  --th-color-border-dropdownmenu: 1px solid rgb(224, 224, 224);
+  --th-color-text-dropdownmenu-option: var(--primary-800);
 }
 
 // html[data-theme='secondary'] {
