@@ -34,6 +34,6 @@ export default function InputPassword({
 }
 InputPassword.propTypes = {
   label: PropTypes.node.isRequired,
-  outline: PropTypes.string.isRequired,
+  outline: PropTypes.string,
   register: PropTypes.func.isRequired,
 };

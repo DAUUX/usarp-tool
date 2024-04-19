@@ -9,6 +9,8 @@ import { Brainstorming } from "../assets/icons/Brainstorming";
 import { Home } from "../assets/icons/Home";
 import { Project } from "../assets/icons/Project";
 import { Option } from "../assets/icons/Option";
+import { CloseCircle } from "../assets/icons/CloseCircle";
+import { CheckCircle } from "../assets/icons/CheckCircle";
 
 export function IconChoice({ icon, color }) {
   switch (icon) {
@@ -32,6 +34,10 @@ export function IconChoice({ icon, color }) {
       return <Brainstorming color={color} />;
     case "option":
       return <Option color={color} />;
+    case "closecircle":
+      return <CloseCircle color={color} />;
+    case "checkcircle":
+      return <CheckCircle color={color} />;
     default:
       return null;
   }

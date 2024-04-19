@@ -34,7 +34,6 @@ export default function AppRoutes() {
             }
           />
         </Route>
-
         <Route
           path="*"
           element={

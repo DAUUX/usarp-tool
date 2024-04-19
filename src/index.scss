@@ -68,6 +68,11 @@ html[data-theme="primary"] {
   --th-bigbutton-border: var(--primary-200);
   --th-bigbutton-text: var(--primary-700);
 
+  --th-feedbackalert-title: var(--primary-800);
+  --th-feedbackalert-description: var(--gray-700);
+  --th-feedbackalert-button: var(--primary-600);
+  --th-feedbackalert-button-hover: var(--primary-100);
+
   --th-brainstormingcard-text-title: var(--gray-800);
   --th-brainstormingcard-text: var(--gray-900);
   --th-brainstormingcard-textdate: var(--gray-700);
