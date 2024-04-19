@@ -116,6 +116,14 @@ html[data-theme="primary"] {
   --th-color-background-dropdownmenu: var(--white);
   --th-color-border-dropdownmenu: 1px solid rgb(224, 224, 224);
   --th-color-text-dropdownmenu-option: var(--primary-800);
+
+  --th-color-text-modal-title: var(--primary-800);
+  --th-color-text-modal-description: var(--gray-700);
+  --th-color-text-modal-highlight: var(--primary-600);
+  --th-color-border-modal-button: var(--primary-600);
+  --th-color-text-modal-button: var(--primary-600);
+  --th-color-background-modal-button-primary: var(--primary-600);
+  --th-color-text-modal-button-primary: var(--white);
 }
 
 // html[data-theme='secondary'] {
