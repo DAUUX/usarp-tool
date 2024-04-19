@@ -52,6 +52,10 @@
       .ReactModal__Buttons_Secondary {
         background-color: transparent;
         color: var(--th-color-text-modal-button);
+
+        &:hover {
+          background-color: var(--th-color-background-modal-button-hover);
+        }
       }
   
       .ReactModal__Buttons_Primary {
