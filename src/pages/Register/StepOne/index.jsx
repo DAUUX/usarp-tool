@@ -81,7 +81,7 @@ export default function StepOne({ next, children }) {
       <section className={styles.card__footer}>
         <p>
           Já tem uma conta?
-          <Link to="/">
+          <Link to="/login">
             <b>&nbsp;Entrar agora</b>
           </Link>
         </p>

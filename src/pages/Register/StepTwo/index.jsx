@@ -39,8 +39,8 @@ export default function StepTwo({ fullName, next, previous, children }) {
       {children}
       <section className={styles.card__header}>
         <h6>
-          Muito bem, <b>{fullName}!</b> Estamos quase lá, agora crie uma{" "}
-          <b>senha</b> segura para proteger sua conta.
+          Muito bem, <b>{fullName}!</b> Estamos quase lá, agora crie uma
+          <b> senha</b> segura para proteger sua conta.
         </h6>
       </section>
       <section className={styles.card__body}>
@@ -54,7 +54,7 @@ export default function StepTwo({ fullName, next, previous, children }) {
               name="password"
               id="password"
               placeholder="•••••••••"
-              minLength="6"
+              minLength="8"
               required={errors.password ? true : false}
             />
             {errors.password && (
@@ -63,8 +63,8 @@ export default function StepTwo({ fullName, next, previous, children }) {
               </p>
             )}
             <p className={styles.card__warning}>
-              Sua senha deve ter pelo menos 8 caracteres, com uma letra
-              maiúscula e um caractere especial.
+              Sua senha deve ter pelo menos 8 caracteres, com letras minúsculas
+              e maiúsculas, números e caracteres especiais
             </p>
             <PasswordStrengthLevel password={getValues("password")} />
           </div>
@@ -93,3 +93,5 @@ StepTwo.propTypes = {
   previous: PropTypes.func,
   children: PropTypes.node,
 };
+
+

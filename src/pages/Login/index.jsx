@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Wrapper from "../../components/Wrapper";
-import toast, { Toaster } from "react-hot-toast";
 import InputPassword from "../../components/InputPassword";
 import axios from "axios";
 import { URL as baseURL } from "../../utils/base";
 import { IconChoice } from "../../utils/IconChoice";
 import { Toast } from "../../components/Toast";
+import { FeedbackAlert } from "../../components/FeedbackAlert";
+import { useAlert } from "../../hooks/useAlert";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,8 +19,7 @@ export default function Login() {
       .email("Deve ser um E-mail válido!")
       .required("E-mail é um campo obrigatório!"),
     password: Yup.string()
-      .min(6, "A senha deve conter pelo menos 6 caracteres!")
-      // .min(8, "A senha deve conter pelo menos 8 caracteres!")
+      .min(6, "A senha deve conter pelo menos 8 caracteres!")
       .required(),
   });
 
@@ -29,61 +29,56 @@ export default function Login() {
   });
 
   const { errors } = formState;
+  const { open, close } = useAlert();
+
+  const handleOpenAlertSuccess = () => {
+    const content = (
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="checkcircle" />
+        <FeedbackAlert.Title title="Bem-vindo(a)" name={", fulano!"} />
+        <FeedbackAlert.Description description="Sua conta foi criada com sucesso" />
+      </FeedbackAlert.Root>
+    );
+    open(content);
+  };
+
+  const handleOpenAlertError = () => {
+    const content = (
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="closecircle" />
+        <FeedbackAlert.Title title="Falha ao realizar login" />
+        <FeedbackAlert.Description description="Instabilidade no servidor" />
+        <FeedbackAlert.Button onClick={close} label="Ok, fechar" />
+      </FeedbackAlert.Root>
+    );
+    open(content);
+  };
+
+  const handleOpenToastError = () => {
+    const content = (
+      <Toast onClick={close} type={"error"} message={"E-mail e/ou senha incorretos"}>
+        <IconChoice icon="close" width="24px" height="24px" color="#fff" />
+      </Toast>
+    );
+    open(content);
+  };
 
   const handleSubmitForm = (body) => {
     axios
       .post(baseURL + "/login", body)
       .then(() => {
-        toast(
-          (t) => (
-            <Toast
-              type={"success"}
-              message={"Login realizado com sucesso!"}
-              onClick={() => toast.dismiss(t.id)}
-            >
-              <IconChoice
-                icon="check"
-                width="24px"
-                height="24px"
-                color="#fff"
-              />
-            </Toast>
-          ),
-          {
-            style: {
-              backgroundColor: "var(--th-color-text-success)",
-              borderRadius: "10px",
-            },
-          }
-        );
+        handleOpenAlertSuccess();
         setTimeout(() => {
+          close();
           navigate("/home");
         }, 2000);
       })
       .catch((err) => {
         console.log(err);
-        toast(
-          (t) => (
-            <Toast
-              type={"error"}
-              message={"E-mail e/ou senha incorretos"}
-              onClick={() => toast.dismiss(t.id)}
-            >
-              <IconChoice
-                icon="close"
-                width="24px"
-                height="24px"
-                color="#fff"
-              />
-            </Toast>
-          ),
-          {
-            style: {
-              backgroundColor: "var(--th-color-text-error)",
-              borderRadius: "10px",
-            },
-          }
-        );
+        if (err.code === "ERR_NETWORK") {
+          handleOpenAlertError();
+        }
+        handleOpenToastError();
       });
   };
 
@@ -136,22 +131,13 @@ export default function Login() {
         <section className={styles.card__footer}>
           <p>
             Ainda não possui uma conta?
-            <Link to="cadastro">
+            <Link to="/cadastro">
               <b> Criar agora</b>
             </Link>
           </p>
         </section>
       </div>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        containerStyle={{
-          top: 314,
-          left: 120,
-          bottom: 120,
-          right: 120,
-        }}
-      />
+    
     </Wrapper>
   );
 }

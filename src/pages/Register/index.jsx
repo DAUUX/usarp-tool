@@ -3,13 +3,12 @@ import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 import StepThree from "./StepThree";
 import axios from "axios";
 import { StepStatus } from "../../components/StepStatus";
 import { URL as baseURL } from "../../utils/base";
-import { IconChoice } from "../../utils/IconChoice";
-import { Toast } from "../../components/Toast";
+import { FeedbackAlert } from "../../components/FeedbackAlert";
+import { useAlert } from "../../hooks/useAlert";
 
 export default function Register() {
   const [steps, setSteps] = useState([]);
@@ -17,6 +16,7 @@ export default function Register() {
   const handleStepNext = useCallback((e) => {
     setSteps((current) => [...current, e]);
   }, []);
+  const { open, close } = useAlert();
 
   const handleStepPrevious = useCallback(() => {
     setSteps(steps.splice(steps.length, steps.length - 1));
@@ -29,61 +29,45 @@ export default function Register() {
     handleRegister({ ...body, ...e });
   };
 
+  const handleOpenAlertError = () => {
+    const content = (
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="closecircle" />
+        <FeedbackAlert.Title title="Falha ao realizar login" />
+        <FeedbackAlert.Description description="Instabilidade no servidor" />
+        <FeedbackAlert.Button onClick={close} label="Ok, fechar" />
+      </FeedbackAlert.Root>
+    );
+    open(content);
+  };
+
+  const handleOpenAlertSuccess = () => {
+    const content = (
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="checkcircle" />
+        <FeedbackAlert.Title
+          title="Bem-vindo(a)"
+          name={`, ${steps[0].fullName}!`}
+        />
+        <FeedbackAlert.Description description="Sua conta foi criada com sucesso" />
+      </FeedbackAlert.Root>
+    );
+    open(content);
+  };
   const handleRegister = (body) => {
     axios
       .post(baseURL + "/users", body)
       .then(() => {
-        toast(
-          (t) => (
-            <Toast
-              type={"success"}
-              message={"Cadastro realizado com sucesso!"}
-              onClick={() => toast.dismiss(t.id)}
-            >
-              <IconChoice
-                icon="check"
-                width="24px"
-                height="24px"
-                color="#fff"
-              />
-            </Toast>
-          ),
-          {
-            style: {
-              backgroundColor: "var(--th-color-text-success)",
-              borderRadius: "10px",
-            },
-          }
-        );
+        handleOpenAlertSuccess();
         setTimeout(() => {
           navigate("/");
         }, 2000);
       })
       .catch((err) => {
         console.log(err);
-        setSteps(steps.splice(steps.length, steps.length - 1));
-        toast(
-          (t) => (
-            <Toast
-              type={"error"}
-              message={"Error Inesperado!"}
-              onClick={() => toast.dismiss(t.id)}
-            >
-              <IconChoice
-                icon="close"
-                width="24px"
-                height="24px"
-                color="#fff"
-              />
-            </Toast>
-          ),
-          {
-            style: {
-              backgroundColor: "var(--th-color-text-error)",
-              borderRadius: "10px",
-            },
-          }
-        );
+        if (err.code === "ERR_NETWORK") {
+          handleOpenAlertError();
+        }
       });
   };
 
@@ -172,27 +156,6 @@ export default function Register() {
       ) : (
         <></>
       )}
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        gutter={8}
-        containerClassName=""
-        containerStyle={{
-          top: 200,
-          left: 20,
-          bottom: 20,
-          right: 20,
-        }}
-        toastOptions={{
-          // Define default options
-          className: "",
-          duration: 3000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
-        }}
-      />
     </Wrapper>
   );
 }
