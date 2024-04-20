@@ -1,9 +1,12 @@
 import { AlertProvider } from "./hooks/useAlert";
-import AppRoutes from "./routes";
+import { AuthProvider } from "./hooks/useAuth";
+import Routes from "./routes";
 export default function App() {
   return (
-    <AlertProvider>
-      <AppRoutes />
-    </AlertProvider>
+    <AuthProvider>
+      <AlertProvider>
+        <Routes />
+      </AlertProvider>
+    </AuthProvider>
   );
 }
