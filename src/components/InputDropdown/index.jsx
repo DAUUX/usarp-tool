@@ -13,7 +13,7 @@ export default function InputDropdown({
       <label htmlFor="">{label}</label>
       <select {...rest} {...register(registerName)}>
         <option value="" disabled hidden>
-          Escolhar...
+          Escolher...
         </option>
         {data.map((item) => {
           return (
