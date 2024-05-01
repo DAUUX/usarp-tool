@@ -9,12 +9,12 @@ export function ModalButton({ primaryButton, secondaryButton }) {
 return (
   <div className={buttonClass}>
       {secondaryButton && (
-        <button className={styles.ReactModal__Buttons_Secondary}>
+        <button className={styles.ReactModal__Buttons_Secondary} onClick={secondaryButton.onClick}>
           { secondaryButton.label }
         </button>
       )}
       {primaryButton && (
-        <button className={styles.ReactModal__Buttons_Primary}>
+        <button className={styles.ReactModal__Buttons_Primary} onClick={primaryButton.onClick}>
           { primaryButton.label }
         </button>
       )}
@@ -25,8 +25,10 @@ return (
 ModalButton.propTypes = {
   primaryButton: PropTypes.shape({
     label: PropTypes.string.isRequired,
+    onClick: PropTypes.func
   }),
   secondaryButton: PropTypes.shape({
     label: PropTypes.string.isRequired,
+    onClick: PropTypes.func
   }),
 };
