@@ -3,6 +3,8 @@ import Login from "./pages/Login";
 import { Home } from "./pages/Home";
 import Register from "./pages/Register";
 import { Layout } from "./components/Layout";
+import { ConfigurationsLayout } from "./components/ConfigurationsLayout";
+import { Profile } from "./pages/Profile";
 export default function AppRoutes() {
   return (
     <BrowserRouter>
@@ -33,6 +35,10 @@ export default function AppRoutes() {
               </center>
             }
           />
+        </Route>
+        <Route path="/configurations" element={<ConfigurationsLayout />}>
+          <Route index path="profile" element={<Profile />} />
+          <Route index path="privacity" element={<p>Em construção</p>} />
         </Route>
         <Route
           path="*"

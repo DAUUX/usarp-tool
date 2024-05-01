@@ -1,0 +1,10 @@
+.AlertBox {
+  grid-area: Configuration__Alert;
+  border-radius: 16px;
+  padding: 16px 24px;
+  color: var(--th-color-text-profile-alert);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

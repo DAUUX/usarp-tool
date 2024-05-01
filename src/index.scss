@@ -118,6 +118,7 @@ html[data-theme="primary"] {
   --th-color-text-dropdownmenu-option: var(--primary-800);
 
   --th-color-text-modal-title: var(--primary-800);
+  --th-color-background-modal: var(--white);
   --th-color-text-modal-description: var(--gray-700);
   --th-color-text-modal-highlight: var(--primary-600);
   --th-color-border-modal-button: var(--primary-600);
@@ -125,6 +126,26 @@ html[data-theme="primary"] {
   --th-color-background-modal-button-primary: var(--primary-600);
   --th-color-text-modal-button-primary: var(--white);
   --th-color-background-modal-button-hover: var(--primary-100);
+
+  --th-color-background-configuration-header: var(--gray-50);
+  --th-background-configuration-page: var(--primary-600);
+  --th-color-text-back-link: #E1F4F5;
+  --th-color-background-configurations-sidebar: var(--gray-50);
+  --th-border-configurations-sidebar: 1px var(--gray-200) solid;
+  --th-color-background-configurations: #F7FCFC;
+  --th-border-configurations: 1px var(--primary-200) solid;
+  --th-color-text-profile-label-view: var(--gray-700);
+  --th-color-text-profile-span-view: var(--primary-800);
+  --th-color-text-profile-label-edit: var(--gray-800);
+  --th-color-text-profile-user-name: var(--primary-700);
+  --th-border-profile-button-edit-picture: 1px var(--primary-600) solid;
+  --th-background-profile-button-edit-picture-hover: var(--primary-100);
+  --th-color-text-prfile-label-button-edit-picture: var(--primary-600);
+  --th-border-divider-profile: 1px var(--gray-200) solid;
+
+  --th-color-text-profile-alert: var(--gray-900);
+  --th-color-background-profile-alert-warning: var(--tertiary-500);
+  --th-color-background-profile-alert-danger: var(--error);
 }
 
 // html[data-theme='secondary'] {
