@@ -1,4 +1,3 @@
-import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import style from './styles.module.scss';
 import { Option } from "./Option";
@@ -40,4 +39,4 @@ export function Dropdown() {
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
-};
+}
