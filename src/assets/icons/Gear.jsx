@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export function Configurations({ color, ...rest }) {
+export function Gear({ color, ...rest }) {
   return (
     <svg
       {...rest}
@@ -29,6 +29,6 @@ export function Configurations({ color, ...rest }) {
   );
 }
 
-Configurations.propTypes = {
+Gear.propTypes = {
   color: PropTypes.string
 }

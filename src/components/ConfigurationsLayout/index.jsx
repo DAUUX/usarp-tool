@@ -12,38 +12,40 @@ export function ConfigurationsLayout() {
 
   return (
     <>
-      <header className={styles.Configuration__Header}>
-        <img src="../../../src/assets/images/logo.png" alt="USARP Tool Logo" />
-        <Dropdown />
-      </header>
       <main className={styles.Configuration}>
+        <header className={styles.Configuration__Header}>
+          <img src="../../../src/assets/images/logo.png" alt="USARP Tool Logo" />
+          <Dropdown />
+        </header>
         <div className={styles.Configuration__BackLink}>
-            <Link to="/">
-              <img src="../src/assets/icons/backArrow.svg" alt="Voltar" />
-              Voltar
-            </Link>
+          <Link to="/">
+            <img src="../src/assets/icons/backArrow.svg" alt="Voltar" />
+            Voltar
+          </Link>
         </div>
 
         {alert && (
           <AlertBox message={alert.message} type={alert.type} icon={alert.icon} />
         )}
 
-        <aside className={styles.Configuration__Sidebar}>
-          <SidebarOption
-            label="Configurações de perfil"
-            link="./profile"
-            icon="gear"
-          />
-          <SidebarOption
-            label="Privacidade e segurança"
-            link="./privacity"
-            icon="lock"
-          />
-        </aside>
-        <div className={styles.Configuration__Content}>
-          <FormSubmitContext.Provider value={{setAlert}}>
-            <Outlet />
-          </FormSubmitContext.Provider>
+        <div className={styles.Configuration__Wrapper}>
+          <aside className={styles.Configuration__Sidebar}>
+            <SidebarOption
+              label="Configurações de perfil"
+              link="./profile"
+              icon="gear"
+            />
+            <SidebarOption
+              label="Privacidade e segurança"
+              link="./privacity"
+              icon="lock"
+            />
+          </aside>
+          <div className={styles.Configuration__Content}>
+            <FormSubmitContext.Provider value={{setAlert}}>
+              <Outlet />
+            </FormSubmitContext.Provider>
+          </div>
         </div>
       </main>
     </>

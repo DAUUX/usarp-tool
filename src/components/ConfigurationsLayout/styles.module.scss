@@ -1,38 +1,26 @@
-body {
+.Configuration {
   background-color: var(--th-background-configuration-page);
-}
-
-.Configuration__Header {
-  background-color: var(--th-color-background-configuration-header);
-  width: 100%;
-  height: 88px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 24px;
-}
-
-.Configuration {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-  display: grid;
-  grid-template-columns: 293px 612fr;
-  /*gap: 32px 32px;*/
-  grid-template-rows: auto auto; 
-  grid-template-areas:
-    "Configuration__BackLink Configuration__BackLink"
-    "Configuration__Alert Configuration__Alert"
-    "Configuration__Sidebar Configuration__Content";
-
+  flex-direction: column;
+  min-height: 100vh;
   
+  .Configuration__Header {
+    background-color: var(--th-color-background-configuration-header);
+    width: 100%;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+  }
+
   .Configuration__BackLink {
-    grid-area: Configuration__BackLink;
+    width: 937px;
     margin: 32px 0 16px 24px;
     
     a {
       display: inline flex;
-      display: inline-flex;
       align-items: center;
       text-decoration: none;
       font-size: 16px;
@@ -45,27 +33,30 @@ body {
     }
   }
 
-  .Configuration__Sidebar {
-    grid-area: Configuration__Sidebar;
-    display: grid;
-    gap: 16px;
-    width: 293px;
-    height: fit-content;
-    padding: 24px;
-    margin: 16px 32px 0 0;
-    background-color: var(--th-color-background-configurations-sidebar);
-    border-radius: 16px;
-    border: var(--th-border-configurations-sidebar);
-  }
+  .Configuration__Wrapper {
+    display: flex;
+    justify-content: center;
 
-  .Configuration__Content {
-    grid-area: Configuration__Content;
-    width: 612px;
-    height: fit-content;
-    padding: 32px;
-    margin: 16px 0 0 32px;
-    background-color: var(--th-color-background-configurations);
-    border-radius: 16px;
-    border: var(--th-border-configurations);
+    .Configuration__Sidebar {
+      display: grid;
+      gap: 16px;
+      width: 293px;
+      height: fit-content;
+      padding: 24px;
+      margin: 16px 32px 0 0;
+      background-color: var(--th-color-background-configurations-sidebar);
+      border-radius: 16px;
+      border: var(--th-border-configurations-sidebar);
+    }
+  
+    .Configuration__Content {
+      width: 612px;
+      height: fit-content;
+      padding: 32px;
+      margin-top: 16px;
+      background-color: var(--th-color-background-configurations);
+      border-radius: 16px;
+      border: var(--th-border-configurations);
+    }
   }
 }

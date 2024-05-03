@@ -11,6 +11,8 @@ import { Project } from "../assets/icons/Project";
 import { Option } from "../assets/icons/Option";
 import { CloseCircle } from "../assets/icons/CloseCircle";
 import { CheckCircle } from "../assets/icons/CheckCircle";
+import { Gear } from "../assets/icons/Gear";
+import { Lock } from "../assets/icons/Lock";
 
 export function IconChoice({ icon, color }) {
   switch (icon) {
@@ -38,6 +40,10 @@ export function IconChoice({ icon, color }) {
       return <CloseCircle color={color} />;
     case "checkcircle":
       return <CheckCircle color={color} />;
+    case "gear":
+      return <Gear color={color} />;
+    case "lock":
+      return <Lock color={color} />;
     default:
       return null;
   }
