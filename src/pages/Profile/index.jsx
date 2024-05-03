@@ -97,7 +97,7 @@ export function Profile() {
           />
           <button
             onClick={() => setEditMode(true)}
-            className={styles.Profile__Button}
+            className={styles.Profile__PrimaryButton}
             type="button">
             Editar dados
           </button>
@@ -189,7 +189,13 @@ export function Profile() {
                 <p className={styles.card__error}>{errors.organization.message}</p>
               )}
             </div>
-            <button className={styles.Profile__Button}
+            <button
+              onClick={() => setEditMode(false)}
+              className={styles.Profile__SecondaryButton}
+              type="button">
+              Cancelar
+            </button>
+            <button className={styles.Profile__PrimaryButton}
               type="submit"
               disabled={!formState.isDirty || !formState.isValid || formState.isSubmitSuccessful}>
                 Salvar dados

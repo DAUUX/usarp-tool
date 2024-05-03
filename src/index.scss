@@ -85,16 +85,19 @@ html[data-theme="primary"] {
   --th-color-card: var(--white);
   --th-line-sidebar: var(--gray-200);
   --th-background-sidebar: var(--gray-50);
-  --th-color-button: var(--primary-600);
+  --th-color-primary-button: var(--primary-600);
+  --th-color-secondary-button: var(--primary-600);
   --th-color-button-focus: var(--primary-700); 
   --th-color-button-back: var(--white);
-  --th-color-button-hover: var(--primary-500);
+  --th-color-primary-button-hover: var(--primary-500);
+  --th-color-secondary-button-hover: var(--primary-100);
+  --th-border-secondary-button: 1px var(--primary-600) solid;
   --th-color-button-disabled: var(--gray-100);
   --th-color-text-button-disabled: var(--gray-800);
 
   --th-color-input-focus: var(--primary-600);
   --th-color-text-input: var(--gray-700);
-  --th-color-text-button: var(--white);
+  --th-color-text-primary-button: var(--white);
   --th-color-text-button-back: var(--primary-600);
   --th-color-text-forgotten-password: var(--primary-500);
   --th-color-text-label: var(--gray-800);
@@ -138,9 +141,6 @@ html[data-theme="primary"] {
   --th-color-text-profile-span-view: var(--primary-800);
   --th-color-text-profile-label-edit: var(--gray-800);
   --th-color-text-profile-user-name: var(--primary-700);
-  --th-border-profile-button-edit-picture: 1px var(--primary-600) solid;
-  --th-background-profile-button-edit-picture-hover: var(--primary-100);
-  --th-color-text-prfile-label-button-edit-picture: var(--primary-600);
   --th-border-divider-profile: 1px var(--gray-200) solid;
 
   --th-color-text-profile-alert: var(--gray-900);
