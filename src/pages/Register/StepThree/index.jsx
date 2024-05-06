@@ -84,6 +84,8 @@ export default function StepThree({ fullName, next, previous, children }) {
             data={[
               { label: "Estudante", value: "Estudante" },
               { label: "Professor", value: "Professor" },
+              { label: "Profissional da indústria ", value: "Profissional da indústria" },
+              { label: "Outro", value: "Outro" },
             ]}
             required={errors.profile ? true : false}
           >

@@ -60,6 +60,7 @@ export default function Register() {
       .then(() => {
         handleOpenAlertSuccess();
         setTimeout(() => {
+          close();
           navigate("/");
         }, 2000);
       })
