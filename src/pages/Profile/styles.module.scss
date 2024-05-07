@@ -1,0 +1,145 @@
+.Profile {
+  header {
+    display: grid;
+    justify-content: start;
+    grid-template-columns: 96px 2fr auto;
+    align-items: center;
+    img {
+      border-radius: 100%;
+    }
+    p {
+      color: var(--th-color-text-profile-user-name);
+      font-size: 20px;
+      font-weight: 600;
+    }
+    button {
+      padding: 16px 24px;
+      border-radius: 16px;
+      border: var(--th-border-secondary-button);
+      background-color: transparent;
+      color: var(--th-color-secondary-button);
+      font-size: 16px;
+      cursor: pointer;
+      &:hover {
+        background-color: var(--th-color-secondary-button-hover);
+      }
+      &:focus {
+        outline: 2px solid var(--th-color-button-focus);
+      }
+    }
+  }
+
+  hr {
+    margin: 32px 0;
+    border: var(--th-border-divider-profile);
+  }
+
+  .Profile__EditForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    div {
+      width: 262px;
+      padding-bottom: 24px;
+
+      fieldset {
+        label {
+          margin: 0;
+          line-height: 1;
+        }
+        select {
+          height: 56px;
+          &:focus-within {
+            outline: 0.89px solid var(--th-color-input-focus);
+            border: none;
+            color: var(--th-color-text-input);
+          }
+        }
+      }
+
+      label {
+        display: block;
+        font-size: 12.39px;
+        color: var(--th-color-text-profile-label-edit);
+        padding-bottom: 7px;
+      }
+  
+      input {
+        width: 100%;
+        height: 56px;
+        margin: 0;
+        background: transparent;
+        border-radius: 1rem;
+        border: 0.89px solid var(--th-color-text-input);
+        padding: 1rem;
+        font-size: 0.875rem;
+        color: var(--th-color-text-input);
+        &[type="date"] {
+          height: 56px;
+        }
+        &:invalid {
+          outline: 0.89px solid var(--th-color-focus-error);
+          color: var(--th-color-focus-error);
+          border-color: transparent;
+        }
+        &:focus-within {
+          outline: 0.89px solid var(--th-color-input-focus);
+          border: none;
+          color: var(--th-color-text-input);
+          svg {
+            color: var(--th-color-input-focus);
+          }
+        }
+      }
+
+      .card__error {
+        padding-left: 5px;
+        font-size: 0.875rem;
+        color: var(--th-color-text-error);
+      }
+    }
+  }
+}
+
+.Profile__PrimaryButton {
+  padding: 16px 24px;
+  border: none;
+  border-radius: 16px;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--th-color-text-primary-button);
+  background-color: var(--th-color-primary-button);
+  margin-top: 8px;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: var(--th-color-primary-button-hover);
+  }
+  &:focus {
+    outline: 2px solid var(--th-color-button-focus);
+  }
+  &:disabled {
+    border: none;
+    background-color: var(--th-color-button-disabled);
+    color: var(--th-color-text-button-disabled);
+    cursor: not-allowed;
+  }
+}
+
+.Profile__SecondaryButton {
+  padding: 16px 24px;
+  border-radius: 16px;
+  border: var(--th-border-secondary-button);
+  background-color: transparent;
+  color: var(--th-color-secondary-button);
+  font-size: 1rem;
+  margin-top: 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--th-color-secondary-button-hover);
+  }
+  &:focus {
+    outline: 2px solid var(--th-color-button-focus);
+  }
+}

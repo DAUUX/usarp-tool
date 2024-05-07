@@ -1,0 +1,30 @@
+.buttonbig__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 10rem;
+  height: 10rem;
+  padding: 1rem;
+  border: 1px solid var(--th-bigbutton-border);
+  border-radius: 1rem;
+  background: var(--th-bigbutton-background);
+  color: var(--th-bigbutton-text);
+
+  font-family: Inter;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 150%;
+  text-align: center;
+
+  cursor: pointer;
+
+  div {
+    width: 4rem;
+    height: 4rem;
+    margin: 0.75rem 0;
+    background: var(--th-bigbutton-box-background);
+  }
+  &:hover {
+    filter: brightness(0.98);
+  }
+}

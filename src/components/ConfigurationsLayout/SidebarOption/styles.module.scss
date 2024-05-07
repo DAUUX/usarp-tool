@@ -1,0 +1,30 @@
+.Profile__SidebarOption {
+  color: var(--th-button-sidebar-text-noselected);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+
+  div {
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    padding: 16px;
+
+    span {
+      padding-left: 16px;
+    }
+
+    &:hover {
+      background-color: var(--th-button-sidebar-hover);
+    }
+  }
+
+  &[data-selected="true"] {
+    color: var(--th-button-sidebar-text-selected);
+    
+    div {
+      font-weight: 600;
+      background-color: var(--th-button-sidebar-background);
+    }
+  }
+}

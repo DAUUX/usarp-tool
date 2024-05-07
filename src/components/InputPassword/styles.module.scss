@@ -1,0 +1,57 @@
+.input__password {
+  display: flex;
+  align-items: center;
+  border-radius: 1rem;
+  border: 2px solid var(--th-color-text-input);
+  input {
+    padding: 0.8rem;
+    font-size: 1rem;
+    width: 90%;
+    border: none;
+    margin: 0.2rem;
+    background: transparent;
+    color: var(--th-color-text-input);
+    &:focus {
+      outline: none;
+      color: var(--th-color-text-selected);
+    }
+  }
+  &:invalid:not(:focus) {
+    outline: 2px solid var(--th-color-focus-error);
+    border: none;
+    color: var(--th-color-focus-error);
+    
+    svg {
+      color: var(--th-color-focus-error);
+    }
+  }
+  &:focus-within {
+    outline: 2px solid var(--th-color-input-focus);
+    border: none;
+    color: var(--th-color-text-input);
+    svg {
+      color: var(--th-color-input-focus);
+    }
+  }
+
+  button {
+    width: 10%;
+    background: transparent;
+    height: 3.2rem;
+    border-radius: 14px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:focus-within {
+      outline: 2px solid var(--th-color-input-focus);
+    }
+  }
+}
+.toast__error {
+  background-color: var(--error);
+}
+.success {
+  background-color: var(--success);
+}

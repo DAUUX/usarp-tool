@@ -1,0 +1,44 @@
+.home__container {
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2.5rem;
+
+  h4 {
+    /* Headline/H5 */
+    font-family: Inter;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 120%;
+    text-align: justify;
+    span {
+      color: #008287;
+    }
+  }
+}
+.recent__container {
+  h4 {
+    color: #212121;
+    font-family: Inter;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 150%;
+    text-align: justify;
+    margin-bottom: 1rem;
+  }
+}
+.buttons__container {
+  margin-top: 2.5rem;
+}
+.cards__container {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.home__ {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
