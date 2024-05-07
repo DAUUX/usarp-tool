@@ -33,8 +33,9 @@ export default function Register() {
     const content = (
       <FeedbackAlert.Root>
         <FeedbackAlert.Icon icon="closecircle" />
-        <FeedbackAlert.Title title="Falha ao realizar login" />
-        <FeedbackAlert.Description description="Instabilidade no servidor" />
+        <FeedbackAlert.Title title="Dado inválido" />
+        <FeedbackAlert.Description description="Houve um problema com os dados fornecidos. 
+        Por favor, verifique as informações inseridas e tente novamente." />
         <FeedbackAlert.Button onClick={close} label="Ok, fechar" />
       </FeedbackAlert.Root>
     );
@@ -56,7 +57,7 @@ export default function Register() {
   };
   const handleRegister = (body) => {
     axios
-      .post(baseURL + "/users", body)
+      .post(baseURL + "/auth/signup", body)
       .then(() => {
         handleOpenAlertSuccess();
         setTimeout(() => {
@@ -69,6 +70,7 @@ export default function Register() {
         if (err.code === "ERR_NETWORK") {
           handleOpenAlertError();
         }
+        handleOpenAlertError()
       });
   };
 
@@ -130,7 +132,7 @@ export default function Register() {
       )}
       {steps.length >= 2 ? (
         <StepThree
-          fullName={"steps[0].fullName"}
+          fullName={steps[0].fullName}
           next={handleStepSubmit}
           previous={handleStepPrevious}
         >

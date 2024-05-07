@@ -16,11 +16,12 @@ import { useAuth } from "../../hooks/useAuth";
 export default function Login() {
   const schema = Yup.object().shape({
     email: Yup.string()
-    .email("Deve ser um E-mail válido!")
-    .required("E-mail é um campo obrigatório!"),
+      .email("Deve ser um E-mail válido!")
+      .required("E-mail é um campo obrigatório!"),
     password: Yup.string()
-    .min(6, "A senha deve conter pelo menos 8 caracteres!")
-    .required(),
+      .min(6, "A senha deve conter pelo menos 8 caracteres!")
+      .max(15, "A senha deve conter no máximo 15 caracteres!")
+      .required(),
   });
   
   const { register, handleSubmit, formState } = useForm({
@@ -74,11 +75,10 @@ export default function Login() {
         handleOpenAlertSuccess();
         setTimeout(() => {
           close();
-          navigate("/home");
-        }, 2000);
+          navigate("/login");
+        }, 6000);
       })
       .catch((err) => {
-        console.log(err);
         if (err.code === "ERR_NETWORK") {
           handleOpenAlertError();
         }

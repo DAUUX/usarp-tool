@@ -87,14 +87,17 @@ html[data-theme="primary"] {
   --th-background-sidebar: var(--gray-50);
   --th-color-primary-button: var(--primary-600);
   --th-color-secondary-button: var(--primary-600);
-  --th-color-button-focus: var(--primary-700); 
+  --th-color-button: var(--primary-600);
+  --th-color-button-hover: var(--primary-500);
+  --th-color-button-focus: var(--primary-700);
+  --th-color-button-back: var(--white);
   --th-color-button-back: var(--white);
   --th-color-primary-button-hover: var(--primary-500);
   --th-color-secondary-button-hover: var(--primary-100);
   --th-border-secondary-button: 1px var(--primary-600) solid;
   --th-color-button-disabled: var(--gray-100);
   --th-color-text-button-disabled: var(--gray-800);
-
+  --th-color-text-button: var(--white);
   --th-color-input-focus: var(--primary-600);
   --th-color-text-input: var(--gray-700);
   --th-color-text-primary-button: var(--white);

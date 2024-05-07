@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { Layout } from "./components/Layout";
-import { ConfigurationsLayout } from "./components/ConfigurationsLayout";
-import { Profile } from "./pages/Profile";
+import { ConfigurationsLayout } from "../components/ConfigurationsLayout";
+import { Profile } from "../pages/Profile";
+import { Home } from "../pages/Home";
+import { Layout } from "../components/Layout";
 
 
 export function LoggedRoutes() {
