@@ -8,11 +8,7 @@ export function Home() {
       <section>
         <div>
           <h4>
-<<<<<<< Updated upstream
-            Bem-vindo(a), <span>Mateus Andrade!</span>
-=======
             Bem-vindo(a), <span>{user.fullName}!</span>
->>>>>>> Stashed changes
           </h4>
         </div>
         <div className={styles.buttons__container}>
