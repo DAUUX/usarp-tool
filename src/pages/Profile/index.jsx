@@ -1,26 +1,43 @@
 import styles from "./styles.module.scss"
 import { DataView } from "./DataView";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputDropdown from "../../components/InputDropdown";
-import { useContext, useEffect } from 'react';
 import { FormSubmitContext } from "../../components/ConfigurationsLayout";
 import { Modal } from "../../components/Modal";
+import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
 
 export function Profile() {
 
+  const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false);
+  const [userData, setUserData] = useState(null);
   const { setAlert } = useContext(FormSubmitContext);
+
+  useEffect(() => {
+    axios.get('/user', {
+        params: {
+          id: user.id
+        }
+      })
+      .then(res => {
+        setUserData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setAlert(true);
+      });
+  }, []);
 
   const schema = Yup.object().shape({
     fullName: Yup.string().required("Nome Completo é um campo obrigatório!"),
     email: Yup.string()
       .email("Deve ser um E-mail válido!")
       .required("E-mail é um campo obrigatório!"),
-    profile: Yup.string().required("Perfil é um campo obrigatório!"),
     organization: Yup.string().required("Organização é um campo obrigatório!")
   });
 
@@ -28,12 +45,12 @@ export function Profile() {
     mode: "all",
     resolver: yupResolver(schema),
     defaultValues: {
-      fullName: "Matheus Andrade Carvalho",
-      email: "MateusAndrade_@bbb.com",
-      birthdate: "1985-05-02",
-      gender: "masculino",
-      profile: "Analista de Requisitos",
-      organization: "Organização WXYZ",
+      fullName: userData.fullName ?? '',
+      email: userData.email ?? '',
+      birthdate: userData.birthdate ?? '',
+      gender: userData.gender ?? '',
+      profile: userData.profile ?? '',
+      organization: userData.organization ?? '',
     },
   });
 
@@ -46,13 +63,25 @@ export function Profile() {
   }, []);
 
   const handleSubmitForm = (data) => {
-    setModalVisibility(true) // TO-DO: dados atualizados com sucesso
-    setAlert({ // TO-DO: falha ao atualizar os dados
-      message: "Desculpe, servidor indisponível no momento",
-      icon: "wifioff",
-      type: "warning"
+    axios.put('/user/update', {
+      email: data.email,
+      fullName: data.fullName,
+      gender: data.gender,
+      birthdate: data.birthdate,
+      profile: data.profile,
+      organization: data.organization,
     })
-    console.log(data);
+      .then(res => {
+        console.log(res.data);
+        setModalVisibility(true);
+      })
+      .catch( err => {
+        setAlert({
+          message: "Desculpe, servidor indisponível no momento",
+          icon: "wifioff",
+          type: "warning"
+        })
+      })
   };
 
   return (
@@ -64,7 +93,7 @@ export function Profile() {
           width="80"
           height="80"
         />
-        <p>Mateus Andrade</p>
+        <p>{user.fullName || "undefined"}</p>
         <button>Editar foto de perfil</button>
       </header>
       <hr/>
@@ -72,7 +101,7 @@ export function Profile() {
         <section>
           <DataView
             legend="E-mail"
-            data="MateusAndrade_@bbb.com"
+            data={user.email}
             id="viewEmail"
           />
           <DataView
@@ -148,17 +177,20 @@ export function Profile() {
               )}
             </div>
             <div>
-              <label htmlFor="profile">Perfil</label>
-              <input
-                {...register("profile")}
-                type="text"
+              <InputDropdown
+                label="Perfil"
+                registerName="profile"
+                register={register}
                 name="profile"
                 id="profile"
-                required={errors.profile ? true : false}
-              />
-              {errors.profile && (
-                <p className={styles.card__error}>{errors.profile.message}</p>
-              )}
+                data={[
+                  { label: "Estudante", value: "Estudante" },
+                  { label: "Professor", value: "Professor" },
+                  { label: "Profissional da indústria", value: "Profissional da indústria" },
+                  { label: "Outro", value: "Outro" },
+                ]}
+              >
+              </InputDropdown>
             </div>
             <div>
               <InputDropdown
