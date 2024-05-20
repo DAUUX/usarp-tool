@@ -149,6 +149,12 @@ html[data-theme="primary"] {
   --th-color-text-profile-alert: var(--gray-900);
   --th-color-background-profile-alert-warning: var(--tertiary-500);
   --th-color-background-profile-alert-danger: var(--error);
+
+  --th-color-title-password-recover: var(--gray-500);
+  --th-color-text-password-recover: var(--gray-500);
+  --th-color-title-password-recover-feedback: var(--primary-800);
+  --th-color-text-password-recover-feedback: var(--primary-500);
+  --th-border-input-password-recover: 1px var(--gray-400) solid;
 }
 
 // html[data-theme='secondary'] {

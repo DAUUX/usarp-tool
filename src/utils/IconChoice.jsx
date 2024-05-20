@@ -13,6 +13,7 @@ import { CloseCircle } from "../assets/icons/CloseCircle";
 import { CheckCircle } from "../assets/icons/CheckCircle";
 import { Gear } from "../assets/icons/Gear";
 import { Lock } from "../assets/icons/Lock";
+import { WarningCircle } from "../assets/icons/WarningCircle";
 
 export function IconChoice({ icon, color }) {
   switch (icon) {
@@ -44,6 +45,8 @@ export function IconChoice({ icon, color }) {
       return <Gear color={color} />;
     case "lock":
       return <Lock color={color} />;
+    case "warning":
+      return <WarningCircle color={color} />
     default:
       return null;
   }
