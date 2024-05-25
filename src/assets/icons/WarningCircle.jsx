@@ -8,12 +8,17 @@ export function WarningCircle(props) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="52.5" cy="52" r="52" fill="#FFC53F" />
+      <circle
+        cx="52.5"
+        cy="52"
+        r="52"
+        fill="#FFC53F"
+      />
       <path
-        d="M52.5 27L28.5 68.5692"
-        stroke="white"
-        strokeWidth="5"
-        strokeLinecap="round"
+      d="M52.5 27L28.5 68.5692"
+      stroke="white"
+      strokeWidth="5"
+      strokeLinecap="round"
       />
       <path
         d="M77.5 69L28.5 68.5692"
@@ -28,7 +33,7 @@ export function WarningCircle(props) {
         strokeLinecap="round"
       />
       <path
-        d="M52.5361 45L52.5482 54.0587"
+        d="M52.5371 45L52.5492 54.0587"
         stroke="white"
         strokeWidth="3.49999"
         strokeLinecap="round"
@@ -42,3 +47,4 @@ export function WarningCircle(props) {
     </svg>
   );
 }
+

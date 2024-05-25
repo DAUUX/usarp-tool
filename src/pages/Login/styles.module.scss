@@ -40,12 +40,13 @@
     }
   }
 
-  b {
+  b, a {
     font-size: 0.875rem;
     align-self: flex-end;
     color: var(--th-color-text-forgotten-password);
     margin: 0.5rem 0 2.5rem 0;
     cursor: pointer;
+    text-decoration: none;
   }
 }
 .card__container {

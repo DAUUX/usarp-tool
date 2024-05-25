@@ -13,6 +13,7 @@ import { CloseCircle } from "../assets/icons/CloseCircle";
 import { CheckCircle } from "../assets/icons/CheckCircle";
 import { Gear } from "../assets/icons/Gear";
 import { Lock } from "../assets/icons/Lock";
+import { WarningCircle } from "../assets/icons/WarningCircle";
 import { BackArrow } from "../assets/icons/BackArrow";
 import { Plus } from "../assets/icons/Plus";
 import { Arrow } from "../assets/icons/Arrow";
@@ -59,7 +60,9 @@ export function IconChoice({ icon, color, ...rest }) {
     case "gear":
       return <Gear color={color} {...rest} />;
     case "lock":
-      return <Lock color={color} {...rest} />;
+      return <Lock color={color} />;
+    case "warning":
+      return <WarningCircle color={color} />
     case "back":
       return <BackArrow color={color} {...rest} />;
     case "plus":

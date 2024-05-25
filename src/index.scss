@@ -150,6 +150,10 @@ html[data-theme="primary"] {
   --th-color-background-profile-alert-warning: var(--tertiary-500);
   --th-color-background-profile-alert-danger: var(--error);
 
+  --th-color-text-password-recover: var(--gray-500);
+  --th-color-title-password-recover-feedback: var(--primary-800);
+  --th-color-text-password-recover-feedback: var(--primary-500);
+  --th-border-input-password-recover: 1px var(--gray-400) solid;
   // button primary
   --th-button-primary-background: var(--primary-600);
   --th-button-primary-hover: var(--primary-500);
