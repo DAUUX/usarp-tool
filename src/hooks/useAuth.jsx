@@ -5,8 +5,9 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const AuthContext = createContext();
 const User = {
+  id: "",
   email: "",
-  fullname: "",
+  fullName: "",
 };
 
 export const AuthProvider = ({ children }) => {
@@ -20,8 +21,9 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
       localStorage.setItem("@AccessToken", token);
 
-      const { email, fullname } = jwtDecode(token);
-      setUser({ email, fullname });
+      const { email, fullName, id } = jwtDecode(token);
+      setUser({ email, fullName, id });
+
     }
   }, [token]);
 

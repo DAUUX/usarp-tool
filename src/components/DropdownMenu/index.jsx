@@ -29,7 +29,7 @@ export function Dropdown() {
             <Option
               icone={"../../src/assets/icons/profile_icon.svg"}
               iconeAlt={"Ícone de perfil do usuário"}
-              link={"../perfil"}
+              link={"../configurations/profile"}
               text={"Meu perfil"}
             />
           </DropdownMenu.Item>

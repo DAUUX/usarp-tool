@@ -22,7 +22,7 @@ export function Home() {
       <section>
         <div className={styles.home__}>
           <h4>
-            Bem-vindo(a), <span>{user.fullname}!</span>
+            Bem-vindo(a), <span>{user.fullName}!</span>
           </h4>
           <Dropdown />
         </div>
