@@ -6,11 +6,12 @@ export function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname.slice(1);
+
   useEffect(() => {
     if (!path) {
       navigate("/home");
     }
-  }, [path, navigate]);
+  }, [navigate, path]);
 
   return (
     <main style={{ display: "grid", gridTemplateColumns: "14rem 1fr" }}>

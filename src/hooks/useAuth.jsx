@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
 
       const { email, fullName, id } = jwtDecode(token);
       setUser({ email, fullName, id });
+
     }
   }, [token]);
 

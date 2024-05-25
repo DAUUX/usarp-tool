@@ -10,6 +10,7 @@ export default function StepTwo({ fullName, next, previous, children }) {
   const schema = Yup.object().shape({
     password: Yup.string()
       .min(8, "A senha deve conter pelo menos 8 caracteres!")
+      .max(15, "A senha deve conter no máximo 15 caracteres!")
       .matches(/[A-Z]/g, "A senha deve conter pelo menos uma letra maiúscula!")
       .matches(/[a-z]/g, "A senha deve conter pelo menos uma letra minúscula!")
       .matches(/[0-9]/g, "A senha deve conter pelo menos um número!")

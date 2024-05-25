@@ -9,9 +9,9 @@ import { FormSubmitContext } from "../../components/ConfigurationsLayout";
 import { Modal } from "../../components/Modal";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
+import { URL as baseURL } from "../../utils/base";
 
 export function Profile() {
-
   const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false);
@@ -41,7 +41,7 @@ export function Profile() {
     organization: Yup.string().required("Organização é um campo obrigatório!")
   });
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, reset } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
     defaultValues: {
@@ -57,10 +57,25 @@ export function Profile() {
   const { errors } = formState;
 
   useEffect(() => {
+    axios.get(baseURL + '/user', {
+        params: {
+          id: user.id
+        }
+      })
+      .then(res => {
+        setUserData(res.data);
+        reset(res.data);
+      })
+      .catch(() => {
+        setAlert(true);
+      });
+  }, [user.id, editMode, reset, setAlert]);
+
+  useEffect(() => {
     return () => {
       setAlert(false);
     };
-  }, []);
+  }, [setAlert]);
 
   const handleSubmitForm = (data) => {
     axios.put('/user/update', {
@@ -84,6 +99,10 @@ export function Profile() {
       })
   };
 
+  if(userData === null) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className={styles.Profile}>
       <header>
@@ -106,22 +125,22 @@ export function Profile() {
           />
           <DataView
             legend="Gênero"
-            data="Homem Cis"
+            data={userData.gender}
             id="viewGender"
           />
           <DataView
             legend="Data de nascimento"
-            data="11/05/1985"
+            data={userData.birthdate}
             id="viewBirthDate"
           />
           <DataView
             legend="Perfil"
-            data="Analista de Requisitos"
+            data={userData.profile}
             id="viewProfile"
           />
           <DataView
             legend="Organização"
-            data="Organização WXYZ"
+            data={userData.organization}
             id="viewOrganization"
           />
           <button
@@ -200,10 +219,10 @@ export function Profile() {
                 name="gender"
                 id="gender"
                 data={[
-                  { label: "Feminino", value: "feminino" },
-                  { label: "Masculino", value: "masculino" },
-                  { label: "Transexual", value: "transexual" },
-                  { label: "Não-binário", value: "nao-binário" },
+                  { label: "Feminino", value: "female" },
+                  { label: "Masculino", value: "male" },
+                  { label: "Transexual", value: "transsexual" },
+                  { label: "Não-binário", value: "non-binary" },
                 ]}
               >
               </InputDropdown>

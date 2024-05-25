@@ -11,31 +11,33 @@ import { IconChoice } from "../../utils/IconChoice";
 import { Toast } from "../../components/Toast";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
-  const navigate = useNavigate();
   const schema = Yup.object().shape({
     email: Yup.string()
       .email("Deve ser um E-mail válido!")
       .required("E-mail é um campo obrigatório!"),
     password: Yup.string()
       .min(6, "A senha deve conter pelo menos 8 caracteres!")
+      .max(15, "A senha deve conter no máximo 15 caracteres!")
       .required(),
   });
-
+  
   const { register, handleSubmit, formState } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
-
+  const navigate = useNavigate();
+  const { setToken, user } = useAuth();
   const { errors } = formState;
   const { open, close } = useAlert();
-
+  
   const handleOpenAlertSuccess = () => {
     const content = (
       <FeedbackAlert.Root>
         <FeedbackAlert.Icon icon="checkcircle" />
-        <FeedbackAlert.Title title="Bem-vindo(a)" name={", fulano!"} />
+        <FeedbackAlert.Title title="Bem-vindo(a)" name={`, ${user.fullname}`} />
         <FeedbackAlert.Description description="Sua conta foi criada com sucesso" />
       </FeedbackAlert.Root>
     );
@@ -61,20 +63,22 @@ export default function Login() {
       </Toast>
     );
     open(content);
+    setTimeout(() => {close()}, 3000);
   };
 
   const handleSubmitForm = (body) => {
     axios
-      .post(baseURL + "/login", body)
-      .then(() => {
+      .post(baseURL + "/auth/signin", body)
+      .then((response) => {
+        const token = response.data.token;
+        setToken(token);
         handleOpenAlertSuccess();
         setTimeout(() => {
           close();
-          navigate("/home");
-        }, 2000);
+          navigate("/login");
+        }, 6000);
       })
       .catch((err) => {
-        console.log(err);
         if (err.code === "ERR_NETWORK") {
           handleOpenAlertError();
         }
@@ -117,7 +121,8 @@ export default function Login() {
               {errors.password && (
                 <p className={styles.card__error}>{errors.password.message}</p>
               )}
-              <b>Esqueci minha senha</b>
+              
+                <b><Link to="/recover">Esqueci minha senha</Link></b>
             </div>
             <button
               disabled={!formState.isValid}

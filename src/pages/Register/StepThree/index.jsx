@@ -63,10 +63,10 @@ export default function StepThree({ fullName, next, previous, children }) {
               nama="gender"
               id="gender"
               data={[
-                { label: "Feminino", value: "feminino" },
-                { label: "Masculino", value: "masculino" },
-                { label: "Transexual", value: "transexual" },
-                { label: "Não-binário", value: "nao-binário" },
+                { label: "Feminino", value: "2" },
+                { label: "Masculino", value: "1" },
+                { label: "Transexual", value: "2" },
+                { label: "Não-binário", value: "3" },
               ]}
               required={errors.gender ? true : false}
             >
@@ -84,6 +84,11 @@ export default function StepThree({ fullName, next, previous, children }) {
             data={[
               { label: "Estudante", value: "Estudante" },
               { label: "Professor", value: "Professor" },
+              {
+                label: "Profissional da indústria ",
+                value: "Profissional da indústria",
+              },
+              { label: "Outro", value: "Outro" },
             ]}
             required={errors.profile ? true : false}
           >

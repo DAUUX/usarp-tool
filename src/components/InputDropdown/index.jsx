@@ -13,7 +13,7 @@ export default function InputDropdown({
       <label htmlFor="">{label}</label>
       <select {...rest} {...register(registerName)}>
         <option value="" disabled hidden>
-          Escolhar...
+          Escolher...
         </option>
         {data.map((item) => {
           return (
@@ -31,7 +31,7 @@ export default function InputDropdown({
 InputDropdown.propTypes = {
   label: PropTypes.node.isRequired,
   registerName: PropTypes.node.isRequired,
-  register: PropTypes.func.isRequired,
+  register: PropTypes.func,
   children: PropTypes.node,
   data: PropTypes.arrayOf(
     PropTypes.shape({
