@@ -8,7 +8,7 @@
   min-width: 28rem;
   background-color: white;
 
-  span {
+  h4 {
     margin-top: -0.75rem;
     color: var(--th-feedbackalert-description);
     font-family: Inter;
@@ -30,7 +30,7 @@
       color: #008287;
     }
   }
-  button {
+  .feedbackalert__button {
     height: 56px;
     display: flex;
     flex-direction: row;
