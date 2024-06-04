@@ -12,19 +12,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 export default function ResetPassword() {
   const schema = Yup.object().shape({
     password: Yup.string()
-      .min(8, "A senha deve conter pelo menos 8 caracteres!")
-      .max(15, "A senha deve conter no máximo 15 caracteres!")
-      .matches(/[A-Z]/g, "A senha deve conter pelo menos uma letra maiúscula!")
-      .matches(/[a-z]/g, "A senha deve conter pelo menos uma letra minúscula!")
-      .matches(/[0-9]/g, "A senha deve conter pelo menos um número!")
+      .min(8, "")
+      .max(15, "")
+      .matches(/[A-Z]/g, "")
+      .matches(/[a-z]/g, "")
+      .matches(/[0-9]/g, "")
       .matches(
         /[#?!@$%^&*-]/g,
         "A senha deve conter pelo menos um caractere especial!"
       )
       .required(),
     passwordConfirmation: Yup.string()
-      .oneOf([Yup.ref('password')], "As senhas devem ser iguais!")
-      .required("As senhas devem ser iguais!"),
+      .oneOf([Yup.ref('password')], "")
+      .required(""),
   });
 
   const { open, close } = useAlert();
@@ -76,13 +76,11 @@ export default function ResetPassword() {
             minLength="8"
             required={errors.password ? true : false}
           />
-          {errors.password && (
-            <p className={styles.ResetPassword__error}>
-              {errors.password.message}
-            </p>
-          )}
         </div>
-        <PasswordStrengthLevel password={getValues("password")} />
+        <p>
+          Sua senha deve ter pelo menos 8 caracteres, com letras
+          minúsculas e maiúsculas, números e caracteres especiais
+        </p>
         <div>
           <label htmlFor="passwordConfirmation">Confirmar senha</label>
           <InputPassword
@@ -94,23 +92,24 @@ export default function ResetPassword() {
             placeholder="•••••••••"
             required={errors.passwordConfirmation ? true : false}
           />
-          {errors.passwordConfirmation && (
-            <p className={styles.ResetPassword__error}>
-              {errors.passwordConfirmation.message}
-            </p>
-          )}
         </div>
+        <p>
+          Digite a mesma senha do campo anterior
+        </p>
+        <PasswordStrengthLevel password={getValues("password")} />
         <button
           className={styles.ResetPassword__primaryButton}
           disabled={!formState.isValid}
           type="submit"
+          style={{marginTop: 24 + "px"}}
         >
           CONTINUAR
         </button>
-        <Link to="../../login">
+        <Link to="../../login" style={{marginTop: 24 + "px"}}>
           <button
             className={styles.ResetPassword__secondaryButton}
             type="button"
+            style={{marginTop: 0}}
           >
             VOLTAR
           </button>
