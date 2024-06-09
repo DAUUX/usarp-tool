@@ -2,20 +2,22 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import style from "./styles.module.scss";
 import { Option } from "./Option";
 import { useAuth } from "../../hooks/useAuth";
+import { Avatar } from "../Avatar";
 
 export function Dropdown() {
-  const { handleLogout } = useAuth();
+  const { handleLogout, user } = useAuth();
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button className={style.DropdownTrigger} aria-label="Menu da conta">
-          <img
+          {/* <img
             className={style.DropdownTrigger__ProfilePic}
             src="../../src/assets/icons/userPlaceholder.svg"
             alt="Foto do usuário"
             width="40"
             height="40"
-          />
+          /> */}
+          <Avatar name={user.fullName} />
           <div className={style.DropdownTrigger__ArrowIcon} />
         </button>
       </DropdownMenu.Trigger>
