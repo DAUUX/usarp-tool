@@ -6,12 +6,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Wrapper from "../../components/Wrapper";
 import InputPassword from "../../components/InputPassword";
 import axios from "axios";
-import { URL as baseURL } from "../../utils/base";
 import { IconChoice } from "../../utils/IconChoice";
 import { Toast } from "../../components/Toast";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
 import { useAuth } from "../../hooks/useAuth";
+import { URL as baseURL } from "../../utils/base";
 
 export default function Login() {
   const schema = Yup.object().shape({
@@ -37,7 +37,7 @@ export default function Login() {
     const content = (
       <FeedbackAlert.Root>
         <FeedbackAlert.Icon icon="checkcircle" />
-        <FeedbackAlert.Title title="Bem-vindo(a)" name={`, ${user.fullname}`} />
+        <FeedbackAlert.Title title="Bem-vindo(a)" name={`, ${user.fullName}`} />
         <FeedbackAlert.Description description="Sua conta foi criada com sucesso" />
       </FeedbackAlert.Root>
     );
@@ -70,13 +70,14 @@ export default function Login() {
     axios
       .post(baseURL + "/auth/signin", body)
       .then((response) => {
-        const token = response.data.token;
+        const token = response.data.accessToken;
         setToken(token);
+        localStorage.setItem("@AccessToken", token);
         handleOpenAlertSuccess();
         setTimeout(() => {
           close();
           navigate("/login");
-        }, 6000);
+        }, 3000);
       })
       .catch((err) => {
         if (err.code === "ERR_NETWORK") {
