@@ -39,6 +39,10 @@
       gap: 1.5rem;
       align-items: center;
     }
+    .viewProject__filter{
+      display: flex;
+      justify-content: space-between;
+    }
   }
   .viewProject__table {
     margin-top: 2.5rem;

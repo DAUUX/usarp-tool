@@ -1,27 +1,63 @@
 import { useForm } from "react-hook-form";
 import { Input } from "../../components/Input/indes";
-import { InputCombobox } from "../../components/InputCombobox";
-import styles from "./styles.module.scss";
 import { Dropdown } from "../../components/Dropdown";
 import { IconChoice } from "../../utils/IconChoice";
+import styles from "./styles.module.scss";
+import ViewProjectService from "./viewProject.service";
+import { URL as baseURL } from "../../utils/base";
+import { Button } from "../../components/Button";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FeedbackAlert } from "../../components/FeedbackAlert";
+import { useAlert } from "../../hooks/useAlert";
+import { useEffect, useState } from "react";
 
 export function ViewProject() {
+  const { open, close } = useAlert();
+  const navigate = useNavigate();
+  const { data } = ViewProjectService(baseURL + "/projeto");
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    setProjects(data);
+  }, [data]);
+
+  const handleOpenAlertDelete = (id) => {
+    open(
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="warningcircle" />
+        <FeedbackAlert.Title title="Aviso!" />
+        <FeedbackAlert.Description
+          style={{ textAlign: "center" }}
+          description="Desejar apagar o projeto?"
+        />
+        <div style={{ display: "flex", gap: "2rem" }}>
+          <Button.Root data-type="danger" onClick={close}>
+            <Button.Text>Cancelar</Button.Text>
+          </Button.Root>
+          <Button.Root data-type="primary" onClick={() => handleDelete(id)}>
+            <Button.Text>Sim, Apagar</Button.Text>
+          </Button.Root>
+        </div>
+      </FeedbackAlert.Root>
+    );
+  };
+
   const {
-    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     mode: "all",
   });
-function getCurrentDateFormatted() {
-  const today = new Date();
+  // function getCurrentDateFormatted() {
+  //   const today = new Date();
 
-  const day = String(today.getDate()).padStart(2, "0");
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const year = today.getFullYear();
+  //   const day = String(today.getDate()).padStart(2, "0");
+  //   const month = String(today.getMonth() + 1).padStart(2, "0");
+  //   const year = today.getFullYear();
 
-  return `${day}/${month}/${year}`;
-}
+  //   return `${day}/${month}/${year}`;
+  // }
   const handleSubmitForm = (body) => {
     console.log(body);
     // axios
@@ -41,6 +77,19 @@ function getCurrentDateFormatted() {
     //     }
     //     handleOpenToastError();
     //   });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(baseURL + "/projeto/" + id);
+      // Atualiza a lista de projetos após a deleção
+      setProjects((prevProjects) =>
+        prevProjects.filter((project) => project.id !== id)
+      );
+      close();
+    } catch (error) {
+      console.error("Erro ao deletar o projeto:", error);
+    }
   };
 
   return (
@@ -96,6 +145,15 @@ function getCurrentDateFormatted() {
               </Dropdown.Menu>
             </Dropdown.Root>
           </form>
+          <Button.Root
+            data-type="primary"
+            title="Nova História de Usuário"
+            style={{ padding: ".8rem 1.5rem" }}
+            onClick={() => navigate("/registerUserstory")}
+          >
+            <Button.Text>Nova História de Usuário</Button.Text>
+            <Button.Icon iconName="plus" />
+          </Button.Root>
         </div>
         <div className={styles.viewProject__table}>
           <table>
@@ -105,40 +163,59 @@ function getCurrentDateFormatted() {
                 <th>CRIADO POR</th>
                 <th>DATA DE CRIAÇÃO</th>
                 <th>STATUS</th>
+                <th>Histórias de Usuário</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Projeto 1</td>
-                <td>
-                  <div className={styles.table__users}>
-                    <IconChoice icon="develop" />
-                    <span>Erik Beran</span>
-                  </div>
-                </td>
-                <td>
-                  <span>{getCurrentDateFormatted()}</span>
-                </td>
-                <td>
-                  <div className={styles.table__status}>
-                    <span>Novo</span>
-                  </div>
-                </td>
-                <td>
-                  <div className={styles.table__buttons}>
-                    <span title="Favoritar">
-                      <IconChoice icon="star" />
-                    </span>
-                    <span title="Editar">
-                      <IconChoice icon="edit" />
-                    </span>
-                    <span title="Deletar">
-                      <IconChoice icon="delete" />
-                    </span>
-                  </div>
-                </td>
-              </tr>
+              {projects.length <= 0 ? (
+                <tr>
+                  <td colSpan={6}>
+                    Ainda não há projetos cadastrados. Criar meu primeiro
+                    projeto agora.
+                  </td>
+                </tr>
+              ) : null}
+              {projects.map((project, index) => (
+                <tr key={index}>
+                  <td>{project.name}</td>
+                  <td>
+                    <div className={styles.table__users}>
+                      <IconChoice icon="develop" />
+                      <span>{project.createdby.name}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span>{project.date}</span>
+                  </td>
+                  <td>
+                    <div className={styles.table__status}>
+                      <span>{project.status}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span>{project.amountUs}</span>
+                  </td>
+                  <td>
+                    <div className={styles.table__buttons}>
+                      <span title="Favoritar">
+                        <IconChoice icon="star" />
+                      </span>
+                      <span title="Editar">
+                        <Link to={`/editProject/${project.id}`}>
+                          <IconChoice icon="edit" />
+                        </Link>
+                      </span>
+                      <span
+                        title="Deletar"
+                        onClick={() => handleOpenAlertDelete(project.id)}
+                      >
+                        <IconChoice icon="delete" />
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
