@@ -6,15 +6,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./styles.module.scss";
 import { useForm } from "react-hook-form";
 import { InputCombobox } from "../../components/InputCombobox";
+import RegisterBrainstormingService from "./registerBrainstorming.service";
+import { URL as baseURL } from "../../utils/base";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
-import { useAlert } from "../../hooks/useAlert";
-import { useNavigate } from "react-router-dom";
 
 export function RegisterBrainstorming() {
   const schema = Yup.object().shape({
-    title: Yup.string().required(
-      "Título do Brainstorming e um campo obrigatório!"
-    ),
+    title: Yup.string()
+      .required("Título do Brainstorming e um campo obrigatório!")
+      .matches(
+        /^[A-Za-z0-9 ]+$/,
+        "O título deve conter apenas letras e números"
+      ),
     date: Yup.string().required("Data e um campo obrigatório!"),
     hours: Yup.string().required("Horário e um campo obrigatório!"),
     project: Yup.string()
@@ -34,8 +37,8 @@ export function RegisterBrainstorming() {
       })
       .required("Histórias de Usuário é um campo obrigatório!"),
   });
-  const { open, close } = useAlert();
-  const navigate = useNavigate();
+  const { handleBackButton, RegisterBrainstorming, listProjects, handleBackBackCloseALert } =
+    RegisterBrainstormingService(baseURL);
 
   const {
     register,
@@ -47,10 +50,22 @@ export function RegisterBrainstorming() {
     mode: "all",
     resolver: yupResolver(schema),
   });
-  const goBack = () => {
-    close();
-    navigate(-1);
+  const selectedProjectId = watch("project");
+  let projectOptions = listProjects.map((item) => ({
+    value: item.id,
+    label: item.name,
+  }));
+  let userStoryOptions = listProjects
+    .filter((i) => i.id === selectedProjectId?.value)[0]
+    ?.userStory?.map((t) => ({
+      value: t.userstoryNumber,
+      label: "US" + t.userstoryNumber,
+    }));
+  const handleSubmitForm = (body) => {
+    RegisterBrainstorming(body, contentSuccess,null,contentWarning);
   };
+
+  // alertas
   const contentSuccess = (
     <FeedbackAlert.Root>
       <FeedbackAlert.Icon icon="checkcircle" />
@@ -59,7 +74,7 @@ export function RegisterBrainstorming() {
         style={{ textAlign: "center" }}
         description="Novo Brainstorming registrado!"
       />
-      <FeedbackAlert.Button onClick={close} label="Visualizar" />
+      <FeedbackAlert.Button onClick={() => handleBackBackCloseALert()} label="Visualizar" />
     </FeedbackAlert.Root>
   );
   const contentWarning = (
@@ -71,55 +86,25 @@ export function RegisterBrainstorming() {
         <Button.Root data-type="danger" onClick={close}>
           <Button.Text>Cancelar</Button.Text>
         </Button.Root>
-        <Button.Root data-type="primary" onClick={goBack}>
+        <Button.Root
+          data-type="primary"
+          onClick={() => handleBackBackCloseALert()}
+        >
           <Button.Text>Sim, continuar</Button.Text>
         </Button.Root>
       </div>
     </FeedbackAlert.Root>
   );
-  const handleOpenAlert = (content) => {
-    open(content);
-  };
-  const handleBackButton = () => {
-    const formValue = watch(["date", "hours", "project", "title", "userStory"]);
-    const hasDataLoss = formValue.some((item) => {
-      if (Array.isArray(item)) {
-        return item.length > 0;
-      } else {
-        return Boolean(item);
-      }
-    });
 
-    hasDataLoss ? handleOpenAlert(contentWarning) : goBack();
-  };
-
-  const handleSubmitForm = (body) => {
-    handleOpenAlert(contentSuccess);
-    console.log(body);
-    // axios
-    //   .post(baseURL + "/auth/signin", body)
-    //   .then((response) => {
-    //     const token = response.data.token;
-    //     setToken(token);
-    //     handleOpenAlertSuccess();
-    //     setTimeout(() => {
-    //       close();
-    //       navigate("/login");
-    //     }, 6000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.code === "ERR_NETWORK") {
-    //       handleOpenAlertError();
-    //     }
-    //     handleOpenToastError();
-    //   });
-  };
 
   return (
     <div className={styles.brainstorming__container}>
       <header>
         <span title="voltar">
-          <IconChoice onClick={() => handleBackButton()} icon="back" />
+          <IconChoice
+            onClick={() => handleBackButton(watch(), contentWarning)}
+            icon="back"
+          />
           <h4>Novo Brainstorming</h4>
         </span>
       </header>
@@ -149,11 +134,7 @@ export function RegisterBrainstorming() {
                   error={errors.project}
                   control={control}
                   required={errors.project ? true : false}
-                  options={[
-                    { value: "1", label: "USARP Tool" },
-                    { value: "2", label: "MDV" },
-                    { value: "3", label: "Projeto 1" },
-                  ]}
+                  options={projectOptions}
                 />
                 {errors.project && (
                   <InputCombobox.Error>
@@ -203,11 +184,7 @@ export function RegisterBrainstorming() {
                   error={errors.userStory}
                   control={control}
                   required={errors.userStory ? true : false}
-                  options={[
-                    { value: "1", label: "USARP Tool" },
-                    { value: "2", label: "MDV" },
-                    { value: "3", label: "Projeto 1" },
-                  ]}
+                  options={userStoryOptions}
                 />
                 {errors.userStory && (
                   <InputCombobox.Error>
@@ -219,6 +196,13 @@ export function RegisterBrainstorming() {
           </div>
         </div>
         <div className={styles.buttons__container}>
+          <Button.Root
+            type="button"
+            onClick={() => handleBackButton(watch(), contentWarning)}
+            data-type="secondary"
+          >
+            <Button.Text>Cancelar</Button.Text>
+          </Button.Root>
           <Button.Root disabled={!isValid} data-type="primary" type="submit">
             <Button.Text>Agendar Brainstorming</Button.Text>
           </Button.Root>
