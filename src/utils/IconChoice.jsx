@@ -19,7 +19,7 @@ import { Plus } from "../assets/icons/Plus";
 import { Arrow } from "../assets/icons/Arrow";
 import { Calendar } from "../assets/icons/Calendar";
 import { Clock } from "../assets/icons/Clock";
-import { WarningCircle } from "../assets/icons/WarningCircle";
+// import { WarningCircle } from "../assets/icons/WarningCircle";
 import { Info } from "../assets/icons/Info";
 import { ArrowUp } from "../assets/icons/ArrowUp";
 import { Develop } from "../assets/icons/Develop";
