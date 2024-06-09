@@ -8,14 +8,21 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { InputCombobox } from "../../components/InputCombobox";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InputTextarea } from "../../components/InputTextarea/indes";
-
+import axios from "axios";
+import { URL as baseURL } from "../../utils/base";
+import { useAuth } from "../../hooks/useAuth";
+import { useEffect } from "react";
 
 export function RegisterProject() {
+  const { id } = useParams();
+  const { user } = useAuth();
   const schema = Yup.object().shape({
-    name: Yup.string().required("Nome do projeto é obrigatório"),
-    description: Yup.string().required("Descrição é obrigatória"),
+    name: Yup.string()
+      .required("Nome do projeto é obrigatório")
+      .min(5, "Nome do projeto deve ter no mínimo 5 caracteres"),
+    description: Yup.string(),
     members: Yup.array().of(
       Yup.object().shape({
         email: Yup.string()
@@ -28,29 +35,29 @@ export function RegisterProject() {
             }
             return value;
           })
-          .required("Função é obrigatória"),
+          .required("Papel é obrigatório"),
       })
     ),
   });
 
   const { open, close } = useAlert();
   const navigate = useNavigate();
-
+  const initialValues = {
+    name: "",
+    description: "",
+    members: [{ email: "", role: "" }],
+  };
   const {
     control,
     register,
     handleSubmit,
-    setValue,
     watch,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
-    defaultValues: {
-      name: "",
-      description: "",
-      members: [{ email: "", role: "" }],
-    },
+    defaultValues: initialValues,
   });
 
   const { fields, append } = useFieldArray({
@@ -62,15 +69,29 @@ export function RegisterProject() {
     close();
     navigate(-1);
   };
+
+  const navegate = () => {
+    close();
+    navigate("/project");
+  };
+  function getCurrentDateFormatted() {
+    const today = new Date();
+
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const year = today.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }
   const contentSuccess = (
     <FeedbackAlert.Root>
       <FeedbackAlert.Icon icon="checkcircle" />
       <FeedbackAlert.Title title="Excelente" />
       <FeedbackAlert.Description
         style={{ textAlign: "center" }}
-        description="Novo Brainstorming registrado!"
+        description="Novo Projeto registrado!"
       />
-      <FeedbackAlert.Button onClick={close} label="Visualizar" />
+      <FeedbackAlert.Button onClick={() => navegate()} label="Visualizar" />
     </FeedbackAlert.Root>
   );
   const contentWarning = (
@@ -92,38 +113,60 @@ export function RegisterProject() {
     open(content);
   };
   const handleBackButton = () => {
-    const formValue = watch(["date", "hours", "project", "title", "userStory"]);
-    const hasDataLoss = formValue.some((item) => {
-      if (Array.isArray(item)) {
-        return item.length > 0;
-      } else {
-        return Boolean(item);
+    const formValues = watch();
+    const hasDataLoss = Object.values(formValues).some((value) => {
+      if (Array.isArray(value)) {
+        return value.some((item) => Object.values(item).some((val) => val));
       }
+      return Boolean(value);
     });
 
     hasDataLoss ? handleOpenAlert(contentWarning) : goBack();
   };
   const handleSubmitForm = (body) => {
-    handleOpenAlert(contentSuccess);
-    console.log(body);
-    // axios
-    //   .post(baseURL + "/auth/signin", body)
-    //   .then((response) => {
-    //     const token = response.data.token;
-    //     setToken(token);
-    //     handleOpenAlertSuccess();
-    //     setTimeout(() => {
-    //       close();
-    //       navigate("/login");
-    //     }, 6000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.code === "ERR_NETWORK") {
-    //       handleOpenAlertError();
-    //     }
-    //     handleOpenToastError();
-    //   });
+    const newData = {
+      createdby: {
+        role: "Developer",
+        name: user.fullName,
+      },
+      status: "Novo",
+      date: getCurrentDateFormatted(),
+      amountUs: 0,
+      userStoryId: 8,
+    };
+
+    const mergedBody = { ...body, ...newData };
+    axios
+      .post(baseURL + "/projeto", mergedBody)
+      .then(() => {
+        handleOpenAlert(contentSuccess);
+        // handleOpenAlertSuccess();
+        // setTimeout(() => {
+        //   close();
+        // }, 3000);
+      })
+      .catch((err) => {
+        if (err.code === "ERR_NETWORK") {
+          // handleOpenAlertError();
+        }
+        // handleOpenToastError();
+      });
   };
+
+  useEffect(() => {
+    if (id) {
+      const fetchProject = async () => {
+        try {
+          const project = await axios.get(`${baseURL}/projeto/${id}`);
+          const { name, description, members } = project.data;
+          reset({ name, description, members });
+        } catch (error) {
+          console.error("Erro ao carregar o projeto:", error);
+        }
+      };
+      fetchProject();
+    }
+  }, [id, reset]);
 
   return (
     <div className={styles.registerProject__container}>
@@ -152,7 +195,7 @@ export function RegisterProject() {
               </Input.Root>
             </fieldset>
             <fieldset>
-              <h6>Descrição</h6>
+              <h6>Descrição (Opcional)</h6>
               <InputTextarea.Root
                 name={"description"}
                 id={"description"}
@@ -187,7 +230,7 @@ export function RegisterProject() {
                 </Input.Root>
               </fieldset>
               <fieldset>
-                <h6>Função dentro do projeto</h6>
+                <h6>Papel dentro do projeto</h6>
                 <InputCombobox.Root>
                   <InputCombobox.Select
                     name={`members.${index}.role`}
@@ -215,7 +258,7 @@ export function RegisterProject() {
           <Button.Root
             type="button"
             disabled={!isValid}
-            data-type="primary"
+            data-type="tertiary"
             onClick={() =>
               append({
                 members: [{ email: "", role: "" }],
@@ -226,7 +269,11 @@ export function RegisterProject() {
             <Button.Icon iconName="plus" />
           </Button.Root>
           <div>
-            <Button.Root data-type="secondary" type="button">
+            <Button.Root
+              data-type="secondary"
+              type="button"
+              onClick={() => handleBackButton()}
+            >
               <Button.Text>Cancelar</Button.Text>
             </Button.Root>
             <Button.Root disabled={!isValid} data-type="primary" type="submit">
