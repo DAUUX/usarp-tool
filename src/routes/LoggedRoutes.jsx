@@ -20,6 +20,7 @@ export function LoggedRoutes() {
           <Route path="project" element={<ViewProject />} />
           <Route path="brainstorming" element={<Maintenance />} />
           <Route path="registerProject" element={<RegisterProject />} />
+          <Route path="editProject/:id" element={<RegisterProject />} />
           <Route path="registerUserstory" element={<RegisterUserstory />} />
           <Route
             path="registerBrainstorming"
@@ -32,7 +33,7 @@ export function LoggedRoutes() {
         </Route>
         <Route path="/configurations" element={<ConfigurationsLayout />}>
           <Route index path="profile" element={<Profile />} />
-          <Route index path="privacity" element={<p>Em construção</p>} />
+          <Route index path="privacity" element={<Maintenance />} />
         </Route>
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>

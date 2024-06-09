@@ -5,4 +5,5 @@ import { UnloggedRoutes } from "./UnloggedRoutes";
 export default function Routes() {
   const { signed } = useAuth();
   return signed ? <LoggedRoutes /> : <UnloggedRoutes />;
+  // return <LoggedRoutes />;
 }
