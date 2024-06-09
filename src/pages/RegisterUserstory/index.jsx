@@ -5,9 +5,6 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./styles.module.scss";
 import { useFieldArray, useForm } from "react-hook-form";
-import { FeedbackAlert } from "../../components/FeedbackAlert";
-import { useAlert } from "../../hooks/useAlert";
-import { useNavigate } from "react-router-dom";
 import { TooltipInfo } from "../../components/TooltipInfo";
 import { InputTextarea } from "../../components/InputTextarea/indes";
 import {
@@ -16,50 +13,34 @@ import {
   templateConversation,
 } from "../../utils/templateText";
 import { Expansible } from "../../components/Expansible/indes";
+import { URL as baseURL } from "../../utils/base";
+import { InputCombobox } from "../../components/InputCombobox";
+import RegisterUserstoryService from "./registerUserstory.service";
+import { FeedbackAlert } from "../../components/FeedbackAlert";
 
 export function RegisterUserstory() {
   const schema = Yup.object().shape({
-    userStory: Yup.array()
-      .of(
-        Yup.object().shape({
-          userstoryNumber: Yup.string().required(
-            "Número da História de Usuário é um campo obrigatório!"
-          ),
-          card: Yup.string().required("Cartão é um campo obrigatório!"),
-          conversation: Yup.string().required(
-            "Conversa é um campo obrigatório!"
-          ),
-          confirmation: Yup.string().required(
-            "Confirmação é um campo obrigatório!"
-          ),
-        })
-      )
-      .test(
-        "is-valid",
-        "Histórias de Usuário são obrigatórias!",
-        function (value) {
-          if (!value) return false;
-          // Verifique todos os itens, exceto o último
-          for (let i = 0; i < value.length - 1; i++) {
-            const item = value[i];
-            if (
-              !item.userstoryNumber ||
-              !item.card ||
-              !item.conversation ||
-              !item.confirmation
-            ) {
-              return false;
-            }
-          }
-          // O último item é opcional, independentemente de estar preenchido ou não
-          return true;
+    userStory: Yup.array().of(
+      Yup.object().shape({
+        userstoryNumber: Yup.number()
+          .typeError("Número da História de Usuário é um campo obrigatório!")
+          .required("Número da História de Usuário é um campo obrigatório!"),
+        card: Yup.string().required("Cartão é um campo obrigatório!"),
+        conversation: Yup.string().required("Conversa é um campo obrigatório!"),
+        confirmation: Yup.string().required(
+          "Confirmação é um campo obrigatório!"
+        ),
+      })
+    ),
+    project: Yup.string()
+      .transform((value, originalValue) => {
+        if (originalValue && typeof originalValue === "object") {
+          return originalValue.label;
         }
-      ),
+        return value;
+      })
+      .required("Projeto e um campo obrigatória"),
   });
-
-
-  const { open, close } = useAlert();
-  const navigate = useNavigate();
 
   const {
     control,
@@ -77,15 +58,19 @@ export function RegisterUserstory() {
       ],
     },
   });
-
   const { fields, append, remove } = useFieldArray({
     control,
     name: "userStory",
   });
-
-  const goBack = () => {
-    close();
-    navigate(-1);
+  
+  const {
+    data: listProject,
+    handleBackButton,
+    registerUserstory,
+    handleBackBackCloseALert,
+  } = RegisterUserstoryService(baseURL);
+  const handleSubmitForm = (body) => {
+    registerUserstory(body, contentSuccess, null, contentWarning);
   };
   const contentSuccess = (
     <FeedbackAlert.Root>
@@ -93,9 +78,9 @@ export function RegisterUserstory() {
       <FeedbackAlert.Title title="Excelente" />
       <FeedbackAlert.Description
         style={{ textAlign: "center" }}
-        description="Novo Brainstorming registrado!"
+        description="Novas História de usuário adicionadas!"
       />
-      <FeedbackAlert.Button onClick={close} label="Visualizar" />
+      <FeedbackAlert.Button onClick={()=>handleBackBackCloseALert()} label="Visualizar em projetos" />
     </FeedbackAlert.Root>
   );
   const contentWarning = (
@@ -107,59 +92,43 @@ export function RegisterUserstory() {
         <Button.Root data-type="danger" onClick={close}>
           <Button.Text>Cancelar</Button.Text>
         </Button.Root>
-        <Button.Root data-type="primary" onClick={goBack}>
+        <Button.Root data-type="primary" onClick={()=>handleBackBackCloseALert()}>
           <Button.Text>Sim, continuar</Button.Text>
         </Button.Root>
       </div>
     </FeedbackAlert.Root>
   );
-  const handleOpenAlert = (content) => {
-    open(content);
-  };
-  const handleBackButton = () => {
-    const formValue = watch(["date", "hours", "project", "title", "userStory"]);
-    const hasDataLoss = formValue.some((item) => {
-      if (Array.isArray(item)) {
-        return item.length > 0;
-      } else {
-        return Boolean(item);
-      }
-    });
-
-    hasDataLoss ? handleOpenAlert(contentWarning) : goBack();
-  };
-  const handleSubmitForm = (body) => {
-    handleOpenAlert(contentSuccess);
-    console.log(body);
-    // axios
-    //   .post(baseURL + "/auth/signin", body)
-    //   .then((response) => {
-    //     const token = response.data.token;
-    //     setToken(token);
-    //     handleOpenAlertSuccess();
-    //     setTimeout(() => {
-    //       close();
-    //       navigate("/login");
-    //     }, 6000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.code === "ERR_NETWORK") {
-    //       handleOpenAlertError();
-    //     }
-    //     handleOpenToastError();
-    //   });
-  };
-
   return (
     <div className={styles.registerUserstory__container}>
       <header>
         <span title="voltar">
-          <IconChoice onClick={() => handleBackButton()} icon="back" />
+          <IconChoice onClick={() => handleBackButton(watch(), contentWarning)} icon="back" />
           <h4>Criar Histórias de Usuário</h4>
         </span>
       </header>
 
       <form onSubmit={handleSubmit(handleSubmitForm)}>
+        <div className={styles.generaldata__container}>
+          <fieldset style={{paddingBottom:"1.5rem"}}>
+            <h6>Selecionar projeto</h6>
+            <InputCombobox.Root>
+              <InputCombobox.Select
+                name={`project`}
+                defaultValue=""
+                error={errors.project}
+                control={control}
+                required={!!errors.project}
+                options={listProject}
+              />
+              {errors.project && (
+                <InputCombobox.Error>
+                  {errors.project.message}
+                </InputCombobox.Error>
+              )}
+            </InputCombobox.Root>
+          </fieldset>
+        </div>
+
         {fields.map((item, index) => {
           const isLast = index === fields.length - 1;
           const FieldSetContent = (
@@ -167,7 +136,7 @@ export function RegisterUserstory() {
               <fieldset>
                 <h6>Número da História de Usuário</h6>
                 <Input.Root
-                  type="text"
+                  type="number"
                   {...register(`userStory[${index}].userstoryNumber`)}
                   name={`userStory[${index}].userstoryNumber`}
                   id={`userStory[${index}].userstoryNumber`}
@@ -257,7 +226,7 @@ export function RegisterUserstory() {
             </div>
           ) : (
             <Expansible.Root
-              usNumber={index + 1}
+              usNumber={watch(`userStory[${index}].userstoryNumber`)}
               key={item.id}
               close={() => remove(index)}
             >
@@ -270,6 +239,7 @@ export function RegisterUserstory() {
 
         <div className={styles.buttons__container}>
           <Button.Root
+            type="button"
             disabled={!isValid}
             data-type="primary"
             onClick={() =>
@@ -285,8 +255,12 @@ export function RegisterUserstory() {
             <Button.Icon iconName="plus" />
           </Button.Root>
           <div>
-            <Button.Root data-type="secondary">
-              <Button.Text>Cancelar</Button.Text>
+            <Button.Root
+              type="button"
+              onClick={()=>handleBackButton(watch(), contentWarning)}
+              data-type="secondary"
+            >
+              <Button.Text >Cancelar</Button.Text>
             </Button.Root>
             <Button.Root disabled={!isValid} data-type="primary" type="submit">
               <Button.Text>Cadastrar</Button.Text>
