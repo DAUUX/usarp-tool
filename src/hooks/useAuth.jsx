@@ -11,7 +11,7 @@ const User = {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("@AccessToken") || "");
   const [signed, setSigned] = useState(false);
   const [user, setUser] = useState(User);
 
@@ -19,11 +19,8 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       setSigned(true);
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      localStorage.setItem("@AccessToken", token);
-
       const { email, fullName, id } = jwtDecode(token);
       setUser({ email, fullName, id });
-
     }
   }, [token]);
 
