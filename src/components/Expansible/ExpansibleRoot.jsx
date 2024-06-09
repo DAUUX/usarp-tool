@@ -30,6 +30,6 @@ export default function ExpansibleRoot({ children, usNumber, close, ...rest }) {
 
 ExpansibleRoot.propTypes = {
   children: PropTypes.node,
-  usNumber: PropTypes.number,
+  usNumber: PropTypes.string,
   close: PropTypes.func,
 };
