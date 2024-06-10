@@ -1,0 +1,11 @@
+{
+  "loginEmail": "E-mail",
+  "loginPassword": "Senha",
+  "loginButton": "Entrar",
+  "loginError": "E-mail ou senha inválidos",
+  "loginError2": "Por favor, preencha todos os campos",
+  "loginError3": "E-mail inválido",
+  "loginError4": "Senha inválida",
+  "loginEsqueci": "Esqueci minha senha",
+  "loginSemCadastro": "Ainda não possui uma conta? Criar agora"
+}
