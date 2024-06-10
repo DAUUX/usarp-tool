@@ -1,0 +1,97 @@
+.ResetPassword {
+  width: 480px;
+
+  label {
+    color: var(--gray-800);
+    font-size: 14px;
+    line-height: 21px;
+    display: block;
+    margin: 24px 0 8px 0;
+  }
+
+  > p {
+    color: var(--gray-700);
+    font-size: 14px;
+    line-height: 21px;
+    display: block;
+    margin: 8px 0 24px 0;
+  }
+
+  >p:last-of-type {
+    margin-bottom: 32px;
+  }
+
+  > div {
+    margin-bottom: 8px;
+  }
+  
+  .ResetPassword__error {
+    color: var(--error);
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  
+  > button {
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 16px;
+    border: var(--th-border-secondary-button);
+    background-color: transparent;
+    color: var(--th-color-secondary-button);
+    font-size: 16px;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--th-color-secondary-button-hover);
+    }
+    &:focus {
+      outline: 2px solid var(--th-color-button-focus);
+    }
+  }
+
+  .ResetPassword__primaryButton {
+    padding: 16px 24px;
+    border: none;
+    border-radius: 16px;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--th-color-text-primary-button);
+    background-color: var(--th-color-primary-button);
+    margin-top: 8px;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: var(--th-color-primary-button-hover);
+    }
+    &:focus {
+      outline: 2px solid var(--th-color-button-focus);
+    }
+    &:disabled {
+      border: none;
+      background-color: var(--th-color-button-disabled);
+      color: var(--th-color-text-button-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  a {
+    display: block;
+  }
+
+  .ResetPassword__secondaryButton {
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 16px;
+    border: var(--th-border-secondary-button);
+    background-color: transparent;
+    color: var(--th-color-secondary-button);
+    font-size: 1rem;
+    margin-top: 8px;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--th-color-secondary-button-hover);
+    }
+    &:focus {
+      outline: 2px solid var(--th-color-button-focus);
+    }
+  }
+}

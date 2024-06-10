@@ -121,7 +121,8 @@ export default function Login() {
               {errors.password && (
                 <p className={styles.card__error}>{errors.password.message}</p>
               )}
-              <b>Esqueci minha senha</b>
+              
+                <b><Link to="/recover">Esqueci minha senha</Link></b>
             </div>
             <button
               disabled={!formState.isValid}
