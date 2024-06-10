@@ -5,12 +5,13 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 const AuthContext = createContext();
 const User = {
+  id: "",
   email: "",
-  fullname: "",
+  fullName: "",
 };
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("@AccessToken") || "");
   const [signed, setSigned] = useState(false);
   const [user, setUser] = useState(User);
 
@@ -18,10 +19,8 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       setSigned(true);
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-      localStorage.setItem("@AccessToken", token);
-
-      const { email, fullname } = jwtDecode(token);
-      setUser({ email, fullname });
+      const { email, fullName, id } = jwtDecode(token);
+      setUser({ email, fullName, id });
     }
   }, [token]);
 

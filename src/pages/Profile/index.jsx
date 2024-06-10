@@ -1,59 +1,107 @@
 import styles from "./styles.module.scss"
 import { DataView } from "./DataView";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputDropdown from "../../components/InputDropdown";
-import { useContext, useEffect } from 'react';
 import { FormSubmitContext } from "../../components/ConfigurationsLayout";
 import { Modal } from "../../components/Modal";
+import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
+import { URL as baseURL } from "../../utils/base";
 
 export function Profile() {
-
+  const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false);
+  const [userData, setUserData] = useState(null);
   const { setAlert } = useContext(FormSubmitContext);
+
+  useEffect(() => {
+    axios.get('/user', {
+        params: {
+          id: user.id
+        }
+      })
+      .then(res => {
+        setUserData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setAlert(true);
+      });
+  }, []);
 
   const schema = Yup.object().shape({
     fullName: Yup.string().required("Nome Completo é um campo obrigatório!"),
     email: Yup.string()
       .email("Deve ser um E-mail válido!")
       .required("E-mail é um campo obrigatório!"),
-    profile: Yup.string().required("Perfil é um campo obrigatório!"),
     organization: Yup.string().required("Organização é um campo obrigatório!")
   });
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, reset } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
     defaultValues: {
-      fullName: "Matheus Andrade Carvalho",
-      email: "MateusAndrade_@bbb.com",
-      birthdate: "1985-05-02",
-      gender: "masculino",
-      profile: "Analista de Requisitos",
-      organization: "Organização WXYZ",
+      fullName: userData.fullName ?? '',
+      email: userData.email ?? '',
+      birthdate: userData.birthdate ?? '',
+      gender: userData.gender ?? '',
+      profile: userData.profile ?? '',
+      organization: userData.organization ?? '',
     },
   });
 
   const { errors } = formState;
 
   useEffect(() => {
+    axios.get(baseURL + '/user', {
+        params: {
+          id: user.id
+        }
+      })
+      .then(res => {
+        setUserData(res.data);
+        reset(res.data);
+      })
+      .catch(() => {
+        setAlert(true);
+      });
+  }, [user.id, editMode, reset, setAlert]);
+
+  useEffect(() => {
     return () => {
       setAlert(false);
     };
-  }, []);
+  }, [setAlert]);
 
   const handleSubmitForm = (data) => {
-    setModalVisibility(true) // TO-DO: dados atualizados com sucesso
-    setAlert({ // TO-DO: falha ao atualizar os dados
-      message: "Desculpe, servidor indisponível no momento",
-      icon: "wifioff",
-      type: "warning"
+    axios.put('/user/update', {
+      email: data.email,
+      fullName: data.fullName,
+      gender: data.gender,
+      birthdate: data.birthdate,
+      profile: data.profile,
+      organization: data.organization,
     })
-    console.log(data);
+      .then(res => {
+        console.log(res.data);
+        setModalVisibility(true);
+      })
+      .catch( err => {
+        setAlert({
+          message: "Desculpe, servidor indisponível no momento",
+          icon: "wifioff",
+          type: "warning"
+        })
+      })
   };
+
+  if(userData === null) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <div className={styles.Profile}>
@@ -64,7 +112,7 @@ export function Profile() {
           width="80"
           height="80"
         />
-        <p>Mateus Andrade</p>
+        <p>{user.fullName || "undefined"}</p>
         <button>Editar foto de perfil</button>
       </header>
       <hr/>
@@ -72,27 +120,27 @@ export function Profile() {
         <section>
           <DataView
             legend="E-mail"
-            data="MateusAndrade_@bbb.com"
+            data={user.email}
             id="viewEmail"
           />
           <DataView
             legend="Gênero"
-            data="Homem Cis"
+            data={userData.gender}
             id="viewGender"
           />
           <DataView
             legend="Data de nascimento"
-            data="11/05/1985"
+            data={userData.birthdate}
             id="viewBirthDate"
           />
           <DataView
             legend="Perfil"
-            data="Analista de Requisitos"
+            data={userData.profile}
             id="viewProfile"
           />
           <DataView
             legend="Organização"
-            data="Organização WXYZ"
+            data={userData.organization}
             id="viewOrganization"
           />
           <button
@@ -148,17 +196,20 @@ export function Profile() {
               )}
             </div>
             <div>
-              <label htmlFor="profile">Perfil</label>
-              <input
-                {...register("profile")}
-                type="text"
+              <InputDropdown
+                label="Perfil"
+                registerName="profile"
+                register={register}
                 name="profile"
                 id="profile"
-                required={errors.profile ? true : false}
-              />
-              {errors.profile && (
-                <p className={styles.card__error}>{errors.profile.message}</p>
-              )}
+                data={[
+                  { label: "Estudante", value: "Estudante" },
+                  { label: "Professor", value: "Professor" },
+                  { label: "Profissional da indústria", value: "Profissional da indústria" },
+                  { label: "Outro", value: "Outro" },
+                ]}
+              >
+              </InputDropdown>
             </div>
             <div>
               <InputDropdown
@@ -168,10 +219,10 @@ export function Profile() {
                 name="gender"
                 id="gender"
                 data={[
-                  { label: "Feminino", value: "feminino" },
-                  { label: "Masculino", value: "masculino" },
-                  { label: "Transexual", value: "transexual" },
-                  { label: "Não-binário", value: "nao-binário" },
+                  { label: "Feminino", value: "female" },
+                  { label: "Masculino", value: "male" },
+                  { label: "Transexual", value: "transsexual" },
+                  { label: "Não-binário", value: "non-binary" },
                 ]}
               >
               </InputDropdown>

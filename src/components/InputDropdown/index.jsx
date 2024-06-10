@@ -31,7 +31,7 @@ export default function InputDropdown({
 InputDropdown.propTypes = {
   label: PropTypes.node.isRequired,
   registerName: PropTypes.node.isRequired,
-  register: PropTypes.func.isRequired,
+  register: PropTypes.func,
   children: PropTypes.node,
   data: PropTypes.arrayOf(
     PropTypes.shape({

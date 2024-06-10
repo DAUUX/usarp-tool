@@ -16,12 +16,20 @@ export function Layout() {
   return (
     <main style={{ display: "grid", gridTemplateColumns: "14rem 1fr" }}>
       <Sidebar.Root>
-        <Sidebar.Button text="Inicio" active={path == "home"} route="home">
+        <Sidebar.Button
+          text="Inicio"
+          active={
+            path == "home" ||
+            path == "registerProject" ||
+            path == "registerBrainstorming"
+          }
+          route="home"
+        >
           <IconChoice icon="home" />
         </Sidebar.Button>
         <Sidebar.Button
           text="Projetos"
-          active={path == "project"}
+          active={path == "project" || path == "registerUserstory"}
           route="project"
         >
           <IconChoice icon="project" />
