@@ -39,7 +39,7 @@
   --gray-700: #616161;
   --gray-600: #546e7a;
   --gray-500: #757575;
-  --gray-400: #78909c;
+  --gray-400: #9E9E9E;
   --gray-300: #90a4ae;
   --gray-200: #E0E0E0;
   --gray-100: #EEEEEE;
@@ -49,7 +49,7 @@
   --white: #ffffff;
 
   --error: #d32f2f;
-  --error-: #ffe5e8;
+  --error-hover: #;
 
   --success: #00ADB4;
   --success-: #dcefdd;
@@ -150,11 +150,44 @@ html[data-theme="primary"] {
   --th-color-background-profile-alert-warning: var(--tertiary-500);
   --th-color-background-profile-alert-danger: var(--error);
 
-  --th-color-title-password-recover: var(--gray-500);
   --th-color-text-password-recover: var(--gray-500);
   --th-color-title-password-recover-feedback: var(--primary-800);
   --th-color-text-password-recover-feedback: var(--primary-500);
   --th-border-input-password-recover: 1px var(--gray-400) solid;
+  // button primary
+  --th-button-primary-background: var(--primary-600);
+  --th-button-primary-hover: var(--primary-500);
+  --th-button-primary-color: var(--white);
+  --th-button-primary-svg: var(--white);
+  // button secondary
+  --th-button-secondary-background: var(--white);
+  --th-button-secondary-hover: var(--primary-100);
+  --th-button-secondary-color: var(--primary-600);
+  --th-button-secondary-svg: var(--primary-600);
+  // button tertiary
+  --th-button-tertiary-background: var(--white);
+  --th-button-tertiary-hover: var(--primary-100);
+  --th-button-tertiary-color: var(--primary-600);
+  --th-button-tertiary-svg: var(--primary-600);
+  // button danger
+  --th-button-danger-background: var(--white);
+  --th-button-danger-hover: var(--error-hover);
+  --th-button-danger-color: var(--error);
+  --th-button-danger-svg: var(--error);
+
+  // input  primary
+  --th-input-border: var(--gray-400);
+  --th-input-color: var(--gray-800);
+  --th-input-focus: var(--primary-600);
+  --th-input-error: var(--error);
+
+    // input  primary
+  --th-combobox-border: var(--gray-400);
+  --th-combobox-color: var(--gray-800);
+  --th-combobox-focus: var(--primary-600);
+  --th-combobox-error: var(--error);
+  --th-combobox-hover: var(--primary-100);
+
 }
 
 // html[data-theme='secondary'] {
@@ -206,3 +239,5 @@ button {
   line-height: 150%;
   font-size: $size;
 }
+
+

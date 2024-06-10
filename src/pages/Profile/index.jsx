@@ -18,6 +18,21 @@ export function Profile() {
   const [userData, setUserData] = useState(null);
   const { setAlert } = useContext(FormSubmitContext);
 
+  useEffect(() => {
+    axios.get('/user', {
+        params: {
+          id: user.id
+        }
+      })
+      .then(res => {
+        setUserData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setAlert(true);
+      });
+  }, []);
+
   const schema = Yup.object().shape({
     fullName: Yup.string().required("Nome Completo é um campo obrigatório!"),
     email: Yup.string()
@@ -29,6 +44,14 @@ export function Profile() {
   const { register, handleSubmit, formState, reset } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
+    defaultValues: {
+      fullName: userData.fullName ?? '',
+      email: userData.email ?? '',
+      birthdate: userData.birthdate ?? '',
+      gender: userData.gender ?? '',
+      profile: userData.profile ?? '',
+      organization: userData.organization ?? '',
+    },
   });
 
   const { errors } = formState;
@@ -54,21 +77,20 @@ export function Profile() {
     };
   }, [setAlert]);
 
-  const handleSubmitForm = (body) => {
-    axios.put(baseURL + '/user/update', {
-      id: user.id,
-      email: body.email,
-      fullName: body.fullName,
-      gender: body.gender,
-      birthdate: body.birthdate,
-      profile: body.profile,
-      organization: body.organization,
+  const handleSubmitForm = (data) => {
+    axios.put('/user/update', {
+      email: data.email,
+      fullName: data.fullName,
+      gender: data.gender,
+      birthdate: data.birthdate,
+      profile: data.profile,
+      organization: data.organization,
     })
       .then(res => {
-        setUserData(res.data);
+        console.log(res.data);
         setModalVisibility(true);
       })
-      .catch(() => {
+      .catch( err => {
         setAlert({
           message: "Desculpe, servidor indisponível no momento",
           icon: "wifioff",
@@ -90,7 +112,7 @@ export function Profile() {
           width="80"
           height="80"
         />
-        <p>{userData.fullName}</p>
+        <p>{user.fullName || "undefined"}</p>
         <button>Editar foto de perfil</button>
       </header>
       <hr/>
@@ -98,7 +120,7 @@ export function Profile() {
         <section>
           <DataView
             legend="E-mail"
-            data={userData.email}
+            data={user.email}
             id="viewEmail"
           />
           <DataView

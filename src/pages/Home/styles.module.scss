@@ -29,12 +29,26 @@
   }
 }
 .buttons__container {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
   margin-top: 2.5rem;
 }
 .cards__container {
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
+  h4{
+    align-items: center;
+    color: #00686C;
+    font-family: Inter;
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin: auto;
+    span{
+      font-weight: 600;
+    }
+  }
 }
 
 .home__ {
