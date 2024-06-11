@@ -4,13 +4,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import PropTypes from "prop-types";
 import InputDropdown from "../../../components/InputDropdown";
 import * as Yup from "yup";
+import { useTranslation } from "react-i18next";
 
 export default function StepThree({ fullName, next, previous, children }) {
+  const { t } = useTranslation();
   const schema = Yup.object().shape({
-    birthdate: Yup.string().required("Campo obrigatório!"),
-    gender: Yup.string().required("Campo obrigatório!"),
-    profile: Yup.string().required("Perfil é um campo obrigatório!"),
-    organization: Yup.string().required("Organização é um campo obrigatório!"),
+    birthdate: Yup.string().required(t("cadastrarCampoObrigatorio")),
+    gender: Yup.string().required(t("cadastrarCampoObrigatorio")),
+    profile: Yup.string().required(t("cadastrarPerfilObrigatorio")),
+    organization: Yup.string().required(t("cadastrarOrganizacaoObrigatorio")),
   });
 
   const { register, handleSubmit, formState } = useForm({
@@ -34,8 +36,8 @@ export default function StepThree({ fullName, next, previous, children }) {
     <div className={styles.card__container}>
       <section className={styles.card__header}>
         <h6>
-          Excelente, <b>{fullName}! </b>Para concluirmos seu cadastro, por favor
-          nos informe os dados abaixo.
+          {t("cadastrarStepThreePart1")}, <b>{fullName}! </b>
+          {t("cadastrarStepThreePart2")}
         </h6>
       </section>
       {children}
@@ -43,7 +45,9 @@ export default function StepThree({ fullName, next, previous, children }) {
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
             <span>
-              <label htmlFor="birthdate">Data de nascimento</label>
+              <label htmlFor="birthdate">
+                {t("cadastrarCampoDataNascimento")}
+              </label>
               <input
                 {...register("birthdate")}
                 type="date"
@@ -57,7 +61,7 @@ export default function StepThree({ fullName, next, previous, children }) {
               )}
             </span>
             <InputDropdown
-              label="Gênero"
+              label={t("cadastrarCampoGenero")}
               registerName="gender"
               register={register}
               nama="gender"
@@ -76,7 +80,7 @@ export default function StepThree({ fullName, next, previous, children }) {
             </InputDropdown>
           </div>
           <InputDropdown
-            label="Perfil"
+            label={t("cadastrarCampoPerfil")}
             registerName="profile"
             register={register}
             nama="profile"
@@ -97,7 +101,9 @@ export default function StepThree({ fullName, next, previous, children }) {
             )}
           </InputDropdown>
           <div>
-            <label htmlFor="organization">Organização</label>
+            <label htmlFor="organization">
+              {t("cadastrarCampoOrganizacao")}
+            </label>
             <input
               {...register("organization")}
               type="text"
@@ -117,14 +123,14 @@ export default function StepThree({ fullName, next, previous, children }) {
             type="submit"
             disabled={!formState.isValid}
           >
-            CONCLUIR CADASTRO
+            {t("cadastrarButaoConcluir")}
           </button>
           <button
             className={styles.card__button}
             onClick={previous}
             type="button"
           >
-            VOLTAR
+            {t("cadastrarButaoVolta")}
           </button>
         </form>
       </section>
