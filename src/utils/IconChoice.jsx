@@ -28,6 +28,7 @@ import { Edit } from "../assets/icons/Edit";
 import { Star } from "../assets/icons/Star";
 import { Folder } from "../assets/icons/Folder";
 import { Lamp } from "../assets/icons/Lamp";
+import { Translate } from "../assets/icons/Translate";
 
 export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
@@ -62,7 +63,7 @@ export function IconChoice({ icon, color, ...rest }) {
     case "lock":
       return <Lock color={color} />;
     case "warning":
-      return <WarningCircle color={color} />
+      return <WarningCircle color={color} />;
     case "back":
       return <BackArrow color={color} {...rest} />;
     case "plus":
@@ -87,6 +88,8 @@ export function IconChoice({ icon, color, ...rest }) {
       return <Info color={color} {...rest} />;
     case "folder":
       return <Folder color={color} {...rest} />;
+    case "translate":
+      return <Translate color={color} {...rest} />;
     case "lamp":
       return <Lamp color={color} {...rest} />;
     default:
