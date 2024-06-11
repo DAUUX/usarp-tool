@@ -15,13 +15,14 @@ import { URL as baseURL } from "../../utils/base";
 import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
   const schema = Yup.object().shape({
     email: Yup.string()
-      .email("Deve ser um E-mail válido!")
-      .required("E-mail é um campo obrigatório!"),
+      .email(t("loginErrorEmailValido"))
+      .required(t("loginErrorEmail")),
     password: Yup.string()
-      .min(6, "A senha deve conter pelo menos 8 caracteres!")
-      .max(15, "A senha deve conter no máximo 15 caracteres!")
+      .min(6, t("loginErrorSenhaMinima"))
+      .max(15, t("loginErrorSenhaMaxima"))
       .required(),
   });
 
@@ -29,7 +30,6 @@ export default function Login() {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { setToken, user } = useAuth();
   const { errors } = formState;
@@ -39,8 +39,11 @@ export default function Login() {
     const content = (
       <FeedbackAlert.Root>
         <FeedbackAlert.Icon icon="checkcircle" />
-        <FeedbackAlert.Title title="Bem-vindo(a)" name={`, ${user.fullName}`} />
-        <FeedbackAlert.Description description="Sua conta foi criada com sucesso" />
+        <FeedbackAlert.Title
+          title={t("loginAlertSucesso")}
+          name={`, ${user.fullName}`}
+        />
+        <FeedbackAlert.Description description={t("loginAlertDescricao")} />
       </FeedbackAlert.Root>
     );
     open(content);
@@ -78,7 +81,7 @@ export default function Login() {
     axios
       .post(baseURL + "/auth/signin", body)
       .then((response) => {
-        const token = response.data.accessToken;
+        const token = response.data.token;
         setToken(token);
         localStorage.setItem("@AccessToken", token);
         handleOpenAlertSuccess();
@@ -116,7 +119,7 @@ export default function Login() {
               )}
             </div>
             <div>
-              <label htmlFor="password">{t('loginPassword')}</label>
+              <label htmlFor="password">{t("loginPassword")}</label>
               <InputPassword
                 label={"password"}
                 register={register}
@@ -132,7 +135,7 @@ export default function Login() {
               )}
 
               <b>
-                <Link to="/recover">{t('loginEsqueci')}</Link>
+                <Link to="/recover">{t("loginEsqueci")}</Link>
               </b>
             </div>
             <button
@@ -146,10 +149,8 @@ export default function Login() {
         </section>
         <section className={styles.card__footer}>
           <p>
-            Ainda não possui uma conta?
-            <Link to="/cadastro">
-              <b> Criar agora</b>
-            </Link>
+            {t("loginSemCadastro")}
+            <Link to="/cadastro">{t("loginCriarAgora")}</Link>
           </p>
         </section>
       </div>
