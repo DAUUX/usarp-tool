@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useTranslation } from "react-i18next";
 
 export default function StepOne({ next, children }) {
+  const { t } = useTranslation();
   const schema = Yup.object().shape({
     email: Yup.string()
-      .email("Deve ser um E-mail válido!")
-      .required("E-mail é um campo obrigatório!"),
-    fullName: Yup.string().required("Nome Completo é um campo obrigatório!"),
+      .email(t("loginErrorEmailValido"))
+      .required(t("loginErrorEmail")),
+    fullName: Yup.string().required(t("cadastrarNomeErro")),
   });
 
   const { register, handleSubmit, formState } = useForm({
@@ -28,14 +30,15 @@ export default function StepOne({ next, children }) {
       {children}
       <section className={styles.card__header}>
         <h6>
-          Comece um <b>brainstorm</b> em menos de <b>5 minutos</b> com o seu
-          time
+          {t("cadastrarcabecalhoPart1")}
+          <b>{t("cadastrarcabecalhoPart2")}</b> {t("cadastrarcabecalhoPart3")}
+          <b>{t("cadastrarcabecalhoPart4")}</b> {t("cadastrarcabecalhoPart5")}
         </h6>
       </section>
       <section className={styles.card__body}>
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
-            <label htmlFor="email">E-mail</label>
+            <label htmlFor="email">{t("loginEmail")}</label>
             <input
               {...register("email")}
               autoFocus={true}
@@ -50,7 +53,7 @@ export default function StepOne({ next, children }) {
             )}
           </div>
           <div>
-            <label htmlFor="fullName">Nome Completo</label>
+            <label htmlFor="fullName">{t("cadastrarNome")}</label>
             <input
               {...register("fullName")}
               type="text"
@@ -68,21 +71,21 @@ export default function StepOne({ next, children }) {
             disabled={!formState.isValid}
             type="submit"
           >
-            PROSSEGUIR COM O CADASTRO
+            {t("cadastrarBotao")}
           </button>
         </form>
       </section>
       <section className={styles.card__terms}>
         <p>
-          Ao criar uma conta, você afirma que concorda com os
-          <b>&nbsp;Termos e Condições</b> da USARP Tool.
+          {t("cadastrarTermoPart1")}
+          <b>&nbsp;{t("cadastrarTermoPart2")}</b> {t("cadastrarTermoPart3")}
         </p>
       </section>
       <section className={styles.card__footer}>
         <p>
-          Já tem uma conta?
+          {t("cadastrarConta")}
           <Link to="/login">
-            <b>&nbsp;Entrar agora</b>
+            <b>&nbsp;{t("cadastrarEntrar")}</b>
           </Link>
         </p>
       </section>

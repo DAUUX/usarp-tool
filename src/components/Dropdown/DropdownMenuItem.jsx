@@ -8,11 +8,12 @@ DropdownMenuItem.propTypes = {
 };
 
 
-export function DropdownMenuItem({ children, value }) {
+export function DropdownMenuItem({ children, value, ...rest }) {
   const { handleSelect } = useDropdown();
 
   return (
     <div
+      {...rest}
       className={styles.dropdown_menu_item}
       onClick={() => handleSelect(value)}
     >
