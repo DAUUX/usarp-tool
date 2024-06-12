@@ -5,19 +5,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import PropTypes from "prop-types";
 import PasswordStrengthLevel from "../../../components/PasswordStrengthLevel";
 import InputPassword from "../../../components/InputPassword";
+import { useTranslation } from "react-i18next";
 
 export default function StepTwo({ fullName, next, previous, children }) {
+  const { t } = useTranslation();
   const schema = Yup.object().shape({
     password: Yup.string()
-      .min(8, "A senha deve conter pelo menos 8 caracteres!")
-      .max(15, "A senha deve conter no máximo 15 caracteres!")
-      .matches(/[A-Z]/g, "A senha deve conter pelo menos uma letra maiúscula!")
-      .matches(/[a-z]/g, "A senha deve conter pelo menos uma letra minúscula!")
-      .matches(/[0-9]/g, "A senha deve conter pelo menos um número!")
-      .matches(
-        /[#?!@$%^&*-]/g,
-        "A senha deve conter pelo menos um caractere especial!"
-      )
+      .min(8, t("loginErrorSenhaMinima"))
+      .max(15, t("loginErrorSenhaMaxima"))
+      .matches(/[A-Z]/g, t("cadastrarErroSenhaMaiuscular"))
+      .matches(/[a-z]/g, t("cadastrarErroSenhaMinuscular"))
+      .matches(/[0-9]/g, t("cadastrarErroSenhaNumero"))
+      .matches(/[#?!@$%^&*-]/g, t("cadastrarErroSenhaCaractere"))
       .required(),
   });
 
@@ -40,14 +39,16 @@ export default function StepTwo({ fullName, next, previous, children }) {
       {children}
       <section className={styles.card__header}>
         <h6>
-          Muito bem, <b>{fullName}!</b> Estamos quase lá, agora crie uma
-          <b> senha</b> segura para proteger sua conta.
+          {t("cadastrarStepTwoPart1")}
+          <b>{fullName}!</b> {t("cadastrarStepTwoPart2")}
+          <b>{t("cadastrarStepTwoPart3")}</b>
+          {t("cadastrarStepTwoPart4")}
         </h6>
       </section>
       <section className={styles.card__body}>
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="password">{t("loginPassword")}</label>
             <InputPassword
               register={register}
               label={"password"}
@@ -63,10 +64,7 @@ export default function StepTwo({ fullName, next, previous, children }) {
                 {errors.password.message}
               </p>
             )}
-            <p className={styles.card__warning}>
-              Sua senha deve ter pelo menos 8 caracteres, com letras minúsculas
-              e maiúsculas, números e caracteres especiais
-            </p>
+            <p className={styles.card__warning}>{t("cadastrarSenhaForca")}</p>
             <PasswordStrengthLevel password={getValues("password")} />
           </div>
           <button
@@ -74,14 +72,14 @@ export default function StepTwo({ fullName, next, previous, children }) {
             type="submit"
             disabled={!formState.isValid}
           >
-            CONTINUAR
+            {t("cadastrarButaoContinua")}
           </button>
           <button
             className={styles.card__button}
             onClick={previous}
             type="button"
           >
-            VOLTAR
+            {t("cadastrarButaoVolta")}
           </button>
         </form>
       </section>

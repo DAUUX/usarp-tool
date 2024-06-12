@@ -4,15 +4,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import PropTypes from "prop-types";
 import InputDropdown from "../../../components/InputDropdown";
 import * as Yup from "yup";
+import { useTranslation } from "react-i18next";
 
 export default function StepThree({ fullName, next, previous, children }) {
+  const { t } = useTranslation();
   const schema = Yup.object().shape({
-    birthdate: Yup.string().required("Campo obrigatório!"),
-    gender: Yup.string().required("Campo obrigatório!"),
-    profile: Yup.string().required("Perfil é um campo obrigatório!"),
-    organization: Yup.string().required("Organização é um campo obrigatório!"),
+    birthdate: Yup.string().required(t("cadastrarCampoObrigatorio")),
+    gender: Yup.string().required(t("cadastrarCampoObrigatorio")),
+    profile: Yup.string().required(t("cadastrarPerfilObrigatorio")),
+    organization: Yup.string().required(t("cadastrarOrganizacaoObrigatorio")),
   });
-
+  function formatDate(date) {
+    const [ano, mes, dia] = date.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
   const { register, handleSubmit, formState } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
@@ -27,15 +32,17 @@ export default function StepThree({ fullName, next, previous, children }) {
   const { errors } = formState;
 
   const handleSubmitForm = (data) => {
-    next(data);
+    const { birthdate, gender, profile, organization } = data;
+    next({ birthdate: formatDate(birthdate), gender, profile, organization });
+    console.log(data);
   };
 
   return (
     <div className={styles.card__container}>
       <section className={styles.card__header}>
         <h6>
-          Excelente, <b>{fullName}! </b>Para concluirmos seu cadastro, por favor
-          nos informe os dados abaixo.
+          {t("cadastrarStepThreePart1")}, <b>{fullName}! </b>
+          {t("cadastrarStepThreePart2")}
         </h6>
       </section>
       {children}
@@ -43,7 +50,9 @@ export default function StepThree({ fullName, next, previous, children }) {
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
             <span>
-              <label htmlFor="birthdate">Data de nascimento</label>
+              <label htmlFor="birthdate">
+                {t("cadastrarCampoDataNascimento")}
+              </label>
               <input
                 {...register("birthdate")}
                 type="date"
@@ -57,16 +66,22 @@ export default function StepThree({ fullName, next, previous, children }) {
               )}
             </span>
             <InputDropdown
-              label="Gênero"
+              label={t("cadastrarCampoGenero")}
               registerName="gender"
               register={register}
               nama="gender"
               id="gender"
               data={[
-                { label: "Feminino", value: "2" },
-                { label: "Masculino", value: "1" },
-                { label: "Transexual", value: "2" },
-                { label: "Não-binário", value: "3" },
+                { label: t("cadastrarCampoGeneroFeminino"), value: "Feminino" },
+                {
+                  label: t("cadastrarCampoGeneroMasculino"),
+                  value: "Masculino",
+                },
+                { label: t("cadastrarCampoGeneroNB"), value: "Não binário" },
+                {
+                  label: t("cadastrarCampoGeneroPN"),
+                  value: "Prefiro não informar",
+                },
               ]}
               required={errors.gender ? true : false}
             >
@@ -76,19 +91,44 @@ export default function StepThree({ fullName, next, previous, children }) {
             </InputDropdown>
           </div>
           <InputDropdown
-            label="Perfil"
+            label={t("cadastrarCampoPerfil")}
             registerName="profile"
             register={register}
             nama="profile"
             id="profile"
             data={[
-              { label: "Estudante", value: "Estudante" },
-              { label: "Professor", value: "Professor" },
               {
-                label: "Profissional da indústria ",
-                value: "Profissional da indústria",
+                label: t("cadastrarCampoPerfilEstudanteGraduação"),
+                value: "Estudante de Graduação",
               },
-              { label: "Outro", value: "Outro" },
+              {
+                label: t("cadastrarCampoPerfilEstudantePos"),
+                value: "Estudante de Pós",
+              },
+              {
+                label: t("cadastrarCampoPerfilEstudanteMestrado"),
+                value: "Estudante de Mestrado",
+              },
+              {
+                label: t("cadastrarCampoPerfilProfessorGraduação"),
+                value: "Professor de Graduação",
+              },
+              {
+                label: t("cadastrarCampoPerfilProfessorMestrado"),
+                value: "Professor de Pós",
+              },
+              {
+                label: t("cadastrarCampoPerfilPos"),
+                value: "Professor de Mestrado",
+              },
+              {
+                label: t("cadastrarCampoPerfilIndústria"),
+                value: "Professor de Mercado",
+              },
+              {
+                label: t("cadastrarCampoPerfilDoutorando"),
+                value: "Doutorando",
+              },
             ]}
             required={errors.profile ? true : false}
           >
@@ -97,13 +137,15 @@ export default function StepThree({ fullName, next, previous, children }) {
             )}
           </InputDropdown>
           <div>
-            <label htmlFor="organization">Organização</label>
+            <label htmlFor="organization">
+              {t("cadastrarCampoOrganizacao")}
+            </label>
             <input
               {...register("organization")}
               type="text"
               name="organization"
               id="organization"
-              placeholder="Ex: Instituição de ensino, empresa..."
+              placeholder={t("cadastrarCampoOrganizacaoPlaceholder")}
               required={errors.organization ? true : false}
             />
             {errors.organization && (
@@ -117,14 +159,14 @@ export default function StepThree({ fullName, next, previous, children }) {
             type="submit"
             disabled={!formState.isValid}
           >
-            CONCLUIR CADASTRO
+            {t("cadastrarButaoConcluir")}
           </button>
           <button
             className={styles.card__button}
             onClick={previous}
             type="button"
           >
-            VOLTAR
+            {t("cadastrarButaoVolta")}
           </button>
         </form>
       </section>

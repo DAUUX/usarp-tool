@@ -12,18 +12,20 @@ import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
 import { useAuth } from "../../hooks/useAuth";
 import { URL as baseURL } from "../../utils/base";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
   const schema = Yup.object().shape({
     email: Yup.string()
-      .email("Deve ser um E-mail válido!")
-      .required("E-mail é um campo obrigatório!"),
+      .email(t("loginErrorEmailValido"))
+      .required(t("loginErrorEmail")),
     password: Yup.string()
-      .min(6, "A senha deve conter pelo menos 8 caracteres!")
-      .max(15, "A senha deve conter no máximo 15 caracteres!")
+      .min(6, t("loginErrorSenhaMinima"))
+      .max(15, t("loginErrorSenhaMaxima"))
       .required(),
   });
-  
+
   const { register, handleSubmit, formState } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -32,13 +34,16 @@ export default function Login() {
   const { setToken, user } = useAuth();
   const { errors } = formState;
   const { open, close } = useAlert();
-  
+
   const handleOpenAlertSuccess = () => {
     const content = (
       <FeedbackAlert.Root>
         <FeedbackAlert.Icon icon="checkcircle" />
-        <FeedbackAlert.Title title="Bem-vindo(a)" name={`, ${user.fullName}`} />
-        <FeedbackAlert.Description description="Sua conta foi criada com sucesso" />
+        <FeedbackAlert.Title
+          title={t("loginAlertSucesso")}
+          name={`, ${user.fullName}`}
+        />
+        <FeedbackAlert.Description description={t("loginAlertDescricao")} />
       </FeedbackAlert.Root>
     );
     open(content);
@@ -58,19 +63,25 @@ export default function Login() {
 
   const handleOpenToastError = () => {
     const content = (
-      <Toast onClick={close} type={"error"} message={"E-mail e/ou senha incorretos"}>
+      <Toast
+        onClick={close}
+        type={"error"}
+        message={"E-mail e/ou senha incorretos"}
+      >
         <IconChoice icon="close" width="24px" height="24px" color="#fff" />
       </Toast>
     );
     open(content);
-    setTimeout(() => {close()}, 3000);
+    setTimeout(() => {
+      close();
+    }, 3000);
   };
 
   const handleSubmitForm = (body) => {
     axios
       .post(baseURL + "/auth/signin", body)
       .then((response) => {
-        const token = response.data.accessToken;
+        const token = response.data.token;
         setToken(token);
         localStorage.setItem("@AccessToken", token);
         handleOpenAlertSuccess();
@@ -93,7 +104,7 @@ export default function Login() {
         <section className={styles.card__body}>
           <form onSubmit={handleSubmit(handleSubmitForm)}>
             <div>
-              <label htmlFor="email">E-mail</label>
+              <label htmlFor="email">{t("loginEmail")}</label>
               <input
                 {...register("email")}
                 autoFocus={true}
@@ -108,7 +119,7 @@ export default function Login() {
               )}
             </div>
             <div>
-              <label htmlFor="password">Senha</label>
+              <label htmlFor="password">{t("loginPassword")}</label>
               <InputPassword
                 label={"password"}
                 register={register}
@@ -122,8 +133,10 @@ export default function Login() {
               {errors.password && (
                 <p className={styles.card__error}>{errors.password.message}</p>
               )}
-              
-                <b><Link to="/recover">Esqueci minha senha</Link></b>
+
+              <b>
+                <Link to="/recover">{t("loginEsqueci")}</Link>
+              </b>
             </div>
             <button
               disabled={!formState.isValid}
@@ -136,14 +149,11 @@ export default function Login() {
         </section>
         <section className={styles.card__footer}>
           <p>
-            Ainda não possui uma conta?
-            <Link to="/cadastro">
-              <b> Criar agora</b>
-            </Link>
+            {t("loginSemCadastro")}
+            <Link to="/cadastro">{t("loginCriarAgora")}</Link>
           </p>
         </section>
       </div>
-    
     </Wrapper>
   );
 }

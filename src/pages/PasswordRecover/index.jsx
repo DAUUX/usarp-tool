@@ -16,8 +16,8 @@ export default function PasswordRecover() {
 
   const schema = Yup.object().shape({
     email: Yup.string()
-      .email("Deve ser um E-mail válido!")
-      .required("Campo vazio"),
+      .email("Dado inválido")
+      .required("Dado inválido"),
   });
 
   const { register, handleSubmit, formState } = useForm({
@@ -57,7 +57,10 @@ export default function PasswordRecover() {
         <Wrapper>
           <div className={styles.recoverPassword__form}>
             <h1>Recuperar senha</h1>
-            <p>Por favor, digite o e-mail da sua conta. Enviaremos um e-mail com instruções para você recuperar sua senha.</p>
+            <p>
+              Por favor, digite o e-mail da sua conta. Enviaremos um
+              e-mail com instruções para você recuperar sua senha.
+            </p>
             <form>
               <div>
                 <label htmlFor="email">E-mail</label>

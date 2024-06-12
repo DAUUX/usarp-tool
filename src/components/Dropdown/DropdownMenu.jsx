@@ -7,7 +7,7 @@ DropdownMenu.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export function DropdownMenu({ children }) {
+export function DropdownMenu({ children, ...rest }) {
   const { isOpen, closeDropdown } = useDropdown();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function DropdownMenu({ children }) {
   }, [isOpen, closeDropdown]);
 
   return (
-    <div className={isOpen ? styles.dropdown_open : styles.dropdown_close}>
+    <div {...rest} className={isOpen ? styles.dropdown_open : styles.dropdown_close}>
       {children}
     </div>
   );
