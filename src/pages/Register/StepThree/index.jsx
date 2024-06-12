@@ -14,7 +14,10 @@ export default function StepThree({ fullName, next, previous, children }) {
     profile: Yup.string().required(t("cadastrarPerfilObrigatorio")),
     organization: Yup.string().required(t("cadastrarOrganizacaoObrigatorio")),
   });
-
+  function formatDate(date) {
+    const [ano, mes, dia] = date.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
   const { register, handleSubmit, formState } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
@@ -29,7 +32,9 @@ export default function StepThree({ fullName, next, previous, children }) {
   const { errors } = formState;
 
   const handleSubmitForm = (data) => {
-    next(data);
+    const { birthdate, gender, profile, organization } = data;
+    next({ birthdate: formatDate(birthdate), gender, profile, organization });
+    console.log(data);
   };
 
   return (
@@ -67,10 +72,16 @@ export default function StepThree({ fullName, next, previous, children }) {
               nama="gender"
               id="gender"
               data={[
-                { label: "Feminino", value: "2" },
-                { label: "Masculino", value: "1" },
-                { label: "Transexual", value: "2" },
-                { label: "Não-binário", value: "3" },
+                { label: t("cadastrarCampoGeneroFeminino"), value: "Feminino" },
+                {
+                  label: t("cadastrarCampoGeneroMasculino"),
+                  value: "Masculino",
+                },
+                { label: t("cadastrarCampoGeneroNB"), value: "Não binário" },
+                {
+                  label: t("cadastrarCampoGeneroPN"),
+                  value: "Prefiro não informar",
+                },
               ]}
               required={errors.gender ? true : false}
             >
@@ -86,13 +97,38 @@ export default function StepThree({ fullName, next, previous, children }) {
             nama="profile"
             id="profile"
             data={[
-              { label: "Estudante", value: "Estudante" },
-              { label: "Professor", value: "Professor" },
               {
-                label: "Profissional da indústria ",
-                value: "Profissional da indústria",
+                label: t("cadastrarCampoPerfilEstudanteGraduação"),
+                value: "Estudante de Graduação",
               },
-              { label: "Outro", value: "Outro" },
+              {
+                label: t("cadastrarCampoPerfilEstudantePos"),
+                value: "Estudante de Pós",
+              },
+              {
+                label: t("cadastrarCampoPerfilEstudanteMestrado"),
+                value: "Estudante de Mestrado",
+              },
+              {
+                label: t("cadastrarCampoPerfilProfessorGraduação"),
+                value: "Professor de Graduação",
+              },
+              {
+                label: t("cadastrarCampoPerfilProfessorMestrado"),
+                value: "Professor de Pós",
+              },
+              {
+                label: t("cadastrarCampoPerfilPos"),
+                value: "Professor de Mestrado",
+              },
+              {
+                label: t("cadastrarCampoPerfilIndústria"),
+                value: "Professor de Mercado",
+              },
+              {
+                label: t("cadastrarCampoPerfilDoutorando"),
+                value: "Doutorando",
+              },
             ]}
             required={errors.profile ? true : false}
           >
@@ -109,7 +145,7 @@ export default function StepThree({ fullName, next, previous, children }) {
               type="text"
               name="organization"
               id="organization"
-              placeholder="Ex: Instituição de ensino, empresa..."
+              placeholder={t("cadastrarCampoOrganizacaoPlaceholder")}
               required={errors.organization ? true : false}
             />
             {errors.organization && (

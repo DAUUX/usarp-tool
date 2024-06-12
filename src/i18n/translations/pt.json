@@ -31,8 +31,21 @@
   "cadastrarStepThreePart2": "Para concluirmos seu cadastro, por favor nos informe os dados abaixo.",
   "cadastrarCampoDataNascimento": "Data de nascimento",
   "cadastrarCampoGenero": "Gênero",
+  "cadastrarCampoGeneroFeminino": "Feminino",
+  "cadastrarCampoGeneroMasculino": "Masculino",
+  "cadastrarCampoGeneroNB": "Não-binário",
+  "cadastrarCampoGeneroPN": "Prefiro não informar",
   "cadastrarCampoPerfil": "Perfil",
+  "cadastrarCampoPerfilEstudanteGraduação": "Estudante de Graduação",
+  "cadastrarCampoPerfilEstudantePos": "Estudante de Pós",
+  "cadastrarCampoPerfilEstudanteMestrado": "Estudante de Mestrado",
+  "cadastrarCampoPerfilProfessorGraduação": "Professor de Graduação",
+  "cadastrarCampoPerfilProfessorMestrado": "Professor de Mestrado",
+  "cadastrarCampoPerfilPos": "Professor de Pós",
+  "cadastrarCampoPerfilIndústria": "Profissional da indústria",
+  "cadastrarCampoPerfilDoutorando": "Doutorando",
   "cadastrarCampoOrganizacao": "Organização",
+  "cadastrarCampoOrganizacaoPlaceholder": "Ex: Instituição de ensino, empresa...",
   "cadastrarButaoConcluir": "CONCLUIR CADASTRO",
   "cadastrarButaoVolta": "VOLTAR",
   "cadastrarButaoContinua": "CONTINUAR",
@@ -49,5 +62,5 @@
   "homeButaoNovoBrainstorming": "Novo Brainstorming",
   "homeRecentes": "Recentes",
   "homeSemBrainstormingPart1": "Ainda não há nada aqui.",
-  "homeSemBrainstormingPart2":" Crie seu primeiro brainstorming agora."
+  "homeSemBrainstormingPart2": " Crie seu primeiro brainstorming agora."
 }
