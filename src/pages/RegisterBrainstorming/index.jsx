@@ -4,7 +4,10 @@ import { IconChoice } from "../../utils/IconChoice";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./styles.module.scss";
+import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/useAuth";
+import { URL as baseURL } from "../../utils/base";
 import { InputCombobox } from "../../components/InputCombobox";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
@@ -34,6 +37,7 @@ export function RegisterBrainstorming() {
       })
       .required("Histórias de Usuário é um campo obrigatório!"),
   });
+  const { user } = useAuth();
   const { open, close } = useAlert();
   const navigate = useNavigate();
 
@@ -93,26 +97,40 @@ export function RegisterBrainstorming() {
     hasDataLoss ? handleOpenAlert(contentWarning) : goBack();
   };
 
+  const handleOpenAlertError = () => {
+    const content = (
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="closecircle" />
+        <FeedbackAlert.Title title="Dado inválido" />
+        <FeedbackAlert.Description description="Houve um problema com os dados fornecidos. 
+        Por favor, verifique as informações inseridas e tente novamente." />
+        <FeedbackAlert.Button onClick={close} label="Ok, fechar" />
+      </FeedbackAlert.Root>
+    );
+    open(content);
+  };
+
   const handleSubmitForm = (body) => {
-    handleOpenAlert(contentSuccess);
-    console.log(body);
-    // axios
-    //   .post(baseURL + "/auth/signin", body)
-    //   .then((response) => {
-    //     const token = response.data.token;
-    //     setToken(token);
-    //     handleOpenAlertSuccess();
-    //     setTimeout(() => {
-    //       close();
-    //       navigate("/login");
-    //     }, 6000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.code === "ERR_NETWORK") {
-    //       handleOpenAlertError();
-    //     }
-    //     handleOpenToastError();
-    //   });
+    const data = {
+      userId: user.id,
+      brainstormingTitle: body.title,
+      project: body.project,
+      brainstormingDate: body.date,
+      brainstormingTime: body.hours,
+      userStories: body.userStory
+    }
+    console.log(data)
+    axios
+      .post(baseURL + "/brainstorming/create", data)
+      .then(() => {
+        handleOpenAlert(contentSuccess);
+        setTimeout(() => {
+          close();
+        }, 2000);
+      })
+      .catch(() => {
+        handleOpenAlertError();
+      })
   };
 
   return (
