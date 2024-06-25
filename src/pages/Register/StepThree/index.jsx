@@ -103,32 +103,16 @@ export default function StepThree({ fullName, next, previous, children }) {
               },
               {
                 label: t("cadastrarCampoPerfilEstudantePos"),
-                value: "Estudante de Pós",
+                value: "Estudante de Pós-Graduação",
               },
               {
-                label: t("cadastrarCampoPerfilEstudanteMestrado"),
-                value: "Estudante de Mestrado",
-              },
-              {
-                label: t("cadastrarCampoPerfilProfessorGraduação"),
-                value: "Professor de Graduação",
-              },
-              {
-                label: t("cadastrarCampoPerfilProfessorMestrado"),
-                value: "Professor de Pós",
-              },
-              {
-                label: t("cadastrarCampoPerfilPos"),
-                value: "Professor de Mestrado",
+                label: t("cadastrarCampoPerfilProfessor"),
+                value: "Professor",
               },
               {
                 label: t("cadastrarCampoPerfilIndústria"),
-                value: "Professor de Mercado",
-              },
-              {
-                label: t("cadastrarCampoPerfilDoutorando"),
-                value: "Doutorando",
-              },
+                value: "Profissional da Indústria",
+              }
             ]}
             required={errors.profile ? true : false}
           >
