@@ -14,10 +14,10 @@ fi
 
 # Clonar o repositório do frontend usando o token para autenticação
 echo "Clonando o repositório do frontend..."
-git clone -b main "https://${GIT_TOKEN}@${FRONTEND_REPO:8}" frontend
+git clone -b develop "https://${GIT_TOKEN}@${FRONTEND_REPO:8}" frontend
 
 # Clonar o repositório do backend usando o token para autenticação
 echo "Clonando o repositório do backend..."
-git clone -b develop "https://${GIT_TOKEN}@${BACKEND_REPO:8}" backend
+git clone -b main "https://${GIT_TOKEN}@${BACKEND_REPO:8}" backend
 
 echo "Repositórios clonados com sucesso!"
