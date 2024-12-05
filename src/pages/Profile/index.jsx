@@ -1,6 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss"
 import { DataView } from "./DataView";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,22 +10,47 @@ import { FormSubmitContext } from "../../components/ConfigurationsLayout";
 import { Modal } from "../../components/Modal";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
-import { URL as baseURL } from "../../utils/base";
+import { URL as baseURL, URL } from "../../utils/base";
 
 export function Profile() {
+  const navigate = useNavigate();  // Inicialize o hook useNavigate
   const { user } = useAuth();
   const [editMode, setEditMode] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState('');
   const { setAlert } = useContext(FormSubmitContext);
+  
+  const createDateFromString = (dateString) =>{
+    // A string deve estar no formato "yyyy-MM-dd"
+    if(dateString === undefined || dateString === null || dateString ===""){
+      return dateString;
+    } else{
+      const [ dia, mes, ano] = dateString.split("/");
+      return `${ano}-${mes}-${dia}`;
+    }
+  }
 
+  function editarValores(mode){
+    setEditMode(mode);
+    setUserData({
+      fullName: userData.fullName,
+      email: userData.email,
+      birthdate: userData.birthdate,
+      gender: userData.gender,
+      profile: userData.profile,
+      organization: userData.organization,
+    });
+    reset(userData)
+  }
+  
   useEffect(() => {
-    axios.get('/user', {
+    axios.get(baseURL + '/user', {
         params: {
           id: user.id
         }
       })
       .then(res => {
+        res.data.birthdate = createDateFromString(res.data.birthdate)
         setUserData(res.data);
       })
       .catch(err => {
@@ -38,55 +64,60 @@ export function Profile() {
     email: Yup.string()
       .email("Deve ser um E-mail válido!")
       .required("E-mail é um campo obrigatório!"),
-    organization: Yup.string().required("Organização é um campo obrigatório!")
+    organization: Yup.string().required("Organização é um campo obrigatório!"),
   });
 
   const { register, handleSubmit, formState, reset } = useForm({
     mode: "all",
     resolver: yupResolver(schema),
     defaultValues: {
-      fullName: userData.fullName ?? '',
-      email: userData.email ?? '',
-      birthdate: userData.birthdate ?? '',
-      gender: userData.gender ?? '',
-      profile: userData.profile ?? '',
-      organization: userData.organization ?? '',
+      fullName: userData.fullName,
+      email: userData.email,
+      birthdate: userData.birthdate,
+      gender: userData.gender,
+      profile: userData.profile,
+      organization: userData.organization,
     },
   });
 
   const { errors } = formState;
 
-  useEffect(() => {
-    axios.get(baseURL + '/user', {
-        params: {
-          id: user.id
-        }
-      })
-      .then(res => {
-        setUserData(res.data);
-        reset(res.data);
-      })
-      .catch(() => {
-        setAlert(true);
-      });
-  }, [user.id, editMode, reset, setAlert]);
+  // useEffect(() => {
+  //   axios.get(baseURL + '/user', {
+  //       params: {
+  //         id: user.id
+  //       }
+  //     })
+  //     .then(res => {
+  //       setUserData(res.data);
+  //       reset(res.data);
+  //     })
+  //     .catch(() => {
+  //       setAlert(true);
+  //     });
+  // }, [user.id, editMode, reset, setAlert]);
 
-  useEffect(() => {
-    return () => {
-      setAlert(false);
-    };
-  }, [setAlert]);
+  // useEffect(() => {
+  //   return () => {
+  //     setAlert(false);
+  //   };
+  // }, [setAlert]);
 
   const handleSubmitForm = (data) => {
-    axios.put('/user/update', {
+
+  // Converter a data para o formato DD/MM/AAAA
+  const formattedBirthdate = data.birthdate.split('-').reverse().join('/'); // "yyyy-MM-dd" -> "dd/MM/yyyy"
+
+    axios.put(baseURL + '/user/update', {
       email: data.email,
       fullName: data.fullName,
       gender: data.gender,
-      birthdate: data.birthdate,
+      //birthdate: data.birthdate,
+      birthdate: formattedBirthdate,  // Envia a data no formato "DD/MM/AAAA"
       profile: data.profile,
       organization: data.organization,
     })
-      .then(res => {
+      .then(res => { 
         console.log(res.data);
         setModalVisibility(true);
       })
@@ -144,7 +175,7 @@ export function Profile() {
             id="viewOrganization"
           />
           <button
-            onClick={() => setEditMode(true)}
+            onClick={() => editarValores(true)}
             className={styles.Profile__PrimaryButton}
             type="button">
             Editar dados
@@ -202,12 +233,20 @@ export function Profile() {
                 register={register}
                 name="profile"
                 id="profile"
+                // data={[
+                //   { label: "Estudante", value: "Estudante" },
+                //   { label: "Professor", value: "Professor" },
+                //   { label: "Profissional da indústria", value: "Profissional da indústria" },
+                //   { label: "Outro", value: "Outro" },
+                // ]}
+
                 data={[
-                  { label: "Estudante", value: "Estudante" },
+                  { label: "Estudante de Graduação", value: "Estudante de Graduação" },
+                  { label: "Estudante de Pós-Graduação", value: "Estudante de Pós-Graduação" },
                   { label: "Professor", value: "Professor" },
-                  { label: "Profissional da indústria", value: "Profissional da indústria" },
-                  { label: "Outro", value: "Outro" },
+                  { label: "Profissional da Indústria", value: "Profissional da Indústria" },
                 ]}
+
               >
               </InputDropdown>
             </div>
@@ -218,12 +257,20 @@ export function Profile() {
                 register={register}
                 name="gender"
                 id="gender"
+                // data={[
+                //   { label: "Feminino", value: "female" },
+                //   { label: "Masculino", value: "male" },
+                //   { label: "Transexual", value: "transsexual" },
+                //   { label: "Não-binário", value: "non-binary" },
+                // ]}
+
                 data={[
-                  { label: "Feminino", value: "female" },
-                  { label: "Masculino", value: "male" },
-                  { label: "Transexual", value: "transsexual" },
-                  { label: "Não-binário", value: "non-binary" },
+                  { label: "Feminino", value: "Feminino" },
+                  { label: "Masculino", value: "Masculino" },
+                  { label: "Não-binário", value: "Não binário" },
+                  { label: "Prefiro não informar", value: "Prefiro não informar" },
                 ]}
+              
               >
               </InputDropdown>
             </div>
@@ -241,7 +288,7 @@ export function Profile() {
               )}
             </div>
             <button
-              onClick={() => setEditMode(false)}
+              onClick={() => editarValores(false)}
               className={styles.Profile__SecondaryButton}
               type="button">
               Cancelar
