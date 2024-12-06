@@ -40,7 +40,7 @@ export function Profile() {
       profile: userData.profile,
       organization: userData.organization,
     });
-    reset(userData)
+    reset(userData);
   }
   
   useEffect(() => {
@@ -112,13 +112,14 @@ export function Profile() {
       email: data.email,
       fullName: data.fullName,
       gender: data.gender,
-      //birthdate: data.birthdate,
       birthdate: formattedBirthdate,  // Envia a data no formato "DD/MM/AAAA"
       profile: data.profile,
       organization: data.organization,
     })
       .then(res => { 
         console.log(res.data);
+        res.data.birthdate = createDateFromString(res.data.birthdate)
+        setUserData(res.data);
         setModalVisibility(true);
       })
       .catch( err => {
@@ -143,7 +144,7 @@ export function Profile() {
           width="80"
           height="80"
         />
-        <p>{user.fullName || "undefined"}</p>
+        <p>{userData.fullName || "undefined"}</p>
         <button>Editar foto de perfil</button>
       </header>
       <hr/>
@@ -151,7 +152,7 @@ export function Profile() {
         <section>
           <DataView
             legend="E-mail"
-            data={user.email}
+            data={userData.email}
             id="viewEmail"
           />
           <DataView
