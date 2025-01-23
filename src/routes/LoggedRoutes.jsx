@@ -10,6 +10,7 @@ import { RegisterUserstory } from "../pages/RegisterUserstory";
 import { RegisterProject } from "../pages/RegisterProject";
 import { NoFound } from "../pages/Maintenance/NoFound";
 import { Maintenance } from "../pages/Maintenance/Maintenance/";
+import { DetailProject } from "../pages/DetailProject";
 
 export function LoggedRoutes() {
   return (
@@ -17,7 +18,7 @@ export function LoggedRoutes() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="home" element={<Home />} />
-          <Route path="project" element={<ViewProject />} />
+          <Route path="project" element={<DetailProject />} />
           <Route path="brainstorming" element={<Maintenance />} />
           <Route path="registerProject" element={<RegisterProject />} />
           <Route path="editProject/:id" element={<RegisterProject />} />
