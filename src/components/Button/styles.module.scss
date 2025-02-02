@@ -121,6 +121,8 @@
     background: #008287;
     border-radius: 16px;
     border: none;
+    width: inherit;
+    justify-content: center;
     svg {
       margin-right: 0.5rem;
     }
@@ -147,37 +149,13 @@
     background: #997626;
     border-radius: 16px;
     border: none;
+    width: inherit;
+    justify-content: center;
     svg {
       margin-right: 0.5rem;
     }
     &:hover {
       background: #664F19;
-      // border: none;
-    }
-    &:focus {
-      outline:  none;
-    }
-    &:disabled {
-      background-color: var(--th-color-button-disabled);
-      color: var(--th-color-text-button-disabled);
-      cursor: not-allowed;
-      svg {
-        fill: white;
-      }
-    }
-  }
-  &[data-type="menber-blue-primary"] {
-    cursor: pointer;
-    padding: 8px 12px;
-    color: white;
-    background: #008287;
-    border-radius: 16px;
-    border: none;
-    svg {
-      margin-right: 0.5rem;
-    }
-    &:hover {
-      background: #00686C;
       // border: none;
     }
     &:focus {
@@ -199,6 +177,8 @@
     background: #CB5228;
     border-radius: 16px;
     border: none;
+    width: inherit;
+    justify-content: center;
     svg {
       margin-right: 0.5rem;
     }
@@ -218,13 +198,14 @@
       }
     }
   }
-
   &[data-type="menber-blue-outline"] {
     cursor: pointer;
     padding: 8px 12px;
     color: #00686C;
     background: transparent;
     border-radius: 16px;
+    justify-content: center;
+    width: 100%;
     border: 0.06rem solid #00686C;
     svg {
       margin-right: 0.5rem;
@@ -239,10 +220,11 @@
     }
     &:disabled {
       background-color: var(--th-color-button-disabled);
-      color: var(--th-color-text-button-disabled);
+      color: var(--gray-500);
+      border: 0.06rem solid var(--grey-100);
       cursor: not-allowed;
       svg {
-        color:var(--th-color-text-button-disabled);
+        color:var(--gray-500);
       }
     }
   }
@@ -252,6 +234,8 @@
     color: #997626;
     background: transparent;
     border-radius: 16px;
+    justify-content: center;
+    width: 100%;
     border: 0.06rem solid #997626;
     svg {
       margin-right: 0.5rem;
@@ -266,10 +250,11 @@
     }
     &:disabled {
       background-color: var(--th-color-button-disabled);
-      color: var(--th-color-text-button-disabled);
+      color: var(--gray-500);
+      border: 0.06rem solid var(--grey-100);
       cursor: not-allowed;
       svg {
-        color:var(--th-color-text-button-disabled);
+        color:var(--gray-500);
       }
     }
   }
@@ -279,6 +264,8 @@
     color: #CB5228;
     background: transparent;
     border-radius: 16px;
+    justify-content: center;
+    width: 100%;
     border: 0.06rem solid #CB5228;
     svg {
       margin-right: 0.5rem;
@@ -293,11 +280,13 @@
     }
     &:disabled {
       background-color: var(--th-color-button-disabled);
-      color: var(--th-color-text-button-disabled);
+      color: var(--gray-500);
+      border: 0.06rem solid var(--grey-100);
       cursor: not-allowed;
       svg {
-        color:var(--th-color-text-button-disabled);
+        color:var(--gray-500);
       }
     }
   }
+
 }
