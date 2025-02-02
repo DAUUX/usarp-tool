@@ -29,7 +29,6 @@
 ```
 
 
-
 ```bash
   # Execute o script de modo desenvolvimento.
   ❯ npm run dev

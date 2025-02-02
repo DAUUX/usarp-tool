@@ -4,6 +4,7 @@ import { AlertBox } from "./AlertBox";
 import { Link, Outlet } from "react-router-dom";
 import { useState, createContext } from "react";
 import { Dropdown } from "../DropdownMenu";
+import { Button } from "../Button";
 
 export const FormSubmitContext = createContext(null);
 
@@ -40,6 +41,10 @@ export function ConfigurationsLayout() {
               link="./privacity"
               icon="lock"
             />
+            <Button.Root className={styles.Configuration__Button} onClick={close}>
+              <Button.Icon iconName="delete" className={styles.Configuration__IconButton}></Button.Icon>
+              <Button.Text>Excluir conta</Button.Text>
+            </Button.Root>
           </aside>
           <div className={styles.Configuration__Content}>
             <FormSubmitContext.Provider value={{setAlert}}>
