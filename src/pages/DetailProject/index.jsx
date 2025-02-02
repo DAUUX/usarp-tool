@@ -1,9 +1,124 @@
 import { Chip } from "../../components/Chip";
 import { IconChoice } from "../../utils/IconChoice";
+import { MemberItem } from "./components/MemberItem";
+import { Button } from "../../components/Button";
+import { FeedbackAlert } from "../../components/FeedbackAlert";
+import { useAlert } from "../../hooks/useAlert";
 import CardMeansurement from "./components/CardMeansurement";
 import styles from "./styles.module.scss";
 
 export function DetailProject() {
+  const { open, close } = useAlert();
+
+  const permission = true;
+  const members = [
+    {
+      name: "Leslie Alexander",
+      icon: "user02",
+      email: "leslie@gmail.com",
+      organization: "Moderador",
+    },
+    {
+      name: "Darrell Steward",
+      icon: "user03",
+      email: "darrell@gmail.com",
+      organization: "Participante",
+    },
+    {
+      name: "Guy Hawkins",
+      icon: "user04",
+      email: "guy@gmail.com",
+      organization: "Participante",
+    },
+    {
+      name: "Ralph Edwards",
+      icon: "user05",
+      email: "ralph@gmail.com",
+      organization: "Participante",
+    },
+    {
+      name: "Jerome Bell",
+      icon: "user06",
+      email: "jerome@gmail.com",
+      organization: "Participante",
+    },
+  ];
+
+  const contentWarningchangeStatusBlocked = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="warningcircle" />
+      <FeedbackAlert.Title title="Atenção!" />
+      <FeedbackAlert.Description
+        description={`Ao mudar o status para <span>Bloqueado</span>, não será permitido vincular Brainstormings e Histórias de Usuário a esse projeto. Além disso, o Moderador ficará impossibilitado de Editar os dados do projeto.`}
+      />
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "24px",
+        }}
+      >
+        <Button.Root data-type="secondary" onClick={() => close(null)}>
+          <Button.Text>Cancelar</Button.Text>
+        </Button.Root>
+        <Button.Root data-type="primary" onClick={() => {}}>
+          <Button.Text>Alterar status do projeto</Button.Text>
+        </Button.Root>
+      </div>
+    </FeedbackAlert.Root>
+  );
+
+  const contentWarningchangeStatusClosed = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="warningcircle" />
+      <FeedbackAlert.Title title="Atenção!" />
+      <FeedbackAlert.Description
+        description={`Ao mudar o status para <span>Concluído/Encerrado</span>, não será permitido vincular Brainstormings e Histórias de Usuário a esse projeto, apenas será permitido a visualização dos mesmos.`}
+      />
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "24px",
+        }}
+      >
+        <Button.Root data-type="secondary" onClick={() => close(null)}>
+          <Button.Text>Cancelar</Button.Text>
+        </Button.Root>
+        <Button.Root data-type="primary" onClick={() => {}}>
+          <Button.Text>Alterar status do projeto</Button.Text>
+        </Button.Root>
+      </div>
+    </FeedbackAlert.Root>
+  );
+
+  const contentWarningchangeStatusActive = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="checkcircle" />
+      <FeedbackAlert.Title title="Status alterado!" />
+      <FeedbackAlert.Description
+        description={`O status do projeto foi alterado com sucesso de <span>Ativo</span> para <span>Concluído/Encerrado</span>.`}
+      />
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "24px",
+        }}
+      >
+        <Button.Root data-type="primary" onClick={() => close(null)}>
+          <Button.Text>Ok, fechar</Button.Text>
+        </Button.Root>
+      </div>
+    </FeedbackAlert.Root>
+  );
+
   return (
     <div className={styles.detailProject}>
       <header>
@@ -17,15 +132,23 @@ export function DetailProject() {
           <div className={styles.card__header}>
             <h5>Nome do projeto</h5>
             <div>
-              <span>
+              <span
+                onClick={() => open(contentWarningchangeStatusClosed)}
+                style={{ cursor: "pointer" }}
+              >
                 <IconChoice icon="star" />
               </span>
-              <span>
-                <IconChoice icon="edit" />
-              </span>
-              <span>
-                <IconChoice icon="delete" />
-              </span>
+
+              {permission && (
+                <span style={{ cursor: "pointer" }}>
+                  <IconChoice icon="edit" />
+                </span>
+              )}
+              {permission && (
+                <span style={{ cursor: "pointer" }}>
+                  <IconChoice icon="delete" />
+                </span>
+              )}
             </div>
           </div>
           <hr />
@@ -40,7 +163,7 @@ export function DetailProject() {
             </div>
             <div>
               <h6>Data de criação</h6>
-              <span>13/05/2024</span>
+              <p>13/05/2024</p>
             </div>
 
             <div>
@@ -55,25 +178,36 @@ export function DetailProject() {
 
             <div>
               <h6>Dados do criador do projeto (Dono do projeto)</h6>
-              <div>
-                <IconChoice icon={"user02"} />
-                <div>
-                  <h6>Mateus Eugênio</h6>
-                  <span>mateus@gmail.com</span>
-                </div>
-                <span>Organização XYZ</span>
-              </div>
+              <MemberItem
+                name="Mateus Eugênio"
+                icon="user01"
+                email="mateus@gmail.com"
+                organization="Organização XYZ"
+                color="#664F19"
+              />
             </div>
 
             <div>
               <h6>Membros</h6>
-              <span>Ativo</span>
+              <li>
+                <ul>
+                  {members.map((member, index) => (
+                    <MemberItem
+                      key={index}
+                      name={member.name}
+                      icon={member.icon}
+                      email={member.email}
+                      organization={member.organization}
+                    />
+                  ))}
+                </ul>
+              </li>
             </div>
           </div>
         </session>
         <session className={styles.meansurement}>
           <CardMeansurement
-            icon={"star"}
+            icon={"statisticsLamp"}
             button={"yellow"}
             title={"Brainstormings"}
             value={1}
@@ -81,7 +215,7 @@ export function DetailProject() {
             color={"#997626"}
           />
           <CardMeansurement
-            icon={"star"}
+            icon={"statisticsUserStory"}
             button={"red"}
             title={"Brainstormings"}
             value={1}

@@ -35,6 +35,8 @@ import { User03 } from "../assets/icons/User03";
 import { User05 } from "../assets/icons/User05";
 import { User06 } from "../assets/icons/User06";
 import { User04 } from "../assets/icons/User04";
+import { StatisticsLamp } from "../assets/icons/StatisticsLamp";
+import { StatisticsUserStory } from "../assets/icons/StatisticsUserStory";
 
 export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
@@ -110,6 +112,10 @@ export function IconChoice({ icon, color, ...rest }) {
       return <User05 color={color} {...rest} />;
     case "user06":
       return <User06 color={color} {...rest} />;
+    case "statisticsLamp":
+      return <StatisticsLamp color={color} {...rest} />;
+    case "statisticsUserStory":
+      return <StatisticsUserStory color={color} {...rest} />;
     default:
       return null;
   }
