@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
-import { useDropdown } from "./DropdownContext";
 import { IconChoice } from "../../utils/IconChoice";
+import { useDropdown } from "./DropdownRoot.";
 
 DropdownTrigger.propTypes = {
   title: PropTypes.node.isRequired,

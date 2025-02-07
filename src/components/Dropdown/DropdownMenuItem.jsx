@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
-import { useDropdown } from "./DropdownContext";
+import { useDropdown } from  "./DropdownRoot.";
 
 DropdownMenuItem.propTypes = {
   children: PropTypes.node.isRequired,

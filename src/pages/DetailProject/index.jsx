@@ -1,4 +1,3 @@
-import { Chip } from "../../components/Chip";
 import { IconChoice } from "../../utils/IconChoice";
 import { MemberItem } from "./components/MemberItem";
 import { Button } from "../../components/Button";
@@ -6,9 +5,40 @@ import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
 import CardMeansurement from "./components/CardMeansurement";
 import styles from "./styles.module.scss";
+import { Dropdown } from "../../components/Dropdown";
+import { useState } from "react";
+
+const primary = {
+  color: "#662914",
+  background: "#FFE1D6",
+  border: `1px solid #FFC2AD`,
+};
+const secondary = {
+  color: "#004548",
+  background: "#CCEFF0",
+  border: `1px solid #99DEE1`,
+};
+const  tercery = {
+  color: "#664F19",
+  background: "#FFF3D9",
+  border:`1px solid #FFE8B2`,
+};
 
 export function DetailProject() {
+
+const DefaultStatus = {
+  active: "Ativo",
+  blocked: "Bloqueado",
+  closed: "Concluído/Encerrado",
+};
+
   const { open, close } = useAlert();
+  const [status, setStatus] = useState(DefaultStatus.active);
+  const handlerStatus = (value) => {
+    if(value != status && value !=  undefined){
+      setStatus(value);
+    }
+  }
 
   const permission = true;
   const members = [
@@ -167,15 +197,31 @@ export function DetailProject() {
             </div>
 
             <div>
-              <h6>Status</h6>
-              <Chip
-                label={"Ativo"}
-                color={"#664F19"}
-                backgroundColor={"#FFF3D9"}
-                borderColor={"#FFE8B2"}
-              />
+              <h6 >Status</h6>
+              <Dropdown.Root
+                onClick={(e) =>handlerStatus(e.target.innerText)}
+                style={
+                  status === DefaultStatus.blocked
+                    ? primary
+                    : status === DefaultStatus.closed
+                    ? secondary
+                    : tercery
+                }
+              >
+                <Dropdown.Trigger title={status} />
+                <Dropdown.Menu>
+                  <Dropdown.Item value={DefaultStatus.active}>
+                    {DefaultStatus.active}
+                  </Dropdown.Item>
+                  <Dropdown.Item value={DefaultStatus.blocked}>
+                    {DefaultStatus.blocked}
+                  </Dropdown.Item>
+                  <Dropdown.Item value={DefaultStatus.closed}>
+                    {DefaultStatus.closed}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown.Root>
             </div>
-
             <div>
               <h6>Dados do criador do projeto (Dono do projeto)</h6>
               <MemberItem
@@ -186,7 +232,6 @@ export function DetailProject() {
                 color="#664F19"
               />
             </div>
-
             <div>
               <h6>Membros</h6>
               <li>

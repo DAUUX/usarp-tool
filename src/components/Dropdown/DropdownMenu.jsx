@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./styles.module.scss";
-import { useDropdown } from "./DropdownContext";
+import { useDropdown } from "./DropdownRoot.";
 
 DropdownMenu.propTypes = {
   children: PropTypes.node.isRequired,
