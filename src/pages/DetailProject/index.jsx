@@ -7,6 +7,7 @@ import CardMeansurement from "./components/CardMeansurement";
 import styles from "./styles.module.scss";
 import { Dropdown } from "../../components/Dropdown";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const primary = {
   color: "#662914",
@@ -26,12 +27,12 @@ const  tercery = {
 
 export function DetailProject() {
 
-const DefaultStatus = {
-  active: "Ativo",
-  blocked: "Bloqueado",
-  closed: "Concluído/Encerrado",
-};
-
+  const DefaultStatus = {
+    active: "Ativo",
+    blocked: "Bloqueado",
+    closed: "Concluído/Encerrado",
+  };
+  const navigate = useNavigate();
   const { open, close } = useAlert();
   const [status, setStatus] = useState(DefaultStatus.active);
   const handlerStatus = (value) => {
@@ -152,7 +153,7 @@ const DefaultStatus = {
   return (
     <div className={styles.detailProject}>
       <header>
-        <span aria-labelledby="title">
+        <span aria-labelledby="title" onClick={() => navigate(-1)}>
           <IconChoice icon="back" />
           <h6 id="title">Detalhes do projeto</h6>
         </span>

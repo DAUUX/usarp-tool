@@ -2,25 +2,28 @@ import { useForm } from "react-hook-form";
 import { Input } from "../../components/Input/indes";
 import { Dropdown } from "../../components/Dropdown";
 import { IconChoice } from "../../utils/IconChoice";
-import styles from "./styles.module.scss";
-import ViewProjectService from "./viewProject.service";
 import { URL as baseURL } from "../../utils/base";
 import { Button } from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
-import { useEffect, useState } from "react";
+import { Text } from "../../components/Text";
+import { useRef, useState, useCallback, useEffect } from "react";
+import { Pagination } from "../../components/Pagination";
+import ViewProjectService from "./viewProject.service";
+import axios from "axios";
+import styles from "./styles.module.scss";
 
 export function ViewProject() {
-  const { open, close } = useAlert();
+  const path = "/project/owned-projects";
   const navigate = useNavigate();
-  const { data } = ViewProjectService(baseURL + "/projeto");
-  const [projects, setProjects] = useState([]);
-
-  useEffect(() => {
-    setProjects(data);
-  }, [data]);
+  const { open, close } = useAlert();
+  const {
+    data: projects,
+    pagination,
+    setPagination,
+    setFilters,
+  } = ViewProjectService(baseURL + path);
 
   const handleOpenAlertDelete = (id) => {
     open(
@@ -49,71 +52,200 @@ export function ViewProject() {
   } = useForm({
     mode: "all",
   });
-  // function getCurrentDateFormatted() {
-  //   const today = new Date();
-
-  //   const day = String(today.getDate()).padStart(2, "0");
-  //   const month = String(today.getMonth() + 1).padStart(2, "0");
-  //   const year = today.getFullYear();
-
-  //   return `${day}/${month}/${year}`;
-  // }
-  const handleSubmitForm = (body) => {
-    console.log(body);
-    // axios
-    //   .post(baseURL + "/auth/signin", body)
-    //   .then((response) => {
-    //     const token = response.data.token;
-    //     setToken(token);
-    //     handleOpenAlertSuccess();
-    //     setTimeout(() => {
-    //       close();
-    //       navigate("/login");
-    //     }, 6000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.code === "ERR_NETWORK") {
-    //       handleOpenAlertError();
-    //     }
-    //     handleOpenToastError();
-    //   });
-  };
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(baseURL + "/projeto/" + id);
       // Atualiza a lista de projetos após a deleção
-      setProjects((prevProjects) =>
-        prevProjects.filter((project) => project.id !== id)
-      );
+      // setProjects((prevProjects) =>
+      //   prevProjects.filter((project) => project.id !== id)
+      // );
       close();
     } catch (error) {
       console.error("Erro ao deletar o projeto:", error);
     }
   };
 
+  // Filtros de pesquisa
+  const [searchValue, setSearchValue] = useState("");
+  const searchTimeoutRef = useRef(null);
+
+  const clearFilters = useCallback(() => {
+    setFilters((prev) => {
+      const newFilters = [...prev];
+      newFilters[0] = "";
+      return newFilters;
+    });
+    setSearchValue("");
+  }, [setFilters]);
+
+  // Função otimizada de handleFilterSearch
+  const handleFilterSearch = useCallback(
+    (e) => {
+      const value = e.target.value;
+      setSearchValue(value);
+
+      // Limpa o timeout anterior se existir
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+
+      if (!value.trim()) {
+        clearFilters();
+        return;
+      }
+
+      if (value.length < 3) {
+        return;
+      }
+
+      searchTimeoutRef.current = setTimeout(() => {
+        setFilters((prev) => {
+          const newFilters = [...prev];
+          newFilters[0] = `&projectName=${value}`;
+          return newFilters;
+        });
+      }, 3000);
+    },
+    [clearFilters]
+  );
+
+  // Handler para eventos de teclado
+  const handleKeyDown = useCallback(
+    (e) => {
+      // Limpa o timeout existente
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+
+      if (e.key === "Enter" && searchValue.length >= 3) {
+        setFilters((prev) => {
+          const newFilters = [...prev];
+          newFilters[0] = `&projectName=${searchValue}`;
+          return newFilters;
+        });
+      }
+
+      if (e.key === "Escape") {
+        clearFilters();
+      }
+    },
+    [searchValue, clearFilters]
+  );
+
+  // Cleanup effect para limpar o timeout quando o componente for desmontado
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  //Filtro de data de criação
+  const handleFilterDateCreation = (value) => {
+    if (!value) {
+      setFilters((prev) => {
+        const newFilters = [...prev];
+        newFilters[1] = "";
+        return newFilters;
+      });
+      return;
+    }
+
+    setFilters((prev) => {
+      const newFilters = [...prev];
+      newFilters[1] =
+        value === "Criados recentemente"
+          ? "&orderBy=createdAt&orderDirection=DESC"
+          : "&orderBy=createdAt&orderDirection=ASC";
+      return newFilters;
+    });
+  };
+
+  //Filtro de data de recente
+  const handleFilterRecentDate = (value) => {
+    if (!value) {
+      setFilters((prev) => {
+        const newFilters = [...prev];
+        newFilters[1] = "";
+        return newFilters;
+      });
+      return;
+    }
+
+    setFilters((prev) => {
+      const newFilters = [...prev];
+      newFilters[1] =
+        value === "Vistos recentemente"
+          ? "&orderBy=updatedAt&orderDirection=DESC"
+          : "&orderBy=updatedAt&orderDirection=ASC";
+      return newFilters;
+    });
+  };
+
+  // paginação
+  const paginationSize = [5, 10, 25, 50];
+  const [limit, setLimit] = useState(pagination.pagination.limit);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.floor(pagination.count / limit) || 1;
+
+  // Handler para alteração do número de itens por página
+  const handleLimitChange = (updateLimit) => {
+    setLimit(updateLimit);
+    setCurrentPage(1);
+    setPagination((prev) => ({
+      ...prev,
+      pagination: {
+        ...prev.pagination,
+        limit: updateLimit,
+      },
+    }));
+  };
+
+  // Handler para troca de página, para atualizar o offset
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    setPagination((prev) => ({
+      ...prev,
+      pagination: {
+        ...prev.pagination,
+        offset: page * limit,
+      },
+    }));
+  };
+
+  //FEAT Filtras
+  const pagedData = projects;
+
   return (
     <div className={styles.viewProject__container}>
       <header>
         <span title="voltar">
-          <h4>Projeto</h4>
+          <Text.Root>
+            <Text.Headline
+              style={{ color: "var(--gray-900)" }}
+              text={"Projeto"}
+              as="h6"
+            />
+          </Text.Root>
         </span>
         <Input.Root
           style={{ width: "30%" }}
           placeholder="Pesquisar projeto"
           type="search"
+          value={searchValue}
+          onChange={handleFilterSearch}
+          onKeyDown={handleKeyDown}
         />
       </header>
       <div className={styles.viewProject__content}>
         <div className={styles.viewProject__filter}>
-          <form onSubmit={handleSubmit(handleSubmitForm)}>
+          <form>
             <Dropdown.Root default={true}>
               <Dropdown.Trigger title="Todos" />
-              {/* <Dropdown.Menu>
-                <Dropdown.Item value="todos">All</Dropdown.Item>
-              </Dropdown.Menu> */}
             </Dropdown.Root>
-            <Dropdown.Root>
+            <Dropdown.Root onSelect={handleFilterRecentDate}>
               <Dropdown.Trigger title="Recentes" />
               <Dropdown.Menu>
                 <Dropdown.Item value="Vistos recentemente">
@@ -135,7 +267,7 @@ export function ViewProject() {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown.Root>
-            <Dropdown.Root>
+            <Dropdown.Root onSelect={handleFilterDateCreation}>
               <Dropdown.Trigger title="Data de criação" />
               <Dropdown.Menu>
                 <Dropdown.Item value="Criados recentemente">
@@ -163,12 +295,11 @@ export function ViewProject() {
                 <th>CRIADO POR</th>
                 <th>DATA DE CRIAÇÃO</th>
                 <th>STATUS</th>
-                <th>Histórias de Usuário</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {projects.length <= 0 ? (
+              {pagedData.length <= 0 ? (
                 <tr>
                   <td colSpan={6}>
                     Ainda não há projetos cadastrados. Criar meu primeiro
@@ -176,39 +307,47 @@ export function ViewProject() {
                   </td>
                 </tr>
               ) : null}
-              {projects.map((project, index) => (
-                <tr key={index}>
-                  <td>{project.name}</td>
+              {pagedData.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.projectName}</td>
                   <td>
                     <div className={styles.table__users}>
                       <IconChoice icon="develop" />
-                      <span>{project.createdby.name}</span>
+                      <span>{item.creatorFullName}</span>
                     </div>
                   </td>
                   <td>
-                    <span>{project.date}</span>
+                    <span>{item.createdAt}</span>
                   </td>
                   <td>
                     <div className={styles.table__status}>
-                      <span>{project.status}</span>
+                      <Text.Root>
+                        <Text.Button
+                          data-type="small"
+                          style={{ color: "var(--tertiary-800)" }}
+                          text={item.status}
+                        />
+                      </Text.Root>
                     </div>
                   </td>
                   <td>
-                    <span>{project.amountUs}</span>
-                  </td>
-                  <td>
                     <div className={styles.table__buttons}>
+                      <span title="Ver detalhes">
+                        <Link to={`/DetailProject/${item.id}`}>
+                          <IconChoice icon="eyeOn" />
+                        </Link>
+                      </span>
                       <span title="Favoritar">
                         <IconChoice icon="star" />
                       </span>
                       <span title="Editar">
-                        <Link to={`/editProject/${project.id}`}>
+                        <Link to={`/editProject/${item.id}`}>
                           <IconChoice icon="edit" />
                         </Link>
                       </span>
                       <span
                         title="Deletar"
-                        onClick={() => handleOpenAlertDelete(project.id)}
+                        onClick={() => handleOpenAlertDelete(item.id)}
                       >
                         <IconChoice icon="delete" />
                       </span>
@@ -219,6 +358,18 @@ export function ViewProject() {
             </tbody>
           </table>
         </div>
+        <Pagination.Root>
+          <Pagination.Selector
+            currentLimit={limit}
+            onLimitChange={handleLimitChange}
+            limitOptions={paginationSize}
+          />
+          <Pagination.Numbers
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </Pagination.Root>
       </div>
     </div>
   );
