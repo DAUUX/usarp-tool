@@ -1,22 +1,46 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useId, useEffect } from "react";
+import { useGlobalDropdown } from "./GlobalDropdownContext";
 import styles from "./styles.module.scss";
 import PropTypes from "prop-types";
 
 const DropdownContext = createContext();
-DropdownRoot.propTypes = {
-  children: PropTypes.node,
-};
-export function DropdownRoot({ children, ...rest }) {
+export function DropdownRoot({ children, onSelect, ...rest }) {
+  const dropdownId = useId();
+  const { openDropdownId, setOpenDropdownId } = useGlobalDropdown();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
 
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
-  const closeDropdown = () => setIsOpen(false);
+  useEffect(() => {
+    if (openDropdownId && openDropdownId !== dropdownId) {
+      setIsOpen(false);
+    }
+  }, [openDropdownId, dropdownId]);
+
+  const toggleDropdown = () => {
+    if (isOpen) {
+      setOpenDropdownId(null);
+    } else {
+      setOpenDropdownId(dropdownId);
+    }
+    setIsOpen(!isOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+    setOpenDropdownId(null);
+  };
+
+  const clearSelection = () => {
+    setSelectedValue(null);
+    if (onSelect) onSelect(null);
+  };
+
   const handleSelect = (value) => {
     setSelectedValue(value);
     closeDropdown();
+    if (onSelect) onSelect(value);
   };
-  
+
   return (
     <DropdownContext.Provider
       value={{
@@ -25,17 +49,27 @@ export function DropdownRoot({ children, ...rest }) {
         toggleDropdown,
         handleSelect,
         closeDropdown,
+        clearSelection,
       }}
     >
-      <div 
+      <div
         {...rest}
-        className={rest.default || selectedValue ? styles.dropdown__selected: styles.dropdown}
+        className={
+          rest.default || selectedValue
+            ? styles.dropdown__selected
+            : styles.dropdown
+        }
       >
         {children}
       </div>
     </DropdownContext.Provider>
   );
 }
+
+DropdownRoot.propTypes = {
+  children: PropTypes.node,
+  onSelect: PropTypes.func,
+};
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useDropdown = () => useContext(DropdownContext);
