@@ -9,13 +9,10 @@ import { InputCombobox } from "../../components/InputCombobox";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useNavigate } from "react-router-dom";
 import { InputTextarea } from "../../components/InputTextarea/indes";
-import { useAuth } from "../../hooks/useAuth";
 import RegisterProjectService from "./registerProject.service";
-import { Toast } from "../../components/Toast";
 
 export function RegisterProject() {
   // const { id } = useParams();
-  const { user } = useAuth();
   const { handleBackButton, registerProject, handleBackBackCloseALert, close } =
     RegisterProjectService("");
   const schema = Yup.object().shape({
@@ -51,7 +48,6 @@ export function RegisterProject() {
     register,
     handleSubmit,
     watch,
-    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: "all",

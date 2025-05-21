@@ -18,18 +18,6 @@
         cursor: pointer;
       }
     }
-
-    h4 {
-      //TODO: Button color
-      /* Headline/H6 */
-      color: #212121;
-      font-family: Inter;
-      font-size: 1.25rem;
-      font-weight: 600;
-      line-height: 150%;
-      letter-spacing: 0%;
-      text-align: justify;
-    }
   }
 
   .viewProject__content {
@@ -45,6 +33,7 @@
     }
   }
   .viewProject__table {
+    margin-bottom: 1.5rem;  
     margin-top: 2.5rem;
     table {
       width: 100%;
@@ -115,23 +104,8 @@
   align-items: center;
   gap: 1rem;
   justify-content: end;
-  span {
-    cursor: pointer;
-  }
-  span[title="Favoritar"] {
-    svg {
-      fill: #757575;
-    }
-  }
-  span[title="Editar"] {
-    svg {
-      fill: #757575;
-    }
-  }
-  span[title="Deletar"] {
-    svg {
-      fill: #757575;
-    }
+  span>a{
+    color: unset;
   }
 }
 .table__users {
@@ -142,19 +116,10 @@
 .table__status {
   display: flex;
   border-radius: 1rem;
-  background: #ffc53f;
+  background: var(--tertiary-100);
   align-items: center;
   flex-direction: column;
   padding: 0.5rem 0.75rem;
   width: fit-content;
-  span {
-    /* Caption/Medium */
-    color: rgb(33, 33, 33);
-    font-family: Inter;
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 150%;
-    letter-spacing: 0%;
-    text-align: center;
-  }
+  border: 1px solid var(--tertiary-200);
 }

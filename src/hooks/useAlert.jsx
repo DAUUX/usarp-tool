@@ -8,10 +8,12 @@ export const AlertProvider = ({ children }) => {
 
   const open = (content) => {
     setAlertContent(content);
+    document.body.style.overflow = "hidden";
   };
 
   const close = () => {
     setAlertContent(null);
+    document.body.style.overflow = "";
   };
 
   return (

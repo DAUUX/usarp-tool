@@ -29,6 +29,14 @@ import { Star } from "../assets/icons/Star";
 import { Folder } from "../assets/icons/Folder";
 import { Lamp } from "../assets/icons/Lamp";
 import { Translate } from "../assets/icons/Translate";
+import { User01 } from "../assets/icons/User01";
+import { User02 } from "../assets/icons/User02";
+import { User03 } from "../assets/icons/User03";
+import { User05 } from "../assets/icons/User05";
+import { User06 } from "../assets/icons/User06";
+import { User04 } from "../assets/icons/User04";
+import { StatisticsLamp } from "../assets/icons/StatisticsLamp";
+import { StatisticsUserStory } from "../assets/icons/StatisticsUserStory";
 
 export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
@@ -92,6 +100,22 @@ export function IconChoice({ icon, color, ...rest }) {
       return <Translate color={color} {...rest} />;
     case "lamp":
       return <Lamp color={color} {...rest} />;
+    case "user01":
+      return <User01 color={color} {...rest} />;
+    case "user02":
+      return <User02 color={color} {...rest} />;
+    case "user03":
+      return <User03 color={color} {...rest} />;
+    case "user04":
+      return <User04 color={color} {...rest} />;
+    case "user05":
+      return <User05 color={color} {...rest} />;
+    case "user06":
+      return <User06 color={color} {...rest} />;
+    case "statisticsLamp":
+      return <StatisticsLamp color={color} {...rest} />;
+    case "statisticsUserStory":
+      return <StatisticsUserStory color={color} {...rest} />;
     default:
       return null;
   }
