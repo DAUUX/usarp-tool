@@ -11,14 +11,14 @@ export default ({ mode }) => {
     base: "/",
     plugins: [svgr(), react()],
     server: {
-      port: env.PORT || 5173, // Usa a porta definida nas variáveis de ambiente ou 3000 por padrão
+      port: env.PORT || 3000, // Usa a porta definida nas variáveis de ambiente ou 3000 por padrão
       strictPort: true,
       host: true,
-      origin: env.ORIGIN || "http://localhost:5173", // Usa o origin definido nas variáveis de ambiente ou localhost:3000 por padrão
+      origin: env.ORIGIN || "http://localhost:3000", // Usa o origin definido nas variáveis de ambiente ou localhost:3000 por padrão
     },
     // Configuração da visualização
     preview: {
-      port: env.PREVIEW_PORT || 5173, // Usa a porta definida nas variáveis de ambiente ou 3001 por padrão
+      port: env.PREVIEW_PORT || 3000, // Usa a porta definida nas variáveis de ambiente ou 3001 por padrão
       strictPort: true,
     },
     define: {

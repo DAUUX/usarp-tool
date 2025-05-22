@@ -31,6 +31,7 @@
 
 ```bash
   # Execute o script de modo desenvolvimento.
+  # Então para esse caso preencher o .env.development
   ❯ npm run dev
 ```
 
