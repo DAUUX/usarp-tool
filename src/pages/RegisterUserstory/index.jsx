@@ -114,6 +114,7 @@ export function RegisterUserstory() {
             <InputCombobox.Root>
               <InputCombobox.Select
                 name={`project`}
+                placeholder="Selecione um projeto"
                 defaultValue=""
                 error={errors.project}
                 control={control}

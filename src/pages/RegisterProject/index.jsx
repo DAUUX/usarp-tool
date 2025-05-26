@@ -239,6 +239,7 @@ export function RegisterProject() {
                 <InputCombobox.Root>
                   <InputCombobox.Select
                     style={{ width: "100%" }}
+                    placeholder="Selecionar"
                     name={`projectTeam.${index}.roleInProject`}
                     defaultValue=""
                     error={errors.projectTeam?.[index]?.roleInProject}
