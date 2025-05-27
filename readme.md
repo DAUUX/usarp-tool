@@ -51,11 +51,25 @@ Após configurar as variáveis de ambiente `.env` e clonar os repositórios com 
    BASE_URL=http://localhost:3333
    ```
 
-3. Para iniciar o ambiente Docker, execute o seguinte comando:
+3. No window o backend, houve um problema com pacote `bcrypt`, nesse caso e apenas fazer substituição.
+     - na pasta do backend altere o arquivo package.json 
+       ```
+       "bcrypt": "5.1.1", trocar por "bcryptjs": "^3.0.2",
+       ```
+     - O arquivo backend\src\controllers\user.controller.js
+       ```
+       const bcrypt = require("bcrypt"); trocar por const bcrypt = require("bcryptjs");
+       ```
+     - O arquivo backend\src\models\user.model.js
+       ```
+       const bcrypt = require("bcrypt"); trocar por const bcrypt = require("bcryptjs");
+       ```
+4. Para iniciar o ambiente Docker, execute o seguinte comando:
 
    ```bash
    docker-compose up -d
    ```
+
 
    Isso iniciará os contêineres Docker necessários.
 
