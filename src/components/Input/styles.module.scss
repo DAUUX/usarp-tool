@@ -1,18 +1,17 @@
 .input__container {
-  border: 0.06rem solid var(--th-input-border);
+  border: 0.06rem solid var(--gray-400);
   border-radius: 1rem;
-  // height: 3.5rem;
   align-items: center;
   padding: 1rem;
   font-size: 0.875rem;
   color: var(--th-input-color);
   &:focus {
-    border: none;
-    outline: 0.06rem solid var(--th-input-focus);
+    outline: none;
+    border: 0.06rem solid var(--th-input-focus);
   }
   &:invalid {
-    border: none;
-    outline: 0.06rem solid var(--th-input-error);
+    outline: none;
+    border: 0.06rem solid var(--th-input-error);
     color: var(--th-input-error);
     &::placeholder {
       color: var(--th-input-error);

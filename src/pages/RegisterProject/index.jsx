@@ -7,28 +7,25 @@ import styles from "./styles.module.scss";
 import { useFieldArray, useForm } from "react-hook-form";
 import { InputCombobox } from "../../components/InputCombobox";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
-import { useAlert } from "../../hooks/useAlert";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { InputTextarea } from "../../components/InputTextarea/indes";
-import axios from "axios";
-import { URL as baseURL } from "../../utils/base";
-import { useAuth } from "../../hooks/useAuth";
-import { useEffect } from "react";
+import RegisterProjectService from "./registerProject.service";
 
 export function RegisterProject() {
-  const { id } = useParams();
-  const { user } = useAuth();
+  // const { id } = useParams();
+  const { handleBackButton, registerProject, handleBackBackCloseALert, close } =
+    RegisterProjectService("");
   const schema = Yup.object().shape({
-    name: Yup.string()
+    projectName: Yup.string()
       .required("Nome do projeto é obrigatório")
       .min(5, "Nome do projeto deve ter no mínimo 5 caracteres"),
     description: Yup.string(),
-    members: Yup.array().of(
+    projectTeam: Yup.array().of(
       Yup.object().shape({
         email: Yup.string()
           .email("E-mail inválido")
           .required("E-mail é obrigatório"),
-        role: Yup.string()
+        roleInProject: Yup.string()
           .transform((value, originalValue) => {
             if (originalValue && typeof originalValue === "object") {
               return originalValue.label;
@@ -40,19 +37,17 @@ export function RegisterProject() {
     ),
   });
 
-  const { open, close } = useAlert();
   const navigate = useNavigate();
   const initialValues = {
-    name: "",
+    projectName: "",
     description: "",
-    members: [{ email: "", role: "" }],
+    projectTeam: [{ email: "", roleInProject: "" }],
   };
   const {
     control,
     register,
     handleSubmit,
     watch,
-    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: "all",
@@ -60,119 +55,129 @@ export function RegisterProject() {
     defaultValues: initialValues,
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
-    name: "members",
+    name: "projectTeam",
   });
-
-  const goBack = () => {
-    close();
-    navigate(-1);
-  };
 
   const navegate = () => {
     close();
-    navigate("/project");
+    navigate("/registerUserstory");
   };
-  function getCurrentDateFormatted() {
-    const today = new Date();
 
-    const day = String(today.getDate()).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  }
+  const extractValueSimpleQuotes = (texto) => {
+    const regex = /'([^']*)'/;
+    const resultado = regex.exec(texto);
+    return resultado ? resultado[1] : null;
+  };
+  
   const contentSuccess = (
     <FeedbackAlert.Root>
       <FeedbackAlert.Icon icon="checkcircle" />
       <FeedbackAlert.Title title="Excelente" />
       <FeedbackAlert.Description
         style={{ textAlign: "center" }}
-        description="Novo Projeto registrado!"
+        description="Projeto teste cadastrado com sucesso!"
       />
-      <FeedbackAlert.Button onClick={() => navegate()} label="Visualizar" />
+      <div className={styles.alert__buttons}>
+        <Button.Root
+          data-type="secondary"
+          onClick={() => handleBackBackCloseALert()}
+        >
+          <Button.Text>Ok, fechar</Button.Text>
+        </Button.Root>
+        <Button.Root data-type="primary" onClick={() => navegate()}>
+          <Button.Text>Cadastrar Histórias de Usuário!</Button.Text>
+        </Button.Root>
+      </div>
     </FeedbackAlert.Root>
   );
+
   const contentWarning = (
     <FeedbackAlert.Root>
       <FeedbackAlert.Icon icon="warningcircle" />
       <FeedbackAlert.Title title="Aviso!" />
       <FeedbackAlert.Description description="Ao sair da pagina as informações serão perdidas, deseja continuar?" />
       <div className={styles.alert__buttons}>
-        <Button.Root data-type="danger" onClick={close}>
+        <Button.Root data-type="danger" onClick={() => close()}>
           <Button.Text>Cancelar</Button.Text>
         </Button.Root>
-        <Button.Root data-type="primary" onClick={goBack}>
+        <Button.Root
+          data-type="primary"
+          onClick={() => handleBackBackCloseALert()}
+        >
           <Button.Text>Sim, continuar</Button.Text>
         </Button.Root>
       </div>
     </FeedbackAlert.Root>
   );
-  const handleOpenAlert = (content) => {
-    open(content);
-  };
-  const handleBackButton = () => {
-    const formValues = watch();
-    const hasDataLoss = Object.values(formValues).some((value) => {
-      if (Array.isArray(value)) {
-        return value.some((item) => Object.values(item).some((val) => val));
-      }
-      return Boolean(value);
-    });
 
-    hasDataLoss ? handleOpenAlert(contentWarning) : goBack();
-  };
+  const contentWarningEmail = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="warningcircle" />
+      <FeedbackAlert.Title title="Aviso!" />
+      <FeedbackAlert.Description
+        style={{ textAlign: "center" }}
+        description={`Usuário com email ${extractValueSimpleQuotes()} não encontrado.`}
+      />
+      <div className={styles.alert__buttons}>
+        <Button.Root
+          data-type="primary"
+          onClick={() => handleBackBackCloseALert()}
+        >
+          <Button.Text>Ok, fechar</Button.Text>
+        </Button.Root>
+      </div>
+    </FeedbackAlert.Root>
+  );
+
+  const contentError = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="closecircle" />
+      <FeedbackAlert.Title title="Erro ao realizar Cadastro!" />
+      <FeedbackAlert.Description
+        style={{ textAlign: "center" }}
+        description={`Falha na conexão`}
+      />
+      <div className={styles.alert__buttons}>
+        <Button.Root
+          data-type="primary"
+          onClick={() => handleBackBackCloseALert()}
+        >
+          <Button.Text>Ok, fechar</Button.Text>
+        </Button.Root>
+      </div>
+    </FeedbackAlert.Root>
+  );
+
   const handleSubmitForm = (body) => {
-    const newData = {
-      createdby: {
-        role: "Developer",
-        name: user.fullName,
-      },
-      status: "Novo",
-      date: getCurrentDateFormatted(),
-      amountUs: 0,
-      userStoryId: 8,
-    };
-
-    const mergedBody = { ...body, ...newData };
-    axios
-      .post(baseURL + "/projeto", mergedBody)
-      .then(() => {
-        handleOpenAlert(contentSuccess);
-        // handleOpenAlertSuccess();
-        // setTimeout(() => {
-        //   close();
-        // }, 3000);
-      })
-      .catch((err) => {
-        if (err.code === "ERR_NETWORK") {
-          // handleOpenAlertError();
-        }
-        // handleOpenToastError();
-      });
+    registerProject(body, contentSuccess, contentError, contentWarningEmail);
   };
 
-  useEffect(() => {
-    if (id) {
-      const fetchProject = async () => {
-        try {
-          const project = await axios.get(`${baseURL}/projeto/${id}`);
-          const { name, description, members } = project.data;
-          reset({ name, description, members });
-        } catch (error) {
-          console.error("Erro ao carregar o projeto:", error);
-        }
-      };
-      fetchProject();
-    }
-  }, [id, reset]);
+  //TODO: Implementar a função de editar o projeto
+  // useEffect(() => {
+  //   if (id) {
+  //     const fetchProject = async () => {
+  //       try {
+  //         const project = await axios.get(`${baseURL}/projeto/${id}`);
+  //         const { projectName, description, projectTeam } = project.data;
+  //         reset({ projectName, description, projectTeam });
+  //       } catch (error) {
+  //         console.error("Erro ao carregar o projeto:", error);
+  //       }
+  //     };
+  //     fetchProject();
+  //   }
+  // }, [id, reset]);
 
   return (
     <div className={styles.registerProject__container}>
       <header>
         <span title="voltar">
-          <IconChoice onClick={() => handleBackButton()} icon="back" />
+          <IconChoice
+            onClick={() => handleBackButton(watch(), contentWarning)}
+            icon="back"
+          />
           <h4>Novo projeto</h4>
         </span>
       </header>
@@ -185,12 +190,12 @@ export function RegisterProject() {
               <h6>Nome do projeto</h6>
               <Input.Root
                 type="text"
-                {...register("name")}
-                name={"name"}
-                id={"name"}
+                {...register("projectName")}
+                name={"projectName"}
+                id={"projectName"}
               >
-                {errors.name && (
-                  <Input.Error>{errors.name.message}</Input.Error>
+                {errors.projectName && (
+                  <Input.Error>{errors.projectName.message}</Input.Error>
                 )}
               </Input.Root>
             </fieldset>
@@ -218,13 +223,13 @@ export function RegisterProject() {
                 <h6>E-mail do membro</h6>
                 <Input.Root
                   type="text"
-                  {...register(`members.${index}.email`)}
-                  name={`members.${index}.email`}
-                  id={`members.${index}.email`}
+                  {...register(`projectTeam.${index}.email`)}
+                  name={`projectTeam.${index}.email`}
+                  id={`projectTeam.${index}.email`}
                 >
-                  {errors.members?.[index]?.email && (
+                  {errors.projectTeam?.[index]?.email && (
                     <Input.Error>
-                      {errors.members[index].email.message}
+                      {errors.projectTeam[index].email.message}
                     </Input.Error>
                   )}
                 </Input.Root>
@@ -233,24 +238,30 @@ export function RegisterProject() {
                 <h6>Papel dentro do projeto</h6>
                 <InputCombobox.Root>
                   <InputCombobox.Select
-                    name={`members.${index}.role`}
+                    style={{ width: "100%" }}
+                    placeholder="Selecionar"
+                    name={`projectTeam.${index}.roleInProject`}
                     defaultValue=""
-                    error={errors.members?.[index]?.role}
+                    error={errors.projectTeam?.[index]?.roleInProject}
                     control={control}
-                    required={!!errors.members?.[index]?.role}
+                    required={!!errors.projectTeam?.[index]?.roleInProject}
                     options={[
-                      { value: "UI/UX", label: "UI/UX" },
-                      { value: "Developer", label: "Developer" },
-                      { value: "Manager", label: "Manager" },
+                      { value: "Moderador", label: "Moderador" },
+                      { value: "Participante", label: "Participante" },
                     ]}
                   />
-                  {errors.members?.[index]?.role && (
+                  {errors.projectTeam?.[index]?.roleInProject && (
                     <InputCombobox.Error>
-                      {errors.members[index].role.message}
+                      {errors.projectTeam[index].roleInProject.message}
                     </InputCombobox.Error>
                   )}
                 </InputCombobox.Root>
               </fieldset>
+              {index > 0 && (
+                <div className={styles.delete__button} title="deletar membro">
+                  <IconChoice icon="delete" onClick={() => remove(index)} />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -261,7 +272,7 @@ export function RegisterProject() {
             data-type="tertiary"
             onClick={() =>
               append({
-                members: [{ email: "", role: "" }],
+                projectTeam: [{ email: "", roleInProject: "" }],
               })
             }
           >
@@ -272,7 +283,7 @@ export function RegisterProject() {
             <Button.Root
               data-type="secondary"
               type="button"
-              onClick={() => handleBackButton()}
+              onClick={() => handleBackButton(watch(), contentWarning)}
             >
               <Button.Text>Cancelar</Button.Text>
             </Button.Root>

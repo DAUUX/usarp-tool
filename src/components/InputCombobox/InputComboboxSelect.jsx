@@ -2,8 +2,24 @@ import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import styles from "./styles.module.scss";
+import { IconChoice } from "../../utils/IconChoice";
 
 export default function InputComboboxSelect({ children, options, error, ...rest }) {
+
+  const CustomDropdownIndicator = ({ selectProps: { menuIsOpen } }) => (
+    <div className={styles.custom_indicator}>
+        <IconChoice
+          icon={menuIsOpen ? "arrowup" : "arrowdown"}
+          />
+      </div>
+    );
+    
+    CustomDropdownIndicator.propTypes = {
+      selectProps: PropTypes.shape({
+        menuIsOpen: PropTypes.bool,
+      }).isRequired,
+    };
+
   return (
     <>
       <Controller
@@ -15,7 +31,12 @@ export default function InputComboboxSelect({ children, options, error, ...rest 
             classNamePrefix="react_select"
             options={options}
             isClearable
-            placeholder="Escolhar um projeto"
+            placeholder={rest.placeholder}
+            components={{
+              DropdownIndicator: CustomDropdownIndicator,
+              IndicatorSeparator: () => null,
+              ClearIndicator: () => null,
+            }}
             styles={{
               control: (provided) => ({
                 ...provided,

@@ -9,6 +9,25 @@
     }
   }
 }
+
+.custom_indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 16px 16px 0;
+  
+  svg {
+    fill: var(--gray-700);
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+  }
+}
+
+.indicator_focused {
+  color: var(--th-combobox-focused);
+}
+
 .input__error {
   color: var(--th-input-error);
   font-family: Inter;

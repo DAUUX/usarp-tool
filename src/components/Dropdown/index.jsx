@@ -1,6 +1,6 @@
-import { DropdownRoot } from "./DropdownContext";
 import { DropdownMenu } from "./DropdownMenu";
 import { DropdownMenuItem } from "./DropdownMenuItem";
+import { DropdownRoot } from "./DropdownRoot.";
 import { DropdownTrigger } from "./DropdownTrigger";
 
 export const Dropdown = {

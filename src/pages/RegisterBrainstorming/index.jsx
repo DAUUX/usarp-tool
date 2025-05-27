@@ -131,6 +131,7 @@ export function RegisterBrainstorming() {
               <InputCombobox.Root>
                 <InputCombobox.Select
                   name="project"
+                  placeholder="Selecione o projeto"
                   error={errors.project}
                   control={control}
                   required={errors.project ? true : false}
@@ -180,6 +181,7 @@ export function RegisterBrainstorming() {
               <InputCombobox.Root>
                 <InputCombobox.MultiSelect
                   name="userStory"
+                  placeholder="Selecione a História de Usuário"
                   defaultValue={[]}
                   error={errors.userStory}
                   control={control}

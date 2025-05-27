@@ -77,8 +77,9 @@
     margin-top: 2.5rem;
     .selectuserstory__content {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 60px;
       gap: 1.5rem;
+      align-items: start;
     }
     h4 {
       //TODO: Button color
@@ -151,6 +152,10 @@
         letter-spacing: 0%;
         text-align: left;
       }
+    }
+    .delete__button {
+      height: -webkit-fill-available;
+      margin-top: 3rem;
     }
   }
   .buttons__container {

@@ -2,8 +2,22 @@ import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import styles from "./styles.module.scss";
+import { IconChoice } from "../../utils/IconChoice";
 
 export default function InputComboboxMultiSelect({ children, options, error, ...rest }) {
+    const CustomDropdownIndicator = ({ selectProps: { menuIsOpen } }) => (
+      <div className={styles.custom_indicator}>
+          <IconChoice
+            icon={menuIsOpen ? "arrowup" : "arrowdown"}
+            />
+        </div>
+      );
+      
+      CustomDropdownIndicator.propTypes = {
+        selectProps: PropTypes.shape({
+          menuIsOpen: PropTypes.bool,
+        }),
+      };
   return (
     <>
       <Controller
@@ -15,7 +29,11 @@ export default function InputComboboxMultiSelect({ children, options, error, ...
             classNamePrefix="react_select"
             options={options}
             isMulti
-            placeholder="Escolhar um projeto"
+            placeholder={rest.placeholder}
+            components={{
+              DropdownIndicator: CustomDropdownIndicator,
+              IndicatorSeparator: () => null,
+            }}
             styles={{
               control: (provided) => ({
                 ...provided,

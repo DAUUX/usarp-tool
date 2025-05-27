@@ -2,6 +2,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { setAuthToken } from "../utils/axios.config";
 
 const AuthContext = createContext();
 const User = {
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       setSigned(true);
+      setAuthToken(token);
       axios.defaults.headers.common["Authorization"] = "Bearer " + token;
       const { email, fullName, id } = jwtDecode(token);
       setUser({ email, fullName, id });
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 
   function handleLogout() {
     setSigned(false);
+    setAuthToken(null);
     localStorage.removeItem("@AccessToken");
   }
 

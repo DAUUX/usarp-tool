@@ -26,14 +26,6 @@ export function Home() {
     i18n.changeLanguage(value);
   }
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  };
   return (
     <div className={styles.home__container}>
       <section>
@@ -85,11 +77,11 @@ export function Home() {
             listBrainstorming.map((brainstorming) => (
               <BrainstormingCard
                 key={brainstorming.id}
-                brainstormingName={brainstorming.title}
-                projectName={brainstorming.project}
-                date={formatDate(brainstorming.date)}
-                hour={brainstorming.hours}
-                userStory={brainstorming.userStory}
+                brainstormingName={brainstorming.brainstormingTitle}
+                projectName={brainstorming.projectName}
+                date={brainstorming.brainstormingDate}
+                hour={brainstorming.brainstormingTime}
+                userStory={brainstorming.userStories}
               />
             ))
           )}
