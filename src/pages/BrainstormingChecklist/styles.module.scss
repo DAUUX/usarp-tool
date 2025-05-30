@@ -1,4 +1,6 @@
 .brainstormingChecklist__container {
+  background-color: var(--gray-100);
+
   .header {
     background-color: var(--primary-600);
     width: 100%;
@@ -55,7 +57,7 @@
 
           margin-left: -5px;
           object-fit: cover;
-          
+
           .avatar__icon {
             width: 32px;
             height: 32px;
@@ -105,4 +107,35 @@
     }
   }
 
+  .content {
+    padding: 1.5rem;
+
+    .checklist__container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      padding: 2rem;
+      background-color: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: 1rem;
+      box-shadow: 4px 4px 24px 0px rgba(0, 0, 0, .05);
+
+      width: 375px;
+
+      h6 {
+        font-weight: 600;
+        font-size: 1.125rem;
+        color: var(--gray-700);
+      }
+
+      .checklist__accordion{
+        display: flex;
+        flex-direction: column;
+
+        gap: 2rem;
+      }
+    }
+
+  }
 }
