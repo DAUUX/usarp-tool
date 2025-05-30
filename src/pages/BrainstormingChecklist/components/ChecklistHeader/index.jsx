@@ -2,6 +2,7 @@ import styles from "../../styles.module.scss";
 import smallLogo from "../../../../assets/images/small-logo.png";
 import { Text } from "../../../../components/Text";
 import { Button } from "../../../../components/Button";
+import { Avatar } from "./avatar";
 
 export function ChecklistHeader({ avatarList, handleSignOutSession }) {
   return (
@@ -20,11 +21,7 @@ export function ChecklistHeader({ avatarList, handleSignOutSession }) {
       <div className={styles.actions__container}>
         <div className={styles.avatar_container}>
           {avatarList.map((avatar) => (
-            <img
-              className={styles.avatar}
-              src={avatar.image}
-              alt={avatar.name}
-            />
+            <Avatar icon={avatar.icon} />
           ))}
         </div>
         <div>

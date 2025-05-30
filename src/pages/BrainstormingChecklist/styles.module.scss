@@ -55,6 +55,11 @@
 
           margin-left: -5px;
           object-fit: cover;
+          
+          .avatar__icon {
+            width: 32px;
+            height: 32px;
+          }
         }
       }
     }
