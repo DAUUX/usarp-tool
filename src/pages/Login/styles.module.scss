@@ -33,9 +33,9 @@
         border-color: transparent;
       }
       &:focus {
-        outline: 2px solid var(--th-color-input-focus);
+        border: 2px solid var(--th-color-input-focus);
         color: var(--th-color-text-selected);
-        border: none;
+        outline: none;
       }
     }
   }

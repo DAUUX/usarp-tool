@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { IconChoice } from "../../utils/IconChoice";
+import { Button } from "../Button";
 
 export default function InputPassword({
   label,
@@ -22,13 +22,13 @@ export default function InputPassword({
         {...register(label)}
         type={passwordVisible ? "password" : "text"}
       />
-      <button type="button" onClick={handlePasswordVisibility}>
-        <IconChoice
-          tabIndex="{0}"
+      <Button.Root type="button" onClick={handlePasswordVisibility}>
+        <Button.Icon
           icon={passwordVisible ? "eyeOff" : "eyeOn"}
           color={outline}
+          tabIndex="{0}"
         />
-      </button>
+      </Button.Root>
     </fieldset>
   );
 }
