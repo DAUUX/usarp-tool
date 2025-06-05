@@ -1,11 +1,10 @@
 import styles from "./styles.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Wrapper from "../../components/Wrapper";
 import InputPassword from "../../components/InputPassword";
-import axios from "axios";
 import { IconChoice } from "../../utils/IconChoice";
 import { Toast } from "../../components/Toast";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
@@ -13,6 +12,8 @@ import { useAlert } from "../../hooks/useAlert";
 import { useAuth } from "../../hooks/useAuth";
 import { URL as baseURL } from "../../utils/base";
 import { useTranslation } from "react-i18next";
+import LoginService from "./login.service";
+import { useState } from "react";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -25,81 +26,62 @@ export default function Login() {
       .max(15, t("loginErrorSenhaMaxima"))
       .required(),
   });
-
   const { register, handleSubmit, formState } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
-  const navigate = useNavigate();
-  const { setToken, user } = useAuth();
+  const { user } = useAuth();
   const { errors } = formState;
-  const { open, close } = useAlert();
+  const { close } = useAlert();
+  const { Login } = LoginService(baseURL);
+  const [toastError, setToastError] = useState();
 
-  const handleOpenAlertSuccess = () => {
-    const content = (
-      <FeedbackAlert.Root>
-        <FeedbackAlert.Icon icon="checkcircle" />
-        <FeedbackAlert.Title
-          title={t("loginAlertSucesso")}
-          name={`, ${user.fullName}`}
-        />
-        <FeedbackAlert.Description description={t("loginAlertDescricao")} />
-      </FeedbackAlert.Root>
-    );
-    open(content);
+  const alertSuccess = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="checkcircle" />
+      <FeedbackAlert.Title
+        title={t("loginAlertSucesso")}
+        name={`, ${user.fullName}`}
+      />
+      <FeedbackAlert.Description description={t("loginAlertDescricao")} />
+    </FeedbackAlert.Root>
+  );
+
+  const alertError = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="closecircle" />
+      <FeedbackAlert.Title title={t("loginAlertErrorTitle")} />
+      <FeedbackAlert.Description description={t("loginAlertErrorDes")} />
+      <FeedbackAlert.Button onClick={close} label={t("loginAlertErrorBtn")} />
+    </FeedbackAlert.Root>
+  );
+
+  const handleSubmitForm = async (body) => {
+    try {
+      await Login(body, alertSuccess, alertError);
+      setToastError(false);
+    } catch (error) {
+      setToastError(true);
+      setTimeout(() => {
+        setToastError(false);
+      }, 3000);
+    }
   };
 
-  const handleOpenAlertError = () => {
-    const content = (
-      <FeedbackAlert.Root>
-        <FeedbackAlert.Icon icon="closecircle" />
-        <FeedbackAlert.Title title="Falha ao realizar login" />
-        <FeedbackAlert.Description description="Instabilidade no servidor" />
-        <FeedbackAlert.Button onClick={close} label="Ok, fechar" />
-      </FeedbackAlert.Root>
-    );
-    open(content);
+  const handleCloseToast = () => {
+    setToastError(false);
   };
-
-  const handleOpenToastError = () => {
-    const content = (
-      <Toast
-        onClick={close}
-        type={"error"}
-        message={"E-mail e/ou senha incorretos"}
-      >
-        <IconChoice icon="close" width="24px" height="24px" color="#fff" />
-      </Toast>
-    );
-    open(content);
-    setTimeout(() => {
-      close();
-    }, 3000);
-  };
-
-  const handleSubmitForm = (body) => {
-    axios
-      .post(baseURL + "/auth/signin", body)
-      .then((response) => {
-        const token = response.data.token;
-        setToken(token);
-        localStorage.setItem("@AccessToken", token);
-        handleOpenAlertSuccess();
-        setTimeout(() => {
-          close();
-          navigate("/login");
-        }, 3000);
-      })
-      .catch((err) => {
-        if (err.code === "ERR_NETWORK") {
-          handleOpenAlertError();
-        }
-        handleOpenToastError();
-      });
-  };
-
   return (
     <Wrapper>
+      {toastError && (
+        <Toast
+          onClick={handleCloseToast}
+          type={"error"}
+          message={t("loginErrorToast")}
+        >
+          <IconChoice icon="close" />
+        </Toast>
+      )}
       <div className={styles.card__container}>
         <section className={styles.card__body}>
           <form onSubmit={handleSubmit(handleSubmitForm)}>
@@ -143,7 +125,7 @@ export default function Login() {
               className={styles.card__button}
               type="submit"
             >
-              ENTRAR
+              {t("loginButton")}
             </button>
           </form>
         </section>
