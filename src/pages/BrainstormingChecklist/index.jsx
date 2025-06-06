@@ -194,7 +194,11 @@ export function BrainstormingChecklist() {
   };
 
   const handleSignOutSession = () => {
-    console.log("saiu");
+    console.log("saiu da sessão");
+  };
+
+  const handleSubmitChecklist = () => {
+    console.log("Botão de preencher cartas");
   };
   return (
     <div className={styles.brainstormingChecklist__container}>
@@ -207,6 +211,7 @@ export function BrainstormingChecklist() {
           accordionItems={accordionItems}
           checkedItems={checkedItems}
           handleCheck={handleCheck}
+          handleSubmitChecklist={handleSubmitChecklist}
         />
       </main>
     </div>

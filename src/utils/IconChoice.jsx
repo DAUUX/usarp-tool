@@ -43,9 +43,12 @@ import { User04Orange } from "../assets/icons/User04_orange";
 import { User05Orange } from "../assets/icons/User05_orange";
 import { User06Orange } from "../assets/icons/User06_orange";
 import { ChevronDown } from "../assets/icons/ChevronDown";
+import { ArrowRightShort } from "../assets/icons/ArrowRightShort";
 
 export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
+    case "arrowRightShort":
+      return <ArrowRightShort {...rest} />;
     case "usarp":
       return <Usarp {...rest} />;
     case "eyeOn":

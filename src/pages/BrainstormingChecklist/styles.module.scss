@@ -129,13 +129,20 @@
         color: var(--gray-700);
       }
 
-      .checklist__accordion{
+      .checklist__accordion {
         display: flex;
         flex-direction: column;
 
         gap: 2rem;
       }
+      .submit__checklist{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
     }
+
 
   }
 }
