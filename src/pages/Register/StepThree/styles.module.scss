@@ -5,6 +5,10 @@
   gap: 2rem;
   flex-wrap: wrap;
   align-content: space-between;
+  @media(max-width: 600px) {
+    gap: 1rem;
+    width: 100%;
+  }
 }
 .card__header {
   color: var(--th-color-text-card-header);
@@ -26,17 +30,19 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    @media(max-width: 600px) {
+      gap: 1rem;
+    }
 
     div:nth-child(1) {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 0.5rem;
-      margin-bottom: -1rem;
+      height: max-content;
       span {
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 12vh;
 
         label {
           margin-bottom: 1rem;
@@ -52,19 +58,18 @@
           padding: 0.9rem;
           font-size: 0.875rem;
           color: var(--th-color-text-input);
-          border: 1px solid var(--th-color-text-input);
+          border: 2px solid var( --gray-400);
+          outline: none;
           &:focus {
-            outline: var(--th-color-input-focus) auto 1px;
+            border: 2px solid var(--th-color-input-focus);
             color: var(--th-color-text-selected);
           }
           &:invalid {
-            outline: 2px solid var(--th-color-focus-error);
+            border: 2px solid var(--th-color-focus-error);
             color: var(--th-color-focus-error);
-            border-color: transparent;
           }
           &:focus-within {
-            outline: 2px solid var(--th-color-input-focus);
-            border: none;
+            border: 2px solid var(--th-color-input-focus);
             color: var(--th-color-text-input);
             svg {
               color: var(--th-color-input-focus);
@@ -101,22 +106,21 @@
       }
       input {
         border-radius: 1rem;
-        border: 1px solid var(--th-color-text-input);
+        border: 2px solid var( --gray-400);
         padding: 1rem;
         font-size: 0.875rem;
         color: var(--th-color-text-input);
+        outline: none;
         &:focus {
-          outline: var(--th-color-input-focus) auto 1px;
+          border: var(--th-color-input-focus) auto 1px;
           color: var(--th-color-text-selected);
         }
         &:invalid {
-          outline: 2px solid var(--th-color-focus-error);
+          border: 2px solid var(--th-color-focus-error);
           color: var(--th-color-focus-error);
-          border-color: transparent;
         }
         &:focus-within {
-          outline: 2px solid var(--th-color-input-focus);
-          border: none;
+          border: 2px solid var(--th-color-input-focus);
           color: var(--th-color-text-input);
           svg {
             color: var(--th-color-input-focus);
@@ -142,14 +146,16 @@
 .card__button[type="submit"] {
   background: var(--th-color-button);
   color: var(--th-color-text-button);
+  outline: none;
   &:hover {
     background-color: var(--th-color-button-hover);
     border-color: var(--th-color-button-hover);
   }
   &:focus {
-    outline: 2px solid var(--th-color-button-focus);
+    border: 2px solid var(--th-color-button-focus);
   }
   &:disabled {
+    outline: none;
     border: none;
     background-color: var(--th-color-button-disabled);
     color: var(--th-color-text-button-disabled);
@@ -160,12 +166,13 @@
 .card__button[type="button"] {
   background: var(--th-color-button-back);
   color: var(--th-color-text-button-back);
+  outline: none;
   &:hover {
     background-color: var(--th-color-button-hover);
     color: var(--th-color-text-button);
   }
   &:focus {
-    outline: 2px solid var(--th-color-button-focus);
+    border: 2px solid var(--th-color-button-focus);
   }
 }
 .card__error {
@@ -173,9 +180,6 @@
   padding-left: 5px;
   font-size: 0.875rem;
   color: var(--th-color-text-error);
-}
-input[type="date"]::-webkit-calendar-picker-indicator {
-  // display: none;
 }
 input[type="date"]::-moz-calendar-box {
   display: none;

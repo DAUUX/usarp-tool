@@ -5,9 +5,13 @@ import PropTypes from "prop-types";
 import InputDropdown from "../../../components/InputDropdown";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
+import { useRegister } from "../contexts/RegisterContext";
+import { useEffect } from "react";
 
-export default function StepThree({ fullName, next, previous, children }) {
+export default function StepThree({ fullName, onSubmit, children }) {
   const { t } = useTranslation();
+  const { formData, updateFormData, previousStep } = useRegister();
+
   const schema = Yup.object().shape({
     birthdate: Yup.string().required(t("cadastrarCampoObrigatorio")),
     gender: Yup.string().required(t("cadastrarCampoObrigatorio")),
@@ -15,26 +19,74 @@ export default function StepThree({ fullName, next, previous, children }) {
     organization: Yup.string().required(t("cadastrarOrganizacaoObrigatorio")),
   });
   function formatDate(date) {
+    if (!date) return '';
+    if (date.includes('/')) {
+      const [dia, mes, ano] = date.split("/");
+      return `${ano}-${mes}-${dia}`;
+    }
+    return date;
+  }
+
+  function formatDateForSubmission(date) {
+    if (!date) return '';
     const [ano, mes, dia] = date.split("-");
     return `${dia}/${mes}/${ano}`;
-  }
-  const { register, handleSubmit, formState } = useForm({
-    mode: "all",
+  }  const { register, handleSubmit, formState, getValues, reset } = useForm({
+    mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      birthdate: "",
-      gender: "",
-      profile: "",
-      organization: "",
-    },
+      birthdate: formatDate(formData.birthdate),
+      gender: formData.gender,
+      profile: formData.profile,
+      organization: formData.organization,
+    },  
+    criteriaMode: "all",
   });
 
   const { errors } = formState;
 
+  // useEffect para sincronizar o formulário quando os dados do Context mudarem
+  useEffect(() => {
+    reset({
+      birthdate: formatDate(formData.birthdate),
+      gender: formData.gender,
+      profile: formData.profile,
+      organization: formData.organization,
+    });
+  }, [formData, reset]);
+
   const handleSubmitForm = (data) => {
     const { birthdate, gender, profile, organization } = data;
-    next({ birthdate: formatDate(birthdate), gender, profile, organization });
-    console.log(data);
+    const finalData = {
+      birthdate: formatDateForSubmission(birthdate),
+      gender,
+      profile,
+      organization,
+    };
+
+    // Atualiza o contexto e passa os dados completos
+    updateFormData(finalData);
+
+    const completeData = {
+      ...formData,
+      ...finalData,
+    };
+    onSubmit(completeData);
+  };
+
+  const handlePreviousStep = () => {
+    // Captura os valores atuais do formulário antes de navegar
+    const currentValues = getValues();
+    // Salva os dados atuais (mesmo que não válidos) no formato correto
+    const dataToSave = {
+      birthdate: currentValues.birthdate ? formatDateForSubmission(currentValues.birthdate) : '',
+      gender: currentValues.gender || '',
+      profile: currentValues.profile || '',
+      organization: currentValues.organization || '',
+    };
+    
+    updateFormData(dataToSave);
+    previousStep();
   };
 
   return (
@@ -144,10 +196,10 @@ export default function StepThree({ fullName, next, previous, children }) {
             disabled={!formState.isValid}
           >
             {t("cadastrarButaoConcluir")}
-          </button>
+          </button>          
           <button
             className={styles.card__button}
-            onClick={previous}
+            onClick={handlePreviousStep}
             type="button"
           >
             {t("cadastrarButaoVolta")}
@@ -160,7 +212,6 @@ export default function StepThree({ fullName, next, previous, children }) {
 
 StepThree.propTypes = {
   fullName: PropTypes.node.isRequired,
-  next: PropTypes.func,
-  previous: PropTypes.func,
+  onSubmit: PropTypes.func,
   children: PropTypes.node,
 };
