@@ -17,4 +17,9 @@
     font-weight: 400;
     line-height: 150%; /* 1.125rem */
   }
+  @media(max-width: 600px) {
+    svg {
+      width: 105px;
+    }
+  }
 }

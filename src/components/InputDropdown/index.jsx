@@ -11,7 +11,7 @@ export default function InputDropdown({
   return (
     <fieldset {...rest} className={styles.InputDropdown}>
       <label htmlFor="">{label}</label>
-      <select {...rest} {...register(registerName)}>
+      <select {...register(registerName)} required={rest.required}>
         <option value="" disabled hidden>
           Escolher...
         </option>
