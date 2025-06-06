@@ -41,6 +41,13 @@ export function Layout() {
         >
           <IconChoice icon="brainstorming" />
         </Sidebar.Button>
+        <Sidebar.Button
+          text="Checklist"
+          active={path == "brainstormingChecklist"}
+          route="brainstormingChecklist"
+        >
+          <IconChoice icon="brainstorming" />
+        </Sidebar.Button>
       </Sidebar.Root>
 
       <Outlet />
