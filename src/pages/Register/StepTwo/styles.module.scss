@@ -5,6 +5,10 @@
   gap: 2rem;
   flex-wrap: wrap;
   align-content: space-between;
+  @media(max-width: 600px) {
+    gap: 1rem;
+    width: 100%;
+  }
 }
 .card__header {
   color: var(--th-color-text-card-header);

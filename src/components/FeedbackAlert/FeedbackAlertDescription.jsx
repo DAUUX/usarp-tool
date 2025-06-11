@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import styles from "./styles.module.scss";
 import { Text } from "../Text";
 
 /**
@@ -12,9 +11,7 @@ import { Text } from "../Text";
 export function FeedbackAlertDescription({ description, ...rest }) {
   return (
     <Text.Root>
-      <Text.Body data-type={"medium"}
-        className={styles.feedbackAlert__description}
-        {...rest}
+      <Text.Body data-type="medium" {...rest}
         dangerouslySetInnerHTML={{ __html: description }}>
       </Text.Body>
     </Text.Root>

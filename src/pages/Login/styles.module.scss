@@ -55,6 +55,10 @@
   flex-direction: column;
   gap: 2.5rem;
   flex-wrap: wrap;
+  @media(max-width: 600px) {
+    gap: 1rem;
+    width: 100%;
+  }
 }
 .card__footer {
   p {
