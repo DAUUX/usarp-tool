@@ -31,7 +31,7 @@ export default function StepOne({ children }) {
       email: formData.email,
       fullName: formData.fullName,
     },
-    criteriaMode: "firstError",
+    criteriaMode: "all",
   });
 
   const { errors } = formState;
