@@ -10,12 +10,11 @@ import { Text } from "../Text";
  */
 export function FeedbackAlertDescription({ description, ...rest }) {
   return (
-    <Text.Root>
-      <Text.Body data-type="medium" {...rest}
-        dangerouslySetInnerHTML={{ __html: description }}>
-      </Text.Body>
-    </Text.Root>
-
+    <Text.Body
+      data-type="medium"
+      {...rest}
+      dangerouslySetInnerHTML={{ __html: description }}
+    ></Text.Body>
   );
 }
 
