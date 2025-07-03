@@ -182,7 +182,6 @@ export function RegisterProject() {
     const fetchProject = async () => {
       if (id) {
         const projectById = await getProjectByid(id);
-        console.log("Project data fetched:", projectById);
         reset(projectById);
       }
     };

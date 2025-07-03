@@ -64,7 +64,6 @@ const RegisterBrainstormingService = (url) => {
             return { ...project, ...userStory };
           })
         );
-        console.log(projectsWithUserStories);
         setListProjects(projectsWithUserStories);
       } catch (err) {
         setError(err.message);

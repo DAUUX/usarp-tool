@@ -85,8 +85,6 @@ const RegisterProjectService = (url) => {
           })),
         ],
       };
-      // console.log("Project data:", projectData);
-      // console.log("Project project:", project);
       return project;
   };
 
