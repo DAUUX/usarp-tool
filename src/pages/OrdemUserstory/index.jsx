@@ -1,67 +1,22 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import styles from "./styles.module.scss";
 import { Button } from "../../components/Button";
 import { Text } from "../../components/Text";
 import { InputCombobox } from "../../components/InputCombobox";
+import OrdemUserstoryService from './ordemUserstory.service';
 
 export function OrdemUserstory() {
-  const userStories = [
-    { id: 'us001', title: 'US001 - Cadastro de usuário no sistema', pririty: 3 },
-    { id: 'us002', title: 'US002 - Login de usuário no sistema', pririty: 2 },
-    { id: 'us003', title: 'US003 - Recuperação de senha do usuário', pririty: 1 },
-  ];
-
-  const initialDefaultValues = {};
-  const priorityFieldNames = userStories.map(us => {
-    const fieldName = `prioridade_${us.id}`;
-    initialDefaultValues[fieldName] = null;
-    return fieldName;
-  });
-
+  const navigate = useNavigate();
   const {
+    userStories,
     control,
     handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm({
-    defaultValues: initialDefaultValues,
-  });
-
-  const allWatchedValues = watch();
-
-  const onSubmit = (data) => {
-    console.log("Dados do formulário (objetos de opção):", data);
-    const simpleData = Object.keys(data).reduce((acc, key) => {
-      acc[key] = data[key] ? data[key].value : null;
-      return acc;
-    }, {});
-    console.log("Dados simplificados (apenas valores):", simpleData);
-  };
-
-  const opcoesDePrioridadeCompleta = userStories.map((us, index) => ({
-    value: (index + 1).toString(),
-    label: (index + 1).toString(),
-  }));
-
-  const getFilteredOptions = (currentFieldName) => {
-    const selectedValuesInOtherFields = [];
-    priorityFieldNames.forEach(fieldName => {
-      if (fieldName !== currentFieldName) {
-        const selectedOptionObject = allWatchedValues[fieldName];
-        if (selectedOptionObject && selectedOptionObject.value) {
-          selectedValuesInOtherFields.push(selectedOptionObject.value);
-        }
-      }
-    });
-    const currentValueForThisField = allWatchedValues[currentFieldName];
-    return opcoesDePrioridadeCompleta.filter(option => {
-      if (currentValueForThisField && option.value === currentValueForThisField.value) {
-        return true;
-      }
-      return !selectedValuesInOtherFields.includes(option.value);
-    });
-  };
+    formState,
+    onSubmit,
+    getFilteredOptions,
+  } = OrdemUserstoryService();
+  const { errors } = formState;
 
   return (
     <div className={styles.ordemUserstory__container}>
@@ -99,25 +54,24 @@ export function OrdemUserstory() {
                       control={control}
                       options={currentOptions}
                       error={errors[fieldName]}
-                      rules={{ required: "Por favor, selecione uma prioridade." }}
+                      rules={{ required: true }}
                       placeholder="Prioridade"
-                    >
-                      {errors[fieldName] && (
-                        <InputCombobox.Error>
-                          {errors[fieldName].message}
-                        </InputCombobox.Error>
-                      )}
-                    </InputCombobox.Select>
+                    />
                   </InputCombobox.Root>
                 </div>
               );
             })}
           </div>
+          <div className={styles.bot_error}>
+            {Object.keys(errors).length > 0 && !formState.isValid && (
+              <span className={styles.single__error}>Por favor, selecione uma prioridade para todas as histórias.</span>
+            )}
+          </div>
           <div className={styles.bot}>
-            <Button.Root data-type="secondary" type="button">
+            <Button.Root data-type="secondary" type="button" onClick={() => navigate(-1)}>
               <Button.Text>cancelar</Button.Text>
             </Button.Root>
-            <Button.Root data-type="primary" type="submit">
+            <Button.Root data-type="primary" type="submit" disabled={!formState.isValid}>
               <Button.Text>Prosseguir para sessão</Button.Text>
             </Button.Root>
           </div>

@@ -64,13 +64,26 @@
                 color:#008287;
               }
         }
+        .bot_error {
+            width: 671px;
+            height: 24px;
+            display: flex;
+            justify-content: flex-start;
+            margin-top: -24px;
+        }
+        .single__error {
+            color: #d32f2f;
+            font-family: Inter;
+            font-size: 0.88rem;
+            font-weight: 400;
+            margin-top: 10px;
+        }
         .bot{
             width: 671px;
             height: 56px;
             gap: 24px;
             display: flex;
             justify-content: flex-end;
-            
         }
       }
   }
