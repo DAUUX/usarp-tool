@@ -5,8 +5,11 @@
   gap: 1.5rem;
   border-radius: 24px;
   padding: 2rem;
-  min-width: 28rem;
+  width: 28rem;
   background-color: white;
+  @media (max-width: 600px) {
+    width: 24rem;
+  }
 
   h4 {
     margin-top: -0.75rem;

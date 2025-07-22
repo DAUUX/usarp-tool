@@ -6,5 +6,5 @@ export function ButtonIcon({iconName, ...rest}) {
 }
 
 ButtonIcon.propTypes = {
-  iconName: PropTypes.string.isRequired
+  iconName: PropTypes.string
 };

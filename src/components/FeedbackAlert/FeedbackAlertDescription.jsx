@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import styles from "./styles.module.scss";
+import { Text } from "../Text";
 
 /**
  * FeedbackAlertDescription Component
@@ -10,11 +10,11 @@ import styles from "./styles.module.scss";
  */
 export function FeedbackAlertDescription({ description, ...rest }) {
   return (
-    <h4
-      className={styles.feedbackAlert__description}
+    <Text.Body
+      data-type="medium"
       {...rest}
       dangerouslySetInnerHTML={{ __html: description }}
-    />
+    ></Text.Body>
   );
 }
 

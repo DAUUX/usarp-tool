@@ -37,9 +37,18 @@ import { User06 } from "../assets/icons/User06";
 import { User04 } from "../assets/icons/User04";
 import { StatisticsLamp } from "../assets/icons/StatisticsLamp";
 import { StatisticsUserStory } from "../assets/icons/StatisticsUserStory";
+import { User02Orange } from "../assets/icons/User02_orange";
+import { User03Orange } from "../assets/icons/User03_orange";
+import { User04Orange } from "../assets/icons/User04_orange";
+import { User05Orange } from "../assets/icons/User05_orange";
+import { User06Orange } from "../assets/icons/User06_orange";
+import { ChevronDown } from "../assets/icons/ChevronDown";
+import { ArrowRightShort } from "../assets/icons/ArrowRightShort";
 
 export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
+    case "arrowRightShort":
+      return <ArrowRightShort {...rest} />;
     case "usarp":
       return <Usarp {...rest} />;
     case "eyeOn":
@@ -112,10 +121,22 @@ export function IconChoice({ icon, color, ...rest }) {
       return <User05 color={color} {...rest} />;
     case "user06":
       return <User06 color={color} {...rest} />;
+    case "user02_orange":
+      return <User02Orange color={color} {...rest} />;
+    case "user03_orange":
+      return <User03Orange color={color} {...rest} />;
+    case "user04_orange":
+      return <User04Orange color={color} {...rest} />;
+    case "user05_orange":
+      return <User05Orange color={color} {...rest} />;
+    case "user06_orange":
+      return <User06Orange color={color} {...rest} />;
     case "statisticsLamp":
       return <StatisticsLamp color={color} {...rest} />;
     case "statisticsUserStory":
       return <StatisticsUserStory color={color} {...rest} />;
+    case "chevronDown":
+      return <ChevronDown color={color} {...rest} />;
     default:
       return null;
   }

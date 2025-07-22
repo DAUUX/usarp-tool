@@ -6,9 +6,13 @@ import PropTypes from "prop-types";
 import PasswordStrengthLevel from "../../../components/PasswordStrengthLevel";
 import InputPassword from "../../../components/InputPassword";
 import { useTranslation } from "react-i18next";
+import { useRegister } from "../contexts/RegisterContext";
+import { useEffect } from "react";
 
-export default function StepTwo({ fullName, next, previous, children }) {
+export default function StepTwo({ fullName, children }) {
   const { t } = useTranslation();
+  const { formData, updateFormData, nextStep, previousStep } = useRegister();
+
   const schema = Yup.object().shape({
     password: Yup.string()
       .min(8, t("loginErrorSenhaMinima"))
@@ -18,20 +22,35 @@ export default function StepTwo({ fullName, next, previous, children }) {
       .matches(/[0-9]/g, t("cadastrarErroSenhaNumero"))
       .matches(/[#?!@$%^&*-]/g, t("cadastrarErroSenhaCaractere"))
       .required(),
-  });
-
-  const { register, handleSubmit, formState, getValues } = useForm({
+  });  const { register, handleSubmit, formState, getValues, reset } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      password: "",
+      password: formData.password,
     },
-    criteriaMode: "all",
-  });
-
+    criteriaMode: "all",  });
   const { errors } = formState;
-  const handleSubmitForm = (data) => {
-    next(data);
+
+  // useEffect para sincronizar o formulário quando os dados do Context mudarem
+  useEffect(() => {
+    reset({
+      password: formData.password,
+    });
+  }, [formData, reset]);const handleSubmitForm = (data) => {
+    updateFormData(data);
+    nextStep();
+  };
+
+  const handlePreviousStep = () => {
+    // Captura os valores atuais do formulário antes de navegar
+    const currentValues = getValues();
+    // Salva os dados atuais (mesmo que não válidos)
+    const dataToSave = {
+      password: currentValues.password || '',
+    };
+    
+    updateFormData(dataToSave);
+    previousStep();
   };
 
   return (
@@ -73,10 +92,9 @@ export default function StepTwo({ fullName, next, previous, children }) {
             disabled={!formState.isValid}
           >
             {t("cadastrarButaoContinua")}
-          </button>
-          <button
+          </button>          <button
             className={styles.card__button}
-            onClick={previous}
+            onClick={handlePreviousStep}
             type="button"
           >
             {t("cadastrarButaoVolta")}
@@ -88,8 +106,6 @@ export default function StepTwo({ fullName, next, previous, children }) {
 }
 StepTwo.propTypes = {
   fullName: PropTypes.node.isRequired,
-  next: PropTypes.func,
-  previous: PropTypes.func,
   children: PropTypes.node,
 };
 

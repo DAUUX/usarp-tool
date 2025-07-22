@@ -22,9 +22,12 @@ export function Home() {
     navigate(routeRegisterBrainstorming);
   };
 
-  const handletranslate = (value) => {
-    i18n.changeLanguage(value);
-  }
+  const handletranslate = (language) => {
+    if (["pt", "en"].includes(language)) {
+      localStorage.setItem("@usarp:language", language);
+      i18n.changeLanguage(language);
+    }
+  };
 
   return (
     <div className={styles.home__container}>
