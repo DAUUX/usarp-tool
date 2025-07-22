@@ -17,8 +17,8 @@
     }
   }
   &:invalid:not(:focus) {
-    outline: 2px solid var(--th-color-focus-error);
-    border: none;
+    border: 2px solid var(--th-color-focus-error);
+    outline: none;
     color: var(--th-color-focus-error);
     
     svg {
@@ -26,8 +26,8 @@
     }
   }
   &:focus-within {
-    outline: 2px solid var(--th-color-input-focus);
-    border: none;
+    border: 2px solid var(--th-color-input-focus);
+    outline: none;
     color: var(--th-color-text-input);
     svg {
       color: var(--th-color-input-focus);
@@ -39,14 +39,11 @@
     background: transparent;
     height: 3.2rem;
     border-radius: 14px;
+    outline: none;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    &:focus-within {
-      outline: 2px solid var(--th-color-input-focus);
-    }
   }
 }
 .toast__error {

@@ -7,14 +7,21 @@ import styles from "./styles.module.scss";
 import { useFieldArray, useForm } from "react-hook-form";
 import { InputCombobox } from "../../components/InputCombobox";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InputTextarea } from "../../components/InputTextarea/indes";
 import RegisterProjectService from "./registerProject.service";
+import { useEffect } from "react";
 
 export function RegisterProject() {
-  // const { id } = useParams();
-  const { handleBackButton, registerProject, handleBackBackCloseALert, close } =
-    RegisterProjectService("");
+  const { id } = useParams();
+  const {
+    handleBackButton,
+    registerProject,
+    handleBackBackCloseALert,
+    close,
+    getProjectByid,
+    updateProject,
+  } = RegisterProjectService("");
   const schema = Yup.object().shape({
     projectName: Yup.string()
       .required("Nome do projeto é obrigatório")
@@ -36,7 +43,6 @@ export function RegisterProject() {
       })
     ),
   });
-
   const navigate = useNavigate();
   const initialValues = {
     projectName: "",
@@ -48,6 +54,7 @@ export function RegisterProject() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     mode: "all",
@@ -90,6 +97,17 @@ export function RegisterProject() {
           <Button.Text>Cadastrar Histórias de Usuário!</Button.Text>
         </Button.Root>
       </div>
+    </FeedbackAlert.Root>
+  );
+  const contentUpdate = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="checkcircle" />
+      <FeedbackAlert.Title title="Excelente!" />
+      <FeedbackAlert.Description
+        style={{ textAlign: "center", color: "var(--gray-700)" }}
+        description="<span>Perfil Atualizado com sucesso!</span>
+        <p> Você será redirecionado para página de projetos.</p>"
+      ></FeedbackAlert.Description>
     </FeedbackAlert.Root>
   );
 
@@ -151,24 +169,26 @@ export function RegisterProject() {
   );
 
   const handleSubmitForm = (body) => {
+    if (id) {
+      updateProject(id, body, contentUpdate, contentError, contentWarningEmail);
+      return;
+    }
     registerProject(body, contentSuccess, contentError, contentWarningEmail);
   };
 
-  //TODO: Implementar a função de editar o projeto
-  // useEffect(() => {
-  //   if (id) {
-  //     const fetchProject = async () => {
-  //       try {
-  //         const project = await axios.get(`${baseURL}/projeto/${id}`);
-  //         const { projectName, description, projectTeam } = project.data;
-  //         reset({ projectName, description, projectTeam });
-  //       } catch (error) {
-  //         console.error("Erro ao carregar o projeto:", error);
-  //       }
-  //     };
-  //     fetchProject();
-  //   }
-  // }, [id, reset]);
+  // para editar um projeto existente
+  useEffect(() => {
+    
+    const fetchProject = async () => {
+      if (id) {
+        const projectById = await getProjectByid(id);
+        console.log("Project data fetched:", projectById);
+        reset(projectById);
+      }
+    };
+    fetchProject();
+  }, [id, reset]);
+
 
   return (
     <div className={styles.registerProject__container}>
@@ -241,7 +261,6 @@ export function RegisterProject() {
                     style={{ width: "100%" }}
                     placeholder="Selecionar"
                     name={`projectTeam.${index}.roleInProject`}
-                    defaultValue=""
                     error={errors.projectTeam?.[index]?.roleInProject}
                     control={control}
                     required={!!errors.projectTeam?.[index]?.roleInProject}
@@ -270,11 +289,7 @@ export function RegisterProject() {
             type="button"
             disabled={!isValid}
             data-type="tertiary"
-            onClick={() =>
-              append({
-                projectTeam: [{ email: "", roleInProject: "" }],
-              })
-            }
+            onClick={() => append({ email: "", roleInProject: "" })}
           >
             <Button.Text>Novo membro</Button.Text>
             <Button.Icon iconName="plus" />
@@ -288,7 +303,7 @@ export function RegisterProject() {
               <Button.Text>Cancelar</Button.Text>
             </Button.Root>
             <Button.Root disabled={!isValid} data-type="primary" type="submit">
-              <Button.Text>Cadastrar</Button.Text>
+              <Button.Text>{!id ? "Cadastrar":"Atualizar" }</Button.Text>
             </Button.Root>
           </div>
         </div>

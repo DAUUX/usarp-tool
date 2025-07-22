@@ -11,6 +11,9 @@ const RegisterProjectService = (url) => {
   const navigate = useNavigate();
 
   const path = "/project/create";
+  const getPath= "/project/owned-projects";
+  const pathUpdate = "/project/update/";
+  const pathById = "/project/owned-projects?id=";
 
   const handleBackBackCloseALert = () => {
     close();
@@ -35,7 +38,6 @@ const RegisterProjectService = (url) => {
         open(success);
       })
       .catch((err) => {
-        debugger;
         if (err.code === "ERR_NETWORK") {
           open(error);
           return;
@@ -48,10 +50,50 @@ const RegisterProjectService = (url) => {
       });
   };
 
+  const updateProject = (id, body, success, error, warning) => {
+    api
+      .put(pathUpdate + id, body)
+      .then(() => {
+        open(success);
+        setTimeout(() => {
+          handleBackBackCloseALert();
+        }, 2000);
+      })
+      .catch((err) => {
+        if (err.code === "ERR_NETWORK") {
+          open(error);
+          return;
+        }
+        if (err.response.status == 400) {
+          open(warning);
+          return;
+        }
+        open(error);
+      });
+  };
+
+  const getProjectByid = async (id) => {
+      const response = await api.get(pathById + id);
+      const projectData = response.data.projects[0];
+      const project = {
+        projectName: projectData.projectName,
+        description: projectData.description,
+        projectTeam: [
+          ...(projectData.projectTeam || []).map((member) => ({
+            email: member.email || "",
+            roleInProject: member.roleInProject || "",
+          })),
+        ],
+      };
+      // console.log("Project data:", projectData);
+      // console.log("Project project:", project);
+      return project;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(path);
+        const response = await api.get(getPath);
         setData(response.data);
       } catch (error) {
         setError(error);
@@ -71,6 +113,8 @@ const RegisterProjectService = (url) => {
     registerProject,
     handleBackBackCloseALert,
     close,
+    getProjectByid,
+    updateProject,
   };
 };
 

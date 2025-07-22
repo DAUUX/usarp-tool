@@ -8,17 +8,15 @@ export default function InputComboboxSelect({ children, options, error, ...rest 
 
   const CustomDropdownIndicator = ({ selectProps: { menuIsOpen } }) => (
     <div className={styles.custom_indicator}>
-        <IconChoice
-          icon={menuIsOpen ? "arrowup" : "arrowdown"}
-          />
-      </div>
-    );
-    
-    CustomDropdownIndicator.propTypes = {
-      selectProps: PropTypes.shape({
-        menuIsOpen: PropTypes.bool,
-      }).isRequired,
-    };
+      <IconChoice icon={menuIsOpen ? "arrowup" : "arrowdown"} />
+    </div>
+  );
+
+  CustomDropdownIndicator.propTypes = {
+    selectProps: PropTypes.shape({
+      menuIsOpen: PropTypes.bool,
+    }).isRequired,
+  };
 
   return (
     <>
@@ -30,6 +28,16 @@ export default function InputComboboxSelect({ children, options, error, ...rest 
             className={styles.custom_select}
             classNamePrefix="react_select"
             options={options}
+            value={
+              field.value
+                ? options.find(
+                    (opt) =>
+                      opt.value === field.value ||
+                      opt.label === field.value ||
+                      JSON.stringify(opt) === JSON.stringify(field.value)
+                  )
+                : null
+            }
             isClearable
             placeholder={rest.placeholder}
             components={{

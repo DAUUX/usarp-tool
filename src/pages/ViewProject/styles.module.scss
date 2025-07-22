@@ -104,7 +104,8 @@
   align-items: center;
   gap: 1rem;
   justify-content: end;
-  span>a{
+  span, a{
+    cursor: pointer;
     color: unset;
   }
 }
