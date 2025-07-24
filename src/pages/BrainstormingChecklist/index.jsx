@@ -35,6 +35,8 @@ export function BrainstormingChecklist() {
 
   const avatarList = avatarMock;
 
+  // MOCK DATA PARA O CHECKLIST COM AS CARTAS (REFATORAR PARA VIR DO BACKEND)
+  // TODO: Inserir os ícones que vierem do backend
   const accordionItems = {
     groups: [
       {
@@ -48,20 +50,26 @@ export function BrainstormingChecklist() {
               {
                 id: "M1",
                 category: "Status do sistema",
-                description: "Informar os usuários sobre o estado interno do sistema.",
-                context: "Quando ocorrer alguma mudança ou falha no sistema que é importante para o usuário."
+                description:
+                  "Informar os usuários sobre o estado interno do sistema.",
+                context:
+                  "Quando ocorrer alguma mudança ou falha no sistema que é importante para o usuário.",
               },
               {
                 id: "M2",
                 category: "Interação",
-                description: "Informar os usuários que o sistema registro uma interação do usuário.",
-                context: "Quando o usuário realiza um evento de interação, como clique do mouse, movimento do mouse, movimento da seta, pressionamento do teclado e etc, o sistema deve informar ao usuário que a interação foi aceita."
+                description:
+                  "Informar os usuários que o sistema registro uma interação do usuário.",
+                context:
+                  "Quando o usuário realiza um evento de interação, como clique do mouse, movimento do mouse, movimento da seta, pressionamento do teclado e etc, o sistema deve informar ao usuário que a interação foi aceita.",
               },
               {
                 id: "M4",
                 category: "Feedback sobre o progresso",
-                description: "Informar os usuários quando o sistema estiver processando uma ação que poderá levar algum tempo para completar.",
-                context: "Quando um processo demorado interrompe a interface do usuário por mais de dois segundos."
+                description:
+                  "Informar os usuários quando o sistema estiver processando uma ação que poderá levar algum tempo para completar.",
+                context:
+                  "Quando um processo demorado interrompe a interface do usuário por mais de dois segundos.",
               },
             ],
           },
@@ -73,8 +81,10 @@ export function BrainstormingChecklist() {
               {
                 id: "M3",
                 category: "Alerta",
-                description: "Informar os usuários sobre qualquer ação com consequências importantes",
-                context: "Quando uma ação que tem sérias consequências é exigida pelo usuário."
+                description:
+                  "Informar os usuários sobre qualquer ação com consequências importantes",
+                context:
+                  "Quando uma ação que tem sérias consequências é exigida pelo usuário.",
               },
             ],
           },
@@ -91,8 +101,10 @@ export function BrainstormingChecklist() {
               {
                 id: "M13",
                 category: "Favoritos",
-                description: "Registrar partes do sistema e do conteúdo que são de interesse do usuário.",
-                context: "Em um sistema de software navegável, quando o sistema é possivelmente grande e complexo e permite que o usuário se mova livremente por ele de maneiras não diretamente suportadas pela estrutura do artefato."
+                description:
+                  "Registrar partes do sistema e do conteúdo que são de interesse do usuário.",
+                context:
+                  "Em um sistema de software navegável, quando o sistema é possivelmente grande e complexo e permite que o usuário se mova livremente por ele de maneiras não diretamente suportadas pela estrutura do artefato.",
               },
             ],
           },
@@ -103,20 +115,26 @@ export function BrainstormingChecklist() {
               {
                 id: "M11",
                 category: "Preferências",
-                description: "Registrar as opções do usuário no uso das funções do sistema.",
-                context: "Quando a aplicação é muito complexa e muitas de suas funções podem ser ajustadas à preferência do usuário e não se sabe o suficiente sobre as preferências do usuáriopara assumir padrões que se adequam a todos os usuários."
+                description:
+                  "Registrar as opções do usuário no uso das funções do sistema.",
+                context:
+                  "Quando a aplicação é muito complexa e muitas de suas funções podem ser ajustadas à preferência do usuário e não se sabe o suficiente sobre as preferências do usuáriopara assumir padrões que se adequam a todos os usuários.",
               },
               {
                 id: "M12",
                 category: "Area de objetos pessoais",
-                description: "Registrar as opções do usuário no uso da interface do sistema.",
-                context: "Quando a interface do aplicativo é complexa e possui muitos ícones que podem ser organizados de maneiras diferentes."
+                description:
+                  "Registrar as opções do usuário no uso da interface do sistema.",
+                context:
+                  "Quando a interface do aplicativo é complexa e possui muitos ícones que podem ser organizados de maneiras diferentes.",
               },
               {
                 id: "M4",
                 category: "Feedback sobre progresso",
-                description: "Informar os usuários quando o sistema estiver processando uma ação que poderá levar algum tempo para completar.",
-                context: "Quando um processo demorado interrompe a interface do usuário por mais de dois segundos."
+                description:
+                  "Informar os usuários quando o sistema estiver processando uma ação que poderá levar algum tempo para completar.",
+                context:
+                  "Quando um processo demorado interrompe a interface do usuário por mais de dois segundos.",
               },
             ],
           },
@@ -134,8 +152,10 @@ export function BrainstormingChecklist() {
               {
                 id: "M8",
                 category: "Voltar",
-                description: "Retornar a um determinado estado em uma sequência de execução de comandos",
-                context: "Quando existem aplicativos interativos com várias etapas."
+                description:
+                  "Retornar a um determinado estado em uma sequência de execução de comandos",
+                context:
+                  "Quando existem aplicativos interativos com várias etapas.",
               },
             ],
           },
@@ -147,19 +167,22 @@ export function BrainstormingChecklist() {
                 id: "M5",
                 category: "Desfazer",
                 description: "Desfazer várias ações em um objeto",
-                context: "Ao construir um sistema altamente interativo com funcionalidades múltiplas e complexas em objetos específicos do sistema.",
+                context:
+                  "Ao construir um sistema altamente interativo com funcionalidades múltiplas e complexas em objetos específicos do sistema.",
               },
               {
                 id: "M6",
                 category: "Abortar operação",
                 description: "Cancelar a execução de toda a aplicação.",
-                context: "Quando o usuário precisa sair de um aplicativo ou comando rapidamente."
+                context:
+                  "Quando o usuário precisa sair de um aplicativo ou comando rapidamente.",
               },
               {
                 id: "M7",
                 category: "Cancelar",
                 description: "Cancelar a execução de uma ação.",
-                context: "Quando o usuário precisa cancelar uma ação específica."
+                context:
+                  "Quando o usuário precisa cancelar uma ação específica.",
               },
             ],
           },
@@ -171,8 +194,10 @@ export function BrainstormingChecklist() {
               {
                 id: "M14",
                 category: "Ajuda multinível",
-                description: "Prover diferentes níveis de ajuda para diferentes usuários",
-                context: "Quando o aplicativo a ser desenvolvido écomplexo e é provável que alguns usuários precisem de um sistema de ajuda completo, mas a maioria dos usuários não leva tempopara usá-lo; portanto, os desenvolvedores desejam oferecer suporte a usuários impacientes e/ou ocasionais."
+                description:
+                  "Prover diferentes níveis de ajuda para diferentes usuários",
+                context:
+                  "Quando o aplicativo a ser desenvolvido écomplexo e é provável que alguns usuários precisem de um sistema de ajuda completo, mas a maioria dos usuários não leva tempopara usá-lo; portanto, os desenvolvedores desejam oferecer suporte a usuários impacientes e/ou ocasionais.",
               },
             ],
           },
@@ -189,8 +214,10 @@ export function BrainstormingChecklist() {
               {
                 id: "M9",
                 category: "Entrada de texto estruturada",
-                description: "Prevenir que os usuários cometam erros de entrada de dados",
-                context: "Quando o sistema pode aceitar apenas entradas do usuário em um formato muito específico."
+                description:
+                  "Prevenir que os usuários cometam erros de entrada de dados",
+                context:
+                  "Quando o sistema pode aceitar apenas entradas do usuário em um formato muito específico.",
               },
             ],
           },
@@ -202,8 +229,10 @@ export function BrainstormingChecklist() {
               {
                 id: "M10",
                 category: "Execução passo-a-passo",
-                description: "Auxiliar os usuários em tarefas que requerem diferentes passos com entrada de dados correta.",
-                context: "Quando um usuário não especialista precisa executar uma tarefa complexa não frequente que consiste em várias subtarefas nas quais énecessário tomar decisões em cada subtarefa."
+                description:
+                  "Auxiliar os usuários em tarefas que requerem diferentes passos com entrada de dados correta.",
+                context:
+                  "Quando um usuário não especialista precisa executar uma tarefa complexa não frequente que consiste em várias subtarefas nas quais énecessário tomar decisões em cada subtarefa.",
               },
             ],
           },
@@ -256,7 +285,13 @@ export function BrainstormingChecklist() {
           handleSubmitChecklist={handleSubmitChecklist}
           onSelectedAccordionItem={onSelectedAccordionItem}
         />
-        <CardsContainer displayedCards={displayedCardsGroup} checkedItems={checkedItems} />
+        {
+          // TODO: Implementar lógica para exibir ícones
+        }
+        <CardsContainer
+          displayedCards={displayedCardsGroup}
+          checkedItems={checkedItems}
+        />
       </main>
     </div>
   );

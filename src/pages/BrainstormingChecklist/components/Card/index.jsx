@@ -7,6 +7,7 @@ export default function Card({
   id,
   isChecked,
 }) {
+  // TODO: Implementar lógica para exibir ícones
   return (
     <div className={isChecked ? styles.card__container__checked : ""}>
       <div className={styles.card__container}>
