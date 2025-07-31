@@ -64,7 +64,7 @@ export default function Login() {
       setToastError(true);
       setTimeout(() => {
         setToastError(false);
-      }, 3000);
+      }, 2000);
     }
   };
 
