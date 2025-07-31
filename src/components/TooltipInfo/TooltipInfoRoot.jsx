@@ -25,7 +25,7 @@ export function TooltipInfoRoot({ children, text,...rest }) {
         onMouseEnter={showTooltip}
         onMouseLeave={hideTooltip}
       >
-        <IconChoice icon="info" />
+        <IconChoice icon="information" />
       </button>
       <div className={styles.tooltip} ref={tooltipRef}>
         {text}

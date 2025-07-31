@@ -44,6 +44,7 @@ import { User05Orange } from "../assets/icons/User05_orange";
 import { User06Orange } from "../assets/icons/User06_orange";
 import { ChevronDown } from "../assets/icons/ChevronDown";
 import { ArrowRightShort } from "../assets/icons/ArrowRightShort";
+import { Information } from "../assets/icons/IInformation";
 
 export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
@@ -137,6 +138,8 @@ export function IconChoice({ icon, color, ...rest }) {
       return <StatisticsUserStory color={color} {...rest} />;
     case "chevronDown":
       return <ChevronDown color={color} {...rest} />;
+    case "information":
+      return <Information color={color} {...rest} />;
     default:
       return null;
   }
