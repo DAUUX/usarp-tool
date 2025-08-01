@@ -22,11 +22,23 @@ export function RegisterProject() {
     getProjectByid,
     updateProject,
   } = RegisterProjectService("");
+
   const schema = Yup.object().shape({
     projectName: Yup.string()
       .required("Nome do projeto é obrigatório")
       .min(5, "Nome do projeto deve ter no mínimo 5 caracteres"),
-    description: Yup.string(),
+    description: Yup.string().test(
+    'min-length-if-filled', // Nome do teste (para depuração)
+    'A descrição deve ter no mínimo 5 caracteres', // Mensagem de erro
+    (value) => {
+      // Se o valor for nulo, indefinido ou uma string vazia, o teste passa (é válido).
+      if (!value) {
+        return true;
+      }
+      // Se houver um valor, ele deve ter 5 ou mais caracteres para passar no teste.
+      return value.length >= 5;
+    }
+  ),
     projectTeam: Yup.array().of(
       Yup.object().shape({
         email: Yup.string()
@@ -55,6 +67,8 @@ export function RegisterProject() {
     handleSubmit,
     watch,
     reset,
+    getValues,
+    resetField,
     formState: { errors, isValid },
   } = useForm({
     mode: "all",
@@ -67,33 +81,42 @@ export function RegisterProject() {
     name: "projectTeam",
   });
 
-  const navegate = () => {
-    close();
+  const navegateRegisterUserstory = () => {
+    close(null);
     navigate("/registerUserstory");
   };
-
-  const extractValueSimpleQuotes = (texto) => {
-    const regex = /'([^']*)'/;
-    const resultado = regex.exec(texto);
-    return resultado ? resultado[1] : null;
+  
+  const resetFieldEmail = () => {
+    close(null);
+    fields.forEach((field, index) => {
+      resetField(`projectTeam.${index}.email`);
+      resetField(`projectTeam.${index}.roleInProject`);
+    });
   };
+  const resetFieldProjectName = () => {
+    close(null);
+    resetField("projectName");
+  };
+
   
   const contentSuccess = (
-    <FeedbackAlert.Root>
+    <FeedbackAlert.Root style={{ width: "auto" }}>
       <FeedbackAlert.Icon icon="checkcircle" />
       <FeedbackAlert.Title title="Excelente" />
       <FeedbackAlert.Description
         style={{ textAlign: "center" }}
-        description="Projeto teste cadastrado com sucesso!"
+        description={`Projeto <span style="color: var(--primary-600);font-weight: 600;"> ${getValues(
+          "projectName"
+        )} </span> cadastrado com sucesso!`}
       />
       <div className={styles.alert__buttons}>
-        <Button.Root
-          data-type="secondary"
-          onClick={() => handleBackBackCloseALert()}
-        >
+        <Button.Root data-type="secondary" onClick={() => close(null)}>
           <Button.Text>Ok, fechar</Button.Text>
         </Button.Root>
-        <Button.Root data-type="primary" onClick={() => navegate()}>
+        <Button.Root
+          data-type="primary"
+          onClick={() => navegateRegisterUserstory()}
+        >
           <Button.Text>Cadastrar Histórias de Usuário!</Button.Text>
         </Button.Root>
       </div>
@@ -130,18 +153,22 @@ export function RegisterProject() {
     </FeedbackAlert.Root>
   );
 
-  const contentWarningEmail = (
+  const contentWarningEmail = (text) => (
     <FeedbackAlert.Root>
       <FeedbackAlert.Icon icon="warningcircle" />
       <FeedbackAlert.Title title="Aviso!" />
       <FeedbackAlert.Description
         style={{ textAlign: "center" }}
-        description={`Usuário com email ${extractValueSimpleQuotes()} não encontrado.`}
+        description={text}
       />
       <div className={styles.alert__buttons}>
         <Button.Root
           data-type="primary"
-          onClick={() => handleBackBackCloseALert()}
+          onClick={() =>
+            text.includes("@")
+              ? resetFieldEmail()
+              : resetFieldProjectName()
+          }
         >
           <Button.Text>Ok, fechar</Button.Text>
         </Button.Root>
