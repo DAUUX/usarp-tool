@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../../../components/Button";
 import { IconChoice } from "../../../../utils/IconChoice";
 import styles from "./index.module.scss";
@@ -13,6 +14,8 @@ import PropTypes from "prop-types";
  * @param {number} value - Valor numérico exibido no card.
  * @param {string} icon - Nome do ícone a ser exibido no card.
  * @param {boolean} permission - Define se o botão "Novo" deve ser exibido (padrão: true).
+ * @param {string} btnSeeAll - Define a rota de navagação do botão "Ver todos".
+ * @param {string} btnNew - Define a rota de navagação do botão "Novo".
  * @returns {JSX.Element} - Retorna o componente CardMeansurement.
  */
 export default function CardMeansurement({
@@ -23,27 +26,39 @@ export default function CardMeansurement({
   value = 0, // Valor padrão para o valor numérico
   icon = "defaultIcon", // Valor padrão para o ícone
   permission = true, // Valor padrão para a permissão
+  btnSeeAll = "/see-all", // Rota padrão para o botão "Ver todos"
+  btnNew = "/new", // Rota padrão para o botão "Novo"
 }) {
+  const navigate = useNavigate();
   return (
     <div
       style={{ border: "1px solid " + line }}
       className={styles.card_membros}
     >
       <div className={styles.card_membro_header}>
-        <IconChoice icon={icon} /> 
+        <IconChoice icon={icon} />
         <div>
-          <h5 style={{ color: color }}>{value}</h5>
+          <h5
+            style={{ color: color, "--valor-final": value }}
+            className={styles.counter}
+          ></h5>
           <p>{title}</p>
         </div>
       </div>
       <div className={styles.card_membro_body}>
-        <Button.Root data-type={`menber-${button}-primary`}>
+        <Button.Root
+          data-type={`menber-${button}-primary`}
+          onClick={() => navigate(btnSeeAll)}
+        >
           <Button.Icon icon="eyeOn" />
           <Button.Text>Ver todos</Button.Text>
         </Button.Root>
 
         {permission && (
-          <Button.Root data-type={`menber-${button}-outline`}>
+          <Button.Root
+            data-type={`menber-${button}-outline`}
+            onClick={() => navigate(btnNew)}
+          >
             <Button.Icon icon="plus" />
             <Button.Text>Novo</Button.Text>
           </Button.Root>
@@ -62,4 +77,6 @@ CardMeansurement.propTypes = {
   value: PropTypes.number, // Valor numérico exibido
   icon: PropTypes.string, // Nome do ícone a ser exibido
   permission: PropTypes.bool, // Define se o botão "Novo" deve ser exibido
+  btnSeeAll: PropTypes.string, // Define a rota de navagação do botão "Ver todos"
+  btnNew: PropTypes.string, // Define a rota de navagação do botão "Novo"
 };
