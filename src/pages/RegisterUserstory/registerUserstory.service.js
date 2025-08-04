@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../hooks/useAlert";
-import { useAuth } from "../../hooks/useAuth";
 import { api } from "../../utils/axios.config";
 import { formatProjectDataSelection } from "../../utils/formatProjectDataSelection";
 
