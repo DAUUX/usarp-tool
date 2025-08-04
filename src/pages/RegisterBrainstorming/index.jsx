@@ -9,6 +9,9 @@ import { InputCombobox } from "../../components/InputCombobox";
 import RegisterBrainstormingService from "./registerBrainstorming.service";
 import { URL as baseURL } from "../../utils/base";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAlert } from "../../hooks/useAlert";
 
 export function RegisterBrainstorming() {
   const schema = Yup.object().shape({
@@ -27,23 +30,35 @@ export function RegisterBrainstorming() {
         }
         return value;
       })
-      .required("Projeto é um campo obrigatório!"),
+      .required("O projeto é um campo obrigatório"),
     userStory: Yup.string()
       .transform((value, originalValue) => {
         if (Array.isArray(originalValue)) {
-          return originalValue.map((item) => item.label).join(", ");
+          return originalValue.map((item) =>{
+            if (typeof item === "object") {
+              return item.label;
+            }
+            return item;
+          }).join(", ");
         }
         return value;
       })
       .required("Histórias de Usuário é um campo obrigatório!"),
   });
-  const { handleBackButton, RegisterBrainstorming, listProjects, handleBackBackCloseALert } =
-    RegisterBrainstormingService(baseURL);
+  const {
+    listProjects,
+    listUserStoriesByProject,
+    setProjectId,
+    handleBackButton,
+    RegisterBrainstorming,
+    handleBackBackCloseALert,
+  } = RegisterBrainstormingService(baseURL);
 
   const {
     register,
     control,
     handleSubmit,
+    getValues,
     watch,
     formState: { errors, isValid },
   } = useForm({
@@ -51,19 +66,26 @@ export function RegisterBrainstorming() {
     resolver: yupResolver(schema),
   });
   const selectedProjectId = watch("project");
-  let projectOptions = listProjects.map((item) => ({
-    value: item.id,
-    label: item.name,
-  }));
-  let userStoryOptions = listProjects
-    .filter((i) => i.id === selectedProjectId?.value)[0]
-    ?.userStory?.map((t) => ({
-      value: t.userstoryNumber,
-      label: "US" + t.userstoryNumber,
-    }));
-  const handleSubmitForm = (body) => {
+  const navigate = useNavigate();
+  const { close } = useAlert();
+
+  const handleSubmitForm = () => {
+    const body = getValues();
     RegisterBrainstorming(body, contentSuccess,null,contentWarning);
   };
+
+  useEffect(() => {
+    if (selectedProjectId) {
+      setProjectId(selectedProjectId.value);
+    } else {
+      setProjectId(null);
+    }
+  }, [selectedProjectId, setProjectId]);
+
+    const navegateBrainstorming = () => {
+      close(null);
+      navigate(`/brainstorming`, { replace: true });
+    };
 
   // alertas
   const contentSuccess = (
@@ -74,7 +96,10 @@ export function RegisterBrainstorming() {
         style={{ textAlign: "center" }}
         description="Novo Brainstorming registrado!"
       />
-      <FeedbackAlert.Button onClick={() => handleBackBackCloseALert()} label="Visualizar" />
+      <FeedbackAlert.Button
+        onClick={() => navegateBrainstorming()}
+        label="Visualizar"
+      />
     </FeedbackAlert.Root>
   );
   const contentWarning = (
@@ -95,7 +120,6 @@ export function RegisterBrainstorming() {
       </div>
     </FeedbackAlert.Root>
   );
-
 
   return (
     <div className={styles.brainstorming__container}>
@@ -134,8 +158,7 @@ export function RegisterBrainstorming() {
                   placeholder="Selecione o projeto"
                   error={errors.project}
                   control={control}
-                  required={errors.project ? true : false}
-                  options={projectOptions}
+                  options={listProjects}
                 />
                 {errors.project && (
                   <InputCombobox.Error>
@@ -186,7 +209,7 @@ export function RegisterBrainstorming() {
                   error={errors.userStory}
                   control={control}
                   required={errors.userStory ? true : false}
-                  options={userStoryOptions}
+                  options={listUserStoriesByProject}
                 />
                 {errors.userStory && (
                   <InputCombobox.Error>

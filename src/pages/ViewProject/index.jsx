@@ -220,7 +220,6 @@ export function ViewProject() {
 
   return (
     <div className={styles.viewProject__container}>
-      <span style={{ visibility: "hidden" }}>Visualizar projetos</span>
       <header>
         <span title="voltar">
           <Text.Root>

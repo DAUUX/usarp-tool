@@ -10,16 +10,7 @@
   background-color: transparent;
   border: none;
   border-radius: 10px;
-  padding: 0.2rem 0.4rem;
   display: flex;
-  svg {
-    fill: #008287;
-    width: 20px;
-  }
-
-  &:hover {
-    background: #cceff0;
-  }
 }
 
 .tooltip {

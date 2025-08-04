@@ -16,7 +16,7 @@ const RegisterProjectService = (url) => {
   const pathById = "/project/owned-projects?id=";
 
   const handleBackBackCloseALert = () => {
-    close();
+    close(null);
     navigate(-1);
   };
 
@@ -31,7 +31,14 @@ const RegisterProjectService = (url) => {
     hasDataLoss ? open(contentAlert) : handleBackBackCloseALert();
   };
 
-  const registerProject = (body, success, error, warning) => {
+
+    const extractValueSimpleQuotes = (texto) => {
+      const regex = /'([^']*)'/;
+      const resultado = regex.exec(texto);
+      return resultado ? resultado[1] : null;
+    };
+
+  const registerProject = (body, success, error, warningCallback) => {
     api
       .post(path, body)
       .then(() => {
@@ -43,10 +50,20 @@ const RegisterProjectService = (url) => {
           return;
         }
         if (err.response.status == 400) {
-          open(warning);
+          const errorMessage = err.response.data?.message || "Ocorreu um erro.";
+          let warningContent = warningCallback(
+            `Usuário com email <span style="color: var(--primary-600);font-weight: 600;"> ${extractValueSimpleQuotes(
+              errorMessage
+            )} </span> não encontrado.`
+          );
+          if (errorMessage === 'Validation error') {
+            warningContent = warningCallback(
+              `O Nome do projeto já está sendo utilizado.`
+            );
+          }
+          open(warningContent);
           return;
         }
-        open(error);
       });
   };
 
@@ -85,8 +102,6 @@ const RegisterProjectService = (url) => {
           })),
         ],
       };
-      // console.log("Project data:", projectData);
-      // console.log("Project project:", project);
       return project;
   };
 

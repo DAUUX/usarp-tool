@@ -15,6 +15,7 @@ export function Toast({ type, message, children, ...rest }) {
   return (
     <div className={styles.overlay}>
       <div
+        style={rest.style} 
         className={`
           ${type == "success" ? styles.toast__success : styles.toast__error}
           ${isLeaving ? 'leaving' : ''}

@@ -20,7 +20,7 @@ export default function ExpansibleRoot({ children, usNumber, close, ...rest }) {
           <span>US{usNumber}</span>
         </div>
         <div className={styles.expansible__close} title="Fecha">
-          <IconChoice icon="close" onClick={close} />
+          <IconChoice icon="delete" onClick={close} />
         </div>
       </div>
       {expanded && children}
