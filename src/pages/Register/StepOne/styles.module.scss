@@ -5,6 +5,10 @@
   gap: 2rem;
   flex-wrap: wrap;
   align-content: space-between;
+  @media(max-width: 600px) {
+    gap: 1rem;
+    width: 100%;
+  }
 }
 .card__header {
   color: var(--th-color-text-card-header);
@@ -51,13 +55,13 @@
       font-size: 0.875rem;
       color: var(--th-color-text-input);
       &:invalid {
-        outline: 2px solid var(--th-color-focus-error);
+        border: 2px solid var(--th-color-focus-error);
         color: var(--th-color-focus-error);
-        border-color: transparent;
+        outline: none;
       }
       &:focus-within {
-        outline: 2px solid var(--th-color-input-focus);
-        border: none;
+        border: 2px solid var(--th-color-input-focus);
+        outline: none;
         color: var(--th-color-text-input);
         svg {
           color: var(--th-color-input-focus);
@@ -90,7 +94,7 @@
   font-weight: 400;
   line-height: 150%;
 
-  b {
+  a {
     color: var(--th-color-text-highlight);
     font-family: Inter;
     font-size: 0.75rem;
@@ -133,7 +137,7 @@
     background-color: var(--th-color-button-hover);
   }
   &:focus {
-    outline: 2px solid var(--th-color-button-focus);
+    border: 2px solid var(--th-color-button-focus);
   }
   &:disabled {
     border: none;

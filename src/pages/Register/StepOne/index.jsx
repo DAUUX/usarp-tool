@@ -5,25 +5,52 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
+import { IconChoice } from "../../../utils/IconChoice";
+import { useEffect, useState } from "react";
+import { Toast } from "../../../components/Toast";
+import { useRegister } from "../contexts/RegisterContext";
 
-export default function StepOne({ next, children }) {
+export default function StepOne({ children }) {
   const { t } = useTranslation();
+  const { formData, updateFormData, nextStep } = useRegister();
+  const [toastError, setToastError] = useState();
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email(t("loginErrorEmailValido"))
       .required(t("loginErrorEmail")),
-    fullName: Yup.string().required(t("cadastrarNomeErro")),
+    fullName: Yup.string()
+      .required(t("cadastrarNomeErro"))
+      .matches(/^[A-Za-zÀ-ÿ\s]+$/, t("cadastrarNomeCaracteresInvalidos")),
   });
 
   const { register, handleSubmit, formState } = useForm({
-    mode: "all",
+    mode: "onBlur",
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: formData.email,
+      fullName: formData.fullName,
+    },
+    criteriaMode: "all",
   });
 
   const { errors } = formState;
+  
   const handleSubmitForm = (data) => {
-    next(data);
+    updateFormData(data);
+    nextStep();
   };
+  const handleCloseToast = () => {
+    setToastError(false);
+  };
+
+  useEffect(() => {
+    if (errors.email || errors.fullName) {
+      setToastError(true);
+      return;
+    }
+    setToastError(false);
+  }, [errors.email, errors.fullName]);
 
   return (
     <div className={styles.card__container}>
@@ -35,6 +62,15 @@ export default function StepOne({ next, children }) {
           <b>{t("cadastrarcabecalhoPart4")}</b> {t("cadastrarcabecalhoPart5")}
         </h6>
       </section>
+      {toastError && (
+        <Toast
+          onClick={handleCloseToast}
+          type={"error"}
+          message={t("cadastrarToast")}
+        >
+          <IconChoice icon="close" />
+        </Toast>
+      )}
       <section className={styles.card__body}>
         <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div>
@@ -78,7 +114,8 @@ export default function StepOne({ next, children }) {
       <section className={styles.card__terms}>
         <p>
           {t("cadastrarTermoPart1")}
-          <b>&nbsp;{t("cadastrarTermoPart2")}</b> {t("cadastrarTermoPart3")}
+          <Link to="/login">&nbsp;{t("cadastrarTermoPart2")}</Link>{" "}
+          {t("cadastrarTermoPart3")}
         </p>
       </section>
       <section className={styles.card__footer}>
@@ -95,5 +132,4 @@ export default function StepOne({ next, children }) {
 
 StepOne.propTypes = {
   children: PropTypes.node,
-  next: PropTypes.func,
 };

@@ -14,6 +14,15 @@
     background-color: transparent;
     height: 1.5rem;
     border: none;
+    >svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: #fff;
+      cursor: pointer;
+    }
+  }
+  @media (max-width: 600px) {
+    width: 20.5rem;
   }
 }
 .toast__success {
@@ -28,21 +37,54 @@
     font-weight: 400;
     border-radius: 16px;
     padding: 1rem;
-  button {
-    background-color: transparent;
-    height: 1.5rem;
-    border: none;
-  }
+    button {
+      background-color: transparent;
+      height: 1.5rem;
+      border: none;
+      >svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        fill: #fff;
+        cursor: pointer;
+      }
+    }
 }
 .overlay {
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 100%;
+  // height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+}
+
+.toast__error,
+.toast__success {
+  animation: toastIn 0.5s ease forwards;
+}
+
+.toast__error.leaving,
+.toast__success.leaving {
+  animation: toastOut 0.5s ease forwards;
+}
+@keyframes toastIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }

@@ -220,6 +220,7 @@ export function ViewProject() {
 
   return (
     <div className={styles.viewProject__container}>
+      <span style={{ visibility: "hidden" }}>Visualizar projetos</span>
       <header>
         <span title="voltar">
           <Text.Root>
@@ -341,7 +342,9 @@ export function ViewProject() {
                         <IconChoice icon="star" />
                       </span>
                       <span title="Editar">
-                        <Link to={`/editProject/${item.id}`}>
+                        <Link
+                          to={`/editProject/${item.id}`}
+                        >
                           <IconChoice icon="edit" />
                         </Link>
                       </span>

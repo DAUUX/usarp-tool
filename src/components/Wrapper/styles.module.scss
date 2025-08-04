@@ -23,4 +23,10 @@
     width: 6rem;
     height: 6.1rem;
   }
+
+  @media(max-width: 600px) {
+    padding: 1.5rem;
+    gap: 0;
+    margin: 1.5rem;
+  }
 }

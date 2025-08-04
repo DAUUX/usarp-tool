@@ -12,6 +12,8 @@ import { NoFound } from "../pages/Maintenance/NoFound";
 import { Maintenance } from "../pages/Maintenance/Maintenance/";
 import { DetailProject } from "../pages/DetailProject";
 import { GlobalDropdownProvider } from "../components/Dropdown/GlobalDropdownContext";
+import { OrdemUserstory } from "../pages/OrdemUserstory";
+import { BrainstormingChecklist } from "../pages/BrainstormingChecklist";
 
 export function LoggedRoutes() {
   return (
@@ -34,7 +36,12 @@ export function LoggedRoutes() {
               path="registerBrainstorming"
               element={<RegisterBrainstorming />}
             />
+            <Route
+              path="brainstormingChecklist"
+              element={<BrainstormingChecklist />}
+            />
           </Route>
+          <Route path="/ordemUserstory" element={<OrdemUserstory />} />
           <Route path="/configurations" element={<ConfigurationsLayout />}>
             <Route index path="profile" element={<Profile />} />
             <Route index path="privacity" element={<Maintenance />} />
