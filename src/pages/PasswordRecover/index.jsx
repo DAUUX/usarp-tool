@@ -34,8 +34,6 @@ export default function PasswordRecover() {
 
     setEmailSent(true);
     setEmail(data.email);
-
-    console.log(data);
   };
 
   const navigate = useNavigate();

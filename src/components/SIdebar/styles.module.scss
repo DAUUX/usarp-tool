@@ -2,7 +2,7 @@
   border-right: 1px solid var(--th-line-sidebar);
   background: var(--th-background-sidebar);
   position: static;
-  height: 100vh;
+  min-height: 100vh;
   padding: 1.5rem 1rem;
 
   nav {

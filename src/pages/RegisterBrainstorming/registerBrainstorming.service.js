@@ -1,23 +1,34 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../hooks/useAlert";
+import { formatProjectDataSelection } from "../../utils/formatProjectDataSelection";
+import { api } from "../../utils/axios.config";
+import { formatUserStoriesDataSelection } from "../../utils/formatUserStoriesDataSelection";
+import { formatDateToDDMMYYYY } from "../../utils/formatDate";
 
 const RegisterBrainstormingService = (url) => {
   const [listProjects, setListProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [listUserStoriesByProject, setListUserStoriesByProject] = useState([]);
+  const [projectId, setProjectId] = useState();
   const [error, setError] = useState(null);
   const { open, close } = useAlert();
   const navigate = useNavigate();
 
   const handleBackBackCloseALert = () => {
-    close();
+    close(null);
     navigate(-1);
   };
-
+  
   const RegisterBrainstorming = (body, success, error, warning) => {
-    axios
-      .post(url + "/brainstorming", body)
+    const formattedBody = {
+      brainstormingTitle: body.title,
+      project: body.project.value,
+      brainstormingDate: formatDateToDDMMYYYY(body.date),
+      brainstormingTime: body.hours,
+      userStories: body.userStory.map((item) => item.value),
+    };
+    api
+      .post(url + "/brainstorming/create", formattedBody)
       .then(() => {
         open(success);
       })
@@ -40,45 +51,43 @@ const RegisterBrainstormingService = (url) => {
     hasDataLoss ? open(contentAlert) : handleBackBackCloseALert();
   };
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setLoading(true);
-      try {
-        // Chamada à API para buscar projetos
-        const projectResponse = await fetch(`${url}/projeto`);
-        if (!projectResponse.ok) {
-          throw new Error("Failed to fetch projects");
-        }
-        const projectsData = await projectResponse.json();
 
-        // Para cada projeto, buscar a user story correspondente
-        const projectsWithUserStories = await Promise.all(
-          projectsData.map(async (project) => {
-            const userStoryResponse = await fetch(
-              `${url}/historiaUsuario/${project.userStoryId}`
-            );
-            if (!userStoryResponse.ok) {
-              throw new Error("Failed to fetch user story");
-            }
-            const userStory = await userStoryResponse.json();
-            return { ...project, ...userStory };
-          })
-        );
-        console.log(projectsWithUserStories);
-        setListProjects(projectsWithUserStories);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  useEffect(() => {
+    const fetchListProject = async () => {
+      try {
+        const { data } = await api.get("/project/owned-projects");
+        setListProjects(formatProjectDataSelection(data.projects));
+      } catch (error) {
+        setError(error);
       }
     };
 
-    fetchProjects();
-  }, [url]);
+    fetchListProject();
+  }, []);
+
+  useEffect(() => {
+    const fetchListUserStoriesByProject = async () => {
+      try {
+        const { data } = await api.get(
+          `/userstories/${projectId}/user-stories`
+        );
+        setListUserStoriesByProject(
+          formatUserStoriesDataSelection(data.userStories)
+        );
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    fetchListUserStoriesByProject();
+  }, [projectId]);
+
+
   return {
     listProjects,
-    loading,
+    listUserStoriesByProject,
     error,
+    setProjectId,
     RegisterBrainstorming,
     handleBackButton,
     handleBackBackCloseALert,

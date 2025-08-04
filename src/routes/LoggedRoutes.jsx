@@ -23,7 +23,8 @@ export function LoggedRoutes() {
           <Route path="/" element={<Layout />}>
             <Route path="home" element={<Home />} />
             <Route path="project" element={<ViewProject />} />
-            <Route path="brainstorming" element={<Maintenance />} />
+            <Route path="brainstorming" element={<ViewBrainstorming />} />
+            <Route path="userStories" element={<Maintenance />} />
             <Route path="registerProject" element={<RegisterProject />} />
             <Route path="editProject/:id" element={<RegisterProject />} />
             <Route path="DetailProject/:id" element={<DetailProject />} />
