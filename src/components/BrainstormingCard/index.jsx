@@ -8,6 +8,7 @@ export function BrainstormingCard({
   date,
   hour,
   userStory,
+  actions,
   ...rest
 }) {
   const style = [
@@ -15,9 +16,11 @@ export function BrainstormingCard({
     { background: "#FFE1D6", color: "#983E1E" },
     { background: "#CCEFF0", color: "#004548" },
   ];
+  
   const getRandomStyle = () => {
     return style[Math.floor(Math.random() * style.length)];
   };
+
   return (
     <div className={styles.brainstormingcard__container} {...rest}>
       <div className={styles.brainstormingcard__header}>
@@ -51,6 +54,9 @@ export function BrainstormingCard({
           <span style={{ background: "#CCEFF0", color: "#004548" }}>5</span> */}
         </div>
       </div>
+
+      {actions}
+
     </div>
   );
 }
@@ -60,4 +66,5 @@ BrainstormingCard.propTypes = {
   date: PropTypes.string.isRequired,
   hour: PropTypes.string.isRequired,
   userStory: PropTypes.string.isRequired,
+  actions: PropTypes.node,
 };

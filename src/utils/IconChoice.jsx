@@ -37,6 +37,10 @@ import { User06 } from "../assets/icons/User06";
 import { User04 } from "../assets/icons/User04";
 import { StatisticsLamp } from "../assets/icons/StatisticsLamp";
 import { StatisticsUserStory } from "../assets/icons/StatisticsUserStory";
+import { List } from "../assets/icons/List";
+import { Grid } from "../assets/icons/Grid"; 
+import { StarHover } from "../assets/icons/StarHover"; 
+import { StarCompleta } from "../assets/icons/StarCompleta"; 
 import { User02Orange } from "../assets/icons/User02_orange";
 import { User03Orange } from "../assets/icons/User03_orange";
 import { User04Orange } from "../assets/icons/User04_orange";
@@ -136,6 +140,14 @@ export function IconChoice({ icon, color, ...rest }) {
       return <StatisticsLamp color={color} {...rest} />;
     case "statisticsUserStory":
       return <StatisticsUserStory color={color} {...rest} />;
+    case "list":
+      return <List color={color} {...rest} />;
+    case "grid":
+      return <Grid color={color} {...rest} />;
+    case 'starHover':
+      return <StarHover {...rest} />;
+     case 'starCompleta':
+      return <StarCompleta {...rest} />;
     case "chevronDown":
       return <ChevronDown color={color} {...rest} />;
     case "information":

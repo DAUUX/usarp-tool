@@ -1,0 +1,43 @@
+.viewSwitcher {
+    display: flex;
+    gap: 4px;
+
+    button {
+      background-color: #ffffff; 
+      border: 1px solid #E0E0E0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+  
+      &:focus {
+        outline: none;
+      }
+  
+      &.active {
+        background-color: #CCEFF0; 
+        border-color: #99DEE1;
+        position: relative; 
+        z-index: 1; 
+      }
+    }
+  
+    button:first-child {
+        width: 56px;
+        height: 40px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 20px;
+    }
+  
+    button:last-child {
+        width: 56px;
+        height: 40px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-bottom-left-radius: 6px;
+    }
+  }
