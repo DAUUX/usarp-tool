@@ -9,6 +9,7 @@ export default function Checklist({
   accordionItems,
   checkedItems,
   handleCheck,
+  onSelectedAccordionItem,
   handleSubmitChecklist
 }) {
   return (
@@ -18,23 +19,23 @@ export default function Checklist({
       </Text.Root>
       <Accordion.Root defaultIndex={0}>
         {accordionItems.groups.map((group) => (
-          <Accordion.Item index={group.id} key={group.id}>
+          <Accordion.Item index={group.id} key={group.id} onClick={() => onSelectedAccordionItem(group.id)}>
             <Accordion.Header>{group.title}</Accordion.Header>
             <Accordion.Content>
               <div className={styles.checklist__accordion}>
-                {group.checkboxGroups.map((checkboxGroup) => (
-                  <CheckboxGroup.Root key={checkboxGroup.id}>
+                {group.cardsGroup.map((cardGroup) => (
+                  <CheckboxGroup.Root key={cardGroup.id}>
                     <CheckboxGroup.Caption>
-                      {checkboxGroup.caption}
+                      {cardGroup.caption}
                     </CheckboxGroup.Caption>
-                    {checkboxGroup.checkboxs.map((checkbox) => (
+                    {cardGroup.cards.map((card) => (
                       <Checkbox.Root
-                        key={checkbox.id}
-                        checked={checkedItems.includes(checkbox.id)}
-                        onChange={() => handleCheck(checkbox.id)}
+                        key={card.id}
+                        checked={checkedItems.includes(card.id)}
+                        onChange={() => handleCheck(card.id)}
                       >
                         <Checkbox.Text>
-                          {checkbox.text} ({checkbox.id})
+                          {card.category} ({card.id})
                         </Checkbox.Text>
                       </Checkbox.Root>
                     ))}
