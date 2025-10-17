@@ -18,34 +18,18 @@ export function Layout() {
       <Sidebar.Root>
         <Sidebar.Button
           text="Inicio"
-          active={
-            path == "home" ||
-            path == "registerProject" ||
-            path == "registerBrainstorming"
-          }
+          active={path == "home" || path == "registerProject" || path == "registerBrainstorming"}
           route="home"
         >
           <IconChoice icon="home" />
         </Sidebar.Button>
-        <Sidebar.Button
-          text="Projetos"
-          active={path == "project" || path == "registerUserstory"}
-          route="project"
-        >
+        <Sidebar.Button text="Projetos" active={path == "project" || path == "registerUserstory"} route="project">
           <IconChoice icon="project" />
         </Sidebar.Button>
-        <Sidebar.Button
-          text="Brainstormings"
-          active={path == "brainstorming"}
-          route="brainstorming"
-        >
+        <Sidebar.Button text="Brainstormings" active={path == "brainstorming"} route="brainstorming">
           <IconChoice icon="brainstorming" />
         </Sidebar.Button>
-        <Sidebar.Button
-          text="Checklist"
-          active={path == "brainstormingChecklist"}
-          route="brainstormingChecklist"
-        >
+        <Sidebar.Button text="Checklist" active={path == "brainstormingChecklist"} route="brainstormingChecklist">
           <IconChoice icon="brainstorming" />
         </Sidebar.Button>
       </Sidebar.Root>

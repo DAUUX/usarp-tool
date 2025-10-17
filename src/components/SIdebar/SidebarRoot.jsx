@@ -1,16 +1,14 @@
 import styles from "./styles.module.scss";
-import Logo from "../../assets/images/logo.png";
+import { images } from "../../assets/images/images";
 
 import PropTypes from "prop-types";
 export function SidebarRoot({ children }) {
   return (
     <aside className={styles.sidebar__container}>
       <figure>
-        <img src={Logo} alt="Logo USARP" />
+        <img src={images.pixelLogo} alt="Logo USARP" />
       </figure>
-      <nav>
-        {children}
-      </nav>
+      <nav>{children}</nav>
     </aside>
   );
 }

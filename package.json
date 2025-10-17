@@ -1,7 +1,7 @@
 {
   "name": "usarp-tool",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.10",
   "type": "module",
   "scripts": {
     "start": "vite --mode development",
@@ -17,6 +17,8 @@
     "axios": "^1.6.2",
     "i18next": "^23.11.5",
     "jwt-decode": "^4.0.0",
+    "lucide": "^0.546.0",
+    "lucide-react": "^0.546.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
@@ -36,8 +38,9 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "sass": "^1.69.5",
-    "vite": "^4.4.5",
+    "sass": "^1.93.2",
+    "sass-loader": "^16.0.5",
+    "vite": "^7.1.10",
     "vite-plugin-svgr": "^4.1.0"
   }
 }
