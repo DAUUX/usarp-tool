@@ -19,18 +19,18 @@ export function Profile() {
   const [modalVisibility, setModalVisibility] = useState(false);
   const [userData, setUserData] = useState('');
   const { setAlert } = useContext(FormSubmitContext);
-  
-  const createDateFromString = (dateString) =>{
+
+  const createDateFromString = (dateString) => {
     // A string deve estar no formato "yyyy-MM-dd"
-    if(dateString === undefined || dateString === null || dateString ===""){
+    if (dateString === undefined || dateString === null || dateString === "") {
       return dateString;
-    } else{
-      const [ dia, mes, ano] = dateString.split("/");
+    } else {
+      const [dia, mes, ano] = dateString.split("/");
       return `${ano}-${mes}-${dia}`;
     }
   }
 
-  function editarValores(mode){
+  function editarValores(mode) {
     setEditMode(mode);
     setUserData({
       fullName: userData.fullName,
@@ -42,13 +42,13 @@ export function Profile() {
     });
     reset(userData);
   }
-  
+
   useEffect(() => {
     axios.get(baseURL + '/user', {
-        params: {
-          id: user.id
-        }
-      })
+      params: {
+        id: user.id
+      }
+    })
       .then(res => {
         res.data.birthdate = createDateFromString(res.data.birthdate)
         setUserData(res.data);
@@ -105,8 +105,8 @@ export function Profile() {
 
   const handleSubmitForm = (data) => {
 
-  // Converter a data para o formato DD/MM/AAAA
-  const formattedBirthdate = data.birthdate.split('-').reverse().join('/'); // "yyyy-MM-dd" -> "dd/MM/yyyy"
+    // Converter a data para o formato DD/MM/AAAA
+    const formattedBirthdate = data.birthdate.split('-').reverse().join('/'); // "yyyy-MM-dd" -> "dd/MM/yyyy"
 
     axios.put(baseURL + '/user/update', {
       email: data.email,
@@ -116,13 +116,13 @@ export function Profile() {
       profile: data.profile,
       organization: data.organization,
     })
-      .then(res => { 
+      .then(res => {
         console.log(res.data);
         res.data.birthdate = createDateFromString(res.data.birthdate)
         setUserData(res.data);
         setModalVisibility(true);
       })
-      .catch( err => {
+      .catch(err => {
         setAlert({
           message: "Desculpe, servidor indisponível no momento",
           icon: "wifioff",
@@ -131,7 +131,7 @@ export function Profile() {
       })
   };
 
-  if(userData === null) {
+  if (userData === null) {
     return <div>Carregando...</div>;
   }
 
@@ -147,7 +147,7 @@ export function Profile() {
         <p>{userData.fullName || "undefined"}</p>
         <button>Editar foto de perfil</button>
       </header>
-      <hr/>
+      <hr />
       {!editMode ? (
         <section>
           <DataView
@@ -182,7 +182,7 @@ export function Profile() {
             Editar dados
           </button>
         </section>
-        ) : (
+      ) : (
         <section>
           <form
             onSubmit={handleSubmit(handleSubmitForm)}
@@ -271,7 +271,7 @@ export function Profile() {
                   { label: "Não-binário", value: "Não binário" },
                   { label: "Prefiro não informar", value: "Prefiro não informar" },
                 ]}
-              
+
               >
               </InputDropdown>
             </div>
@@ -297,7 +297,7 @@ export function Profile() {
             <button className={styles.Profile__PrimaryButton}
               type="submit"
               disabled={!formState.isDirty || !formState.isValid || formState.isSubmitSuccessful}>
-                Salvar dados
+              Salvar dados
             </button>
           </form>
           <Modal.Root isOpen={modalVisibility}>
