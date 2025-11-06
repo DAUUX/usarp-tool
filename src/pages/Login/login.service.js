@@ -2,7 +2,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useAlert } from "../../hooks/useAlert";
-import { setAuthToken } from "../../utils/api";
 
 const LoginService = (url) => {
   const navigate = useNavigate();
@@ -17,7 +16,6 @@ const LoginService = (url) => {
           const token = response.data.token;
           setToken(token);
           localStorage.setItem("@AccessToken", token);
-          setAuthToken(token); 
           open(success);
           setTimeout(() => {
             close();
