@@ -1,0 +1,34 @@
+.sidebarBox {
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(16,24,40,0.06);
+  width: 100%;
+}
+
+.sidebarBox h3 { margin:0 0 12px 0; font-size:16px; color:#333;}
+.accordionItem{ margin-bottom:12px;}
+.accordionHeader{
+  display:flex; justify-content:space-between; align-items:center;
+  width:100%;
+  padding:12px;
+  border:1px solid #eee;
+  border-radius:10px;
+  background: #fff;
+  cursor:pointer;
+}
+.chev{ color: #888; font-size:14px;}
+.accordionContent{
+  margin-top:8px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #f3d9b8;
+  background:#fffaf6;
+}
+.smallDesc{ font-size:13px; color:#555; margin-bottom:8px;}
+.items{ display:flex; flex-direction:column; gap:8px;}
+.item{ display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;}
+.item input{ accent-color: var(--teal); width:16px; height:16px;}
+.footer{ display:flex; flex-direction:column; gap:10px; margin-top:14px;}
+.backBtn{ background:transparent; border:1px solid #ddd; padding:10px; border-radius:8px; cursor:pointer;}
+.fillBtn{ background:var(--teal); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer;}

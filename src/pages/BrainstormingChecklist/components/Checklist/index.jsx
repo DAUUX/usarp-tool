@@ -4,6 +4,7 @@ import { Text } from "../../../../components/Text";
 import { CheckboxGroup } from "../../../../components/CheckboxGroup";
 import styles from "../../styles.module.scss";
 import { Button } from "../../../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function Checklist({
   accordionItems,
@@ -12,6 +13,7 @@ export default function Checklist({
   onSelectedAccordionItem,
   handleSubmitChecklist
 }) {
+   const navigate = useNavigate();
   return (
     <div className={styles.checklist__container}>
       <Text.Root>
@@ -46,7 +48,10 @@ export default function Checklist({
           </Accordion.Item>
         ))}
       </Accordion.Root>
-      <Button.Root data-type="primary">
+      <Button.Root
+        data-type="primary"
+        onClick={() => navigate("/preenchimento-cartas")} 
+      >
         <div className={styles.submit__checklist}>
           <Button.Text>Preencher Cartas</Button.Text>
           <Button.Icon iconName={"arrowRightShort"} />

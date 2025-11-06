@@ -55,6 +55,12 @@
 
   --success: #00ADB4;
   --success-: #dcefdd;
+
+  --teal: #007f75;
+  --teal-600: #008d84;
+  --yellow: #f5b83a;
+  --card-bg: #ffffff;
+  --muted: #666666;
 }
 
 html[data-theme="primary"] {
@@ -228,6 +234,11 @@ body {
   font-weight: 400;
   font-weight: 150%;
   height: 100%;
+
+  margin:0;
+  font-family: "Poppins", sans-serif;
+  background:#f2f6f8;
+  color:#222;
 }
 button {
   font-family: var(--th-font-inter);

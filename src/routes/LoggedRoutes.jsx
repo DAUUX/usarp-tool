@@ -14,6 +14,8 @@ import { DetailProject } from "../pages/DetailProject";
 import { GlobalDropdownProvider } from "../components/Dropdown/GlobalDropdownContext";
 import { OrdemUserstory } from "../pages/OrdemUserstory";
 import { BrainstormingChecklist } from "../pages/BrainstormingChecklist";
+import FillCards from "../pages/BrainstormingChecklist/preenchimento-cartas/FillCards.jsx";
+
 
 export function LoggedRoutes() {
   return (
@@ -40,6 +42,10 @@ export function LoggedRoutes() {
             <Route
               path="brainstormingChecklist"
               element={<BrainstormingChecklist />}
+            />
+            <Route
+              path="preenchimento-cartas"
+              element={<FillCards />}
             />
           </Route>
           <Route path="/ordemUserstory" element={<OrdemUserstory />} />

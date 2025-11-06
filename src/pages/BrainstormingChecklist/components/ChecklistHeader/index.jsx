@@ -6,10 +6,12 @@ import { Avatar } from "./avatar";
 
 export function ChecklistHeader({ avatarList, handleSignOutSession }) {
   return (
+    
     <header className={styles.header}>
       <div className={styles.brainstorming__header__info__container}>
         <img src={smallLogo} alt="Usarp Logo" className={styles.smallLogo} />
         <div className={styles.title__container}>
+    
           <Text.Root>
             <Text.Headline as="h6">Brainstorming 1</Text.Headline>
             <Text.Caption>
