@@ -1,128 +1,306 @@
-import Wrapper from "../../components/Wrapper";
-import StepOne from "./StepOne";
-import StepTwo from "./StepTwo";
-import StepThree from "./StepThree";
-import { StepStatus } from "../../components/StepStatus";
-import { URL as baseURL } from "../../utils/base";
-import { FeedbackAlert } from "../../components/FeedbackAlert";
-import { useAlert } from "../../hooks/useAlert";
-import { RegisterProvider, useRegister } from "./contexts/RegisterContext";
-import RegisterService from "./register.service";
+import { useMemo, useState } from "react";
+
 import { useTranslation } from "react-i18next";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
-function RegisterContent() {
-  const { close } = useAlert();
-  const { formData, currentStep, resetForm } = useRegister();
-  const { Register } = RegisterService(baseURL);
+import useModal from "../../hooks/useModal";
+import { useRegister } from "../../hooks/useRegister";
+import { formatDateToDMY } from "../../utils/formatDate";
+
+import Wrapper from "../../layouts/Wrapper/Wrapper";
+import Modal from "../../layouts/Modal/Modal";
+
+import Link from "../../components/ui/Link/Link";
+import FormStepper from "../../components/FormStepper/FormStepper";
+import Button from "../../components/ui/Button/Button";
+import Input from "../../components/ui/Input/Input";
+import PwStrengthLevel from "../../components/PwStrengthLevel/PwStrengthLevel";
+import InputDate from "../../components/ui/InputDate/InputDate";
+import Select from "../../components/ui/Select/Select";
+
+import { FORMSTEPS, GENDER, PROFILE } from "../../data/constants";
+
+import { images } from "../../assets/images/images";
+
+import styles from "./styles.module.scss";
+
+const Register = () => {
   const { t } = useTranslation();
+  const [activeStep, setActiveStep] = useState(0);
+  const { modalProps, openModal, closeModal } = useModal();
 
-  const handleOpenAlertError = (
-    <FeedbackAlert.Root>
-      <FeedbackAlert.Icon icon="closecircle" />
-      <FeedbackAlert.Title title={t("cadastrarFeedbackAlertError")} />
-      <FeedbackAlert.Description
-        description={t("cadastrarFeedbackAlertErrorDes")}
-      />
-      <FeedbackAlert.Button onClick={close} label={t("loginAlertErrorBtn")} />
-    </FeedbackAlert.Root>
-  );
-  const handleOpenAlertSuccess = (
-    <FeedbackAlert.Root>
-      <FeedbackAlert.Icon icon="checkcircle" />
-      <FeedbackAlert.Title
-        title={t("loginAlertSucesso")}
-        name={`, ${formData.fullName}!`}
-      />
-      <FeedbackAlert.Description
-        description={t("cadastrarFeedbackAlertSucesso")}
-      />
-    </FeedbackAlert.Root>
+  const navigate = useNavigate();
+
+  const schema = useMemo(
+    () =>
+      Yup.object().shape({
+        email: Yup.string().email("digite um email valido").required("Email é obrigatório"),
+        fullName: Yup.string().min(3, "nome muito curto").max(50, "nome muito grande").required("Nome é obrigatório"),
+        password: Yup.string()
+          .required("Senha é obrigatória")
+          .min(8, "A senha deve ter no mínimo 8 caracteres")
+          .max(15, "A senha deve ter no máximo 15 caracteres")
+          .matches(/[a-z]/, "A senha deve conter ao menos 1 letra minúscula")
+          .matches(/[A-Z]/, "A senha deve conter ao menos 1 letra maiúscula")
+          .matches(/[0-9]/, "A senha deve conter ao menos 1 número")
+          .matches(/[^a-zA-Z0-9]/, "A senha deve conter ao menos 1 caractere especial (ex: !@#$%)"),
+        birthdate: Yup.date().required("Data de nascimento é obrigatória"),
+        gender: Yup.string().required("Gênero é obrigatório"),
+        profile: Yup.string().required("Perfil é obrigatório"),
+        organization: Yup.string().max(100, "nome da organização muito grande"),
+      }),
+    []
   );
 
-  const handleRegister = async (dataToSend = null) => {
-    const response = await Register(
-      dataToSend,
-      handleOpenAlertSuccess,
-      handleOpenAlertError
-    );
-    if (response) {
-      resetForm();
+  const { control, handleSubmit, formState, trigger, watch, reset } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema),
+    defaultValues: {
+      email: "",
+      fullName: "",
+      password: "",
+      birthdate: null,
+      gender: "",
+      profile: "",
+      organization: "",
+    },
+  });
+
+  const { errors, isValid } = formState;
+  const { register, isLoading: isRegistering } = useRegister();
+
+  const password = watch("password");
+  const nome = watch("fullName");
+  const primeiroNome = nome ? nome.split(" ")[0] : "fulano(a)";
+
+  const modalSuccess = useMemo(
+    () => ({
+      type: "success",
+      text: "Sua conta foi criada com sucesso! Faça login para continuar.",
+      buttonText: "Fazer Login",
+      onButtonClick: () => navigate("/login"),
+    }),
+    [navigate]
+  );
+
+  const modalError = useMemo(
+    () => ({
+      type: "error",
+      title: "Erro no cadastro",
+      text: "Ocorreu um erro ao criar sua conta. Por favor, tente novamente.",
+      buttonText: "Fechar",
+      onButtonClick: () => {
+        closeModal();
+        reset();
+        setActiveStep(0);
+      },
+    }),
+    [closeModal, reset]
+  );
+
+  const handleSubmitForm = async (data) => {
+    const payload = {
+      ...data,
+      birthdate: formatDateToDMY(data.birthdate),
+    };
+
+    await register(payload, {
+      openModal,
+      closeModal,
+      reset,
+      modalSuccess,
+      modalError,
+    });
+  };
+
+  const handleNext = async () => {
+    let fieldsToValidate = [];
+    if (activeStep === 0) {
+      fieldsToValidate = ["email", "fullName"];
+    } else if (activeStep === 1) {
+      fieldsToValidate = ["password"];
+    }
+    const isStepValid = await trigger(fieldsToValidate);
+
+    if (isStepValid) {
+      setActiveStep((prev) => (prev < 2 ? prev + 1 : prev));
     }
   };
 
+  const handleBack = () => {
+    setActiveStep((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+
   return (
-    <Wrapper>
-      {currentStep === 1 && (
-        <StepOne>
-          <StepStatus.Root>
-            <StepStatus.Circle
-              text={"1"}
-              color={currentStep === 1 ? "#ffff" : "#004548"}
-              background={currentStep === 1 ? "#00686C" : "#CCEFF0"}
-            />
-            <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
-            <StepStatus.Circle
-              text={"2"}
-              color={currentStep === 2 ? "#ffff" : "#004548"}
-              background={currentStep === 2 ? "#00686C" : "#CCEFF0"}
-            />
-            <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
-            <StepStatus.Circle
-              text={"3"}
-              color={currentStep === 3 ? "#ffff" : "#004548"}
-              background={currentStep === 3 ? "#00686C" : "#CCEFF0"}
-            />
-          </StepStatus.Root>
-        </StepOne>
-      )}
+    <div className={styles.container}>
+      <Wrapper>
+        <figure>
+          <img src={images.logo2} alt="logo USARP" style={{ width: "5rem" }} />
+        </figure>
 
-      {currentStep === 2 && (
-        <StepTwo fullName={formData.fullName}>
-          <StepStatus.Root>
-            <StepStatus.Circle
-              text={"1"}
-              color="#004548"
-              background="#CCEFF0"
-            />
-            <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
-            <StepStatus.Circle text={"2"} color="#ffff" background="#00686C" />
-            <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
-            <StepStatus.Circle
-              text={"3"}
-              color="#004548"
-              background="#CCEFF0"
-            />
-          </StepStatus.Root>
-        </StepTwo>
-      )}
+        <div style={{ width: "100%" }}>
+          <FormStepper activeStep={activeStep} steps={FORMSTEPS} />
+        </div>
 
-      {currentStep === 3 && (
-        <StepThree fullName={formData.fullName} onSubmit={handleRegister}>
-          <StepStatus.Root>
-            <StepStatus.Circle
-              text={"1"}
-              color="#004548"
-              background="#CCEFF0"
-            />
-            <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
-            <StepStatus.Circle
-              text={"2"}
-              color="#004548"
-              background="#CCEFF0"
-            />
-            <StepStatus.Line width={"2px"} color={"#BDBDBD"} />
-            <StepStatus.Circle text={"3"} color="#ffff" background="#00686C" />
-          </StepStatus.Root>
-        </StepThree>
-      )}
-    </Wrapper>
+        <form onSubmit={handleSubmit(handleSubmitForm)} noValidate>
+          {activeStep === 0 && (
+            <>
+              <p className={styles.infoText}>
+                Comece um <span>brainstorming</span> em menos de <span>5 minutos</span> com o seu time!
+              </p>
+              <div className={styles.inputGrup}>
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      label="Email"
+                      type="email"
+                      placeholder="exemplo@usarp.com"
+                      error={!!errors.email}
+                      helperText={errors.email?.message}
+                    />
+                  )}
+                />
+                <Controller
+                  name="fullName"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      label="Nome Completo"
+                      placeholder="Digite seu nome completo"
+                      error={!!errors.fullName}
+                      helperText={errors.fullName?.message}
+                    />
+                  )}
+                />
+              </div>
+            </>
+          )}
+
+          {activeStep === 1 && (
+            <>
+              <p className={styles.infoText}>
+                Muito bem, <span>{primeiroNome}</span>! Estamos quase lá, agora crie uma <span>senha</span> segura.
+              </p>
+              <div className={styles.inputGrup}>
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      label="Senha"
+                      type="password"
+                      placeholder="Crie sua senha"
+                      showPasswordToggle
+                      error={!!errors.password}
+                      helperText={errors.password?.message}
+                    />
+                  )}
+                />
+              </div>
+              <PwStrengthLevel password={password || ""} />
+            </>
+          )}
+
+          {activeStep === 2 && (
+            <>
+              <p className={styles.infoText}>
+                Excelente, <span>{primeiroNome}</span>! Para concluirmos, informe os dados abaixo.
+              </p>
+              <div className={styles.dobGender}>
+                <Controller
+                  name="birthdate"
+                  control={control}
+                  render={({ field }) => (
+                    <InputDate {...field} error={!!errors.birthdate} helperText={errors.birthdate?.message} required />
+                  )}
+                />
+                <Controller
+                  name="gender"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label="Gênero"
+                      error={!!errors.gender}
+                      helperText={errors.gender?.message}
+                      options={GENDER}
+                      required
+                    />
+                  )}
+                />
+              </div>
+              <div className={styles.inputGrup}>
+                <Controller
+                  name="profile"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label="Perfil"
+                      error={!!errors.profile}
+                      helperText={errors.profile?.message}
+                      options={PROFILE}
+                      required
+                    />
+                  )}
+                />
+                <Controller
+                  name="organization"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      label="Organização"
+                      placeholder="Digite sua organização"
+                      error={!!errors.organization}
+                      helperText={errors.organization?.message}
+                    />
+                  )}
+                />
+              </div>
+            </>
+          )}
+
+          <div className={styles.buttonGrup}>
+            {activeStep < 2 ? (
+              <Button type="button" onClick={handleNext}>
+                Próximo
+              </Button>
+            ) : (
+              <Button type="submit" disabled={isRegistering || !isValid}>
+                Finalizar Cadastro
+              </Button>
+            )}
+
+            {activeStep > 0 && (
+              <Button variant="outlined" type="button" onClick={handleBack}>
+                Voltar
+              </Button>
+            )}
+          </div>
+
+          <p className={styles.terms}>
+            Ao criar uma conta, você concorda com os <Link to="/term">Termos e Condições</Link>.
+          </p>
+        </form>
+
+        <div>
+          <p>
+            {t("possuiConta")} <Link to="/login">{t("cadastrarEntrar")}</Link>
+          </p>
+        </div>
+        <Modal {...modalProps} onClose={closeModal} />
+      </Wrapper>
+    </div>
   );
-}
+};
 
-export default function Register() {
-  return (
-    <RegisterProvider>
-      <RegisterContent />
-    </RegisterProvider>
-  );
-}
+export default Register;

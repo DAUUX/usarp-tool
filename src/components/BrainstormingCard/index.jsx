@@ -1,6 +1,7 @@
 import styles from "./styles.module.scss";
 import PropTypes from "prop-types";
 import { images } from "../../assets/images/images";
+import { EllipsisVertical } from "lucide-react";
 export function BrainstormingCard({ brainstormingName, projectName, date, hour, userStory, ...rest }) {
   const style = [
     { background: "#FFE8B2", color: "#33270D" },
@@ -14,7 +15,7 @@ export function BrainstormingCard({ brainstormingName, projectName, date, hour, 
     <div className={styles.brainstormingcard__container} {...rest}>
       <div className={styles.brainstormingcard__header}>
         <h6>{brainstormingName}</h6>
-        <IconChoice icon="option" />
+        <EllipsisVertical />
       </div>
       <span>
         {date} - {hour}

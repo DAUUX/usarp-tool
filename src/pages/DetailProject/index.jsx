@@ -5,7 +5,6 @@ import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useAlert } from "../../hooks/useAlert";
 import CardMeansurement from "./components/CardMeansurement";
 import styles from "./styles.module.scss";
-import { Dropdown } from "../../components/Dropdown";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DetailProjectService from "./detailProject.service";
@@ -187,23 +186,6 @@ export function DetailProject() {
 
                         <div>
                             <h6>Status</h6>
-                            <Dropdown.Root
-                                onClick={(e) => handlerStatus(e.target.innerText)}
-                                style={
-                                    status === DefaultStatus.blocked
-                                        ? primary
-                                        : status === DefaultStatus.closed
-                                        ? secondary
-                                        : tercery
-                                }
-                            >
-                                <Dropdown.Trigger title={status} />
-                                <Dropdown.Menu>
-                                    <Dropdown.Item value={DefaultStatus.active}>{DefaultStatus.active}</Dropdown.Item>
-                                    <Dropdown.Item value={DefaultStatus.blocked}>{DefaultStatus.blocked}</Dropdown.Item>
-                                    <Dropdown.Item value={DefaultStatus.closed}>{DefaultStatus.closed}</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown.Root>
                         </div>
                         <div>
                             <h6>Dados do criador do projeto (Dono do projeto)</h6>

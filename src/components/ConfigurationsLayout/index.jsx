@@ -3,9 +3,8 @@ import { SidebarOption } from "./SidebarOption";
 import { AlertBox } from "./AlertBox";
 import { Link, Outlet } from "react-router-dom";
 import { useState, createContext } from "react";
-import { Dropdown } from "../DropdownMenu";
 import { Button } from "../Button";
-import { images } from "../../assets/images/images";
+import Navbar from "../../layouts/Navbar";
 
 export const FormSubmitContext = createContext(null);
 
@@ -15,10 +14,7 @@ export function ConfigurationsLayout() {
   return (
     <>
       <main className={styles.Configuration}>
-        <header className={styles.Configuration__Header}>
-          <img src={images.pixelLogo} alt="USARP Tool Logo" />
-          <Dropdown />
-        </header>
+        <Navbar />
         <div className={styles.Configuration__BackLink}>
           <Link to="/">
             <img src="../src/assets/icons/backArrow.svg" alt="Voltar" />

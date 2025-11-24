@@ -102,6 +102,7 @@ html[data-theme="primary"] {
     --th-color-text-button-disabled: var(--gray-800);
     --th-color-text-button: var(--white);
     --th-color-input-focus: var(--primary-600);
+    --th-color-input-hover: var(--primary-600);
     --th-color-text-input: var(--gray-700);
     --th-color-text-primary-button: var(--white);
     --th-color-text-button-back: var(--primary-600);
@@ -109,6 +110,7 @@ html[data-theme="primary"] {
     --th-color-text-label: var(--gray-800);
     --th-color-text-footer: var(--gray-700);
     --th-color-text-link: var(--primary-600);
+    --th-color-text-link-focus: var(--primary-700);
     --th-color-text-card-header: var(--gray-500);
     --th-color-text-highlight: var(--primary-500);
     --th-color-text-warning: var(--gray-700);
