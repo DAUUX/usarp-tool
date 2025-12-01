@@ -4,7 +4,7 @@ Avatar.propTypes = {
   name: PropTypes.string,
 };
 
-export function Avatar({ name },...rest) {
+export function Avatar({ name ,...rest}) {
   // Função para gerar uma cor aleatória
   const getRandomColor = () => {
     const letters = "0123456789ABCDEF";

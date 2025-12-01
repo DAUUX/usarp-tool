@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IconChoice } from '../../utils/IconChoice';
 import { Modal } from "../../components/Modal";
+import {api} from "../../services/api";
+
 
 export default function PasswordRecover() {
 
@@ -29,11 +31,17 @@ export default function PasswordRecover() {
   });
 
   const { errors } = formState;
-  const handleSubmitForm = (data) => {
-    setWarningDisplay(false);
+  const handleSubmitForm = async (data) => {
+    try{
+      await api.post("/auth/forgot_password", { email: data.email });
 
-    setEmailSent(true);
-    setEmail(data.email);
+      setWarningDisplay(false);
+      setEmailSent(true);
+      setEmail(data.email);
+    }
+    catch (err){
+      console.error(err);
+    }
   };
 
   const navigate = useNavigate();

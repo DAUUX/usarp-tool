@@ -20,7 +20,6 @@ import FillCards from "../pages/BrainstormingChecklist/preenchimento-cartas/Fill
 export function LoggedRoutes() {
   return (
     <GlobalDropdownProvider>
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="home" element={<Home />} />
@@ -55,7 +54,7 @@ export function LoggedRoutes() {
           </Route>
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
-      </BrowserRouter>
+      
     </GlobalDropdownProvider>
   );
 }
