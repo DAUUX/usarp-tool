@@ -21,6 +21,7 @@ export default function PasswordRecover() {
       .email("Dado inválido")
       .required("Dado inválido"),
   });
+  
 
   const { register, handleSubmit, formState } = useForm({
     mode: "all",
