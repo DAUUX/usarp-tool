@@ -120,7 +120,7 @@ const CreateProject = () => {
 
     try {
       if (isEditMode) {
-        // --- LÓGICA DE UPDATE (PUT) ---
+        // LÓGICA DE UPDATE (PUT)
         // Payload específico para o PUT (sem projectTeam)
         const updatePayload = {
           projectName: data.projectName,
@@ -132,7 +132,7 @@ const CreateProject = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        // --- LÓGICA DE CREATE (POST) ---
+        // LÓGICA DE CREATE (POST)
         // Payload completo
         await axios.post(`${config.baseUrl}/project/create`, data, {
           headers: { Authorization: `Bearer ${token}` },

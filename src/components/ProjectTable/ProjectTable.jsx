@@ -25,7 +25,7 @@ import Link from "../ui/Link/Link";
 import { formatDateToDMY } from "../../utils/formatDate";
 import styles from "./styles.module.scss";
 
-const ProjectTable = ({ rows = [], onToggleFavorite, onHideProject, filter }) => {
+const ProjectTable = ({ rows = [], onToggleFavorite, onHideProject, onDeleteProject, filter }) => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -156,7 +156,7 @@ const ProjectTable = ({ rows = [], onToggleFavorite, onHideProject, filter }) =>
                     <Pencil size={20} color="var(--primary-600)" />
                   </IconButton>
 
-                  <IconButton size="small">
+                  <IconButton size="small" onClick={() => onDeleteProject(row.id)} title="Excluir Projeto">
                     <Trash2 size={20} color="var(--error)" />
                   </IconButton>
                 </TableCell>
@@ -214,6 +214,7 @@ const ProjectTable = ({ rows = [], onToggleFavorite, onHideProject, filter }) =>
 ProjectTable.propTypes = {
   onToggleFavorite: PropTypes.func,
   onHideProject: PropTypes.func,
+  onDeleteProject: PropTypes.func,
   filter: PropTypes.string,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
