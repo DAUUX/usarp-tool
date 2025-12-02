@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { MoveLeft, Plus, Trash2 } from "lucide-react";
-import { NavLink, useNavigate, useParams } from "react-router-dom"; // Adicionado useParams
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { useForm, Controller, useFieldArray } from "react-hook-form";
@@ -17,7 +17,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { ROLE_IN_PROJECT } from "../../data/constants";
 import styles from "./styles.module.scss";
 
-// Lista de status possíveis para edição
 const PROJECT_STATUS_OPTIONS = [
   { value: "Novo", label: "Novo" },
   { value: "active", label: "Ativo" },
@@ -27,24 +26,20 @@ const PROJECT_STATUS_OPTIONS = [
 
 const CreateProject = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o ID da rota (se existir)
+  const { id } = useParams();
   const { token } = useAuth();
 
-  const isEditMode = !!id; // Boolean: true se estiver editando
+  const isEditMode = !!id;
 
   const [apiError, setApiError] = useState("");
   const [isLoadingData, setIsLoadingData] = useState(false);
 
-  // Schema adaptável
   const schema = useMemo(
     () =>
       Yup.object().shape({
         projectName: Yup.string().required("Nome do Projeto é Obrigatório"),
         description: Yup.string().optional(),
-        // Status é obrigatório apenas na edição
         status: isEditMode ? Yup.string().required("Status é obrigatório") : Yup.string().optional(),
-
-        // Na edição, o time não é enviado, mas o form precisa dele para renderizar a lista
         projectTeam: Yup.array().of(
           Yup.object().shape({
             email: Yup.string().email("Digite um Email Valido").required("Email é Obrigatório"),
@@ -55,7 +50,7 @@ const CreateProject = () => {
     [isEditMode]
   );
 
-  const { control, formState, handleSubmit, reset, setValue } = useForm({
+  const { control, formState, handleSubmit, reset } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
@@ -73,28 +68,23 @@ const CreateProject = () => {
 
   const { errors, isValid, isSubmitting } = formState;
 
-  // Efeito para carregar dados se for edição
   useEffect(() => {
     if (isEditMode && token) {
       const fetchProjectData = async () => {
         setIsLoadingData(true);
         try {
-          // Reutilizando o endpoint de listagem filtrando por ID para pegar os dados
           const response = await axios.get(`${config.baseUrl}/project/owned-projects`, {
             headers: { Authorization: `Bearer ${token}` },
-            params: { id: id }, // Filtra pelo ID
+            params: { id: id },
           });
 
           const projects = response.data.projects || [];
           if (projects.length > 0) {
             const project = projects[0];
-
-            // Preenche o formulário
             reset({
               projectName: project.projectName,
               description: project.description,
               status: project.status,
-              // Mapeia o time vindo do back para o formato do form
               projectTeam: project.projectTeam.map((member) => ({
                 email: member.email,
                 roleInProject: member.roleInProject || "",
@@ -117,47 +107,27 @@ const CreateProject = () => {
 
   const handleSubmitForm = async (data) => {
     setApiError("");
-
     try {
       if (isEditMode) {
-        // LÓGICA DE UPDATE (PUT)
-        // Payload específico para o PUT (sem projectTeam)
         const updatePayload = {
           projectName: data.projectName,
           description: data.description,
           status: data.status,
         };
-
         await axios.put(`${config.baseUrl}/project/${id}`, updatePayload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        // LÓGICA DE CREATE (POST)
-        // Payload completo
         await axios.post(`${config.baseUrl}/project/create`, data, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
-
       reset();
       navigate("/projects");
     } catch (error) {
       console.error("Erro ao salvar projeto:", error);
-
       if (error.response) {
-        const { status, data } = error.response;
-
-        if (status === 400) {
-          setApiError(data.message || "Erro de validação.");
-        } else if (status === 401) {
-          setApiError("Sessão expirada. Faça login novamente.");
-        } else if (status === 403) {
-          setApiError("Somente o criador pode editar este projeto.");
-        } else if (status === 404) {
-          setApiError("Projeto não encontrado.");
-        } else {
-          setApiError("Ocorreu um erro interno.");
-        }
+        setApiError(error.response.data.message || "Erro ao salvar.");
       } else {
         setApiError("Erro de conexão com o servidor.");
       }
@@ -229,7 +199,6 @@ const CreateProject = () => {
               )}
             />
 
-            {/* Campo STATUS só aparece na Edição */}
             {isEditMode && (
               <Controller
                 name="status"
@@ -250,90 +219,85 @@ const CreateProject = () => {
           </div>
         </fieldset>
 
-        {/* Na edição, mostraremos a equipe como "apenas leitura" ou editável visualmente,
-            mas lembrando que a API de PUT não atualiza a equipe.
-            Para evitar confusão, vamos desabilitar a edição da equipe se for EditMode
-            ou adicionar um aviso visual.
-        */}
         <fieldset>
           <legend>
             Equipe do projeto{" "}
             {isEditMode && (
-              <span style={{ fontSize: "0.8rem", color: "#666" }}>
+              <span style={{ fontSize: "0.8rem", color: "#666", fontWeight: "400" }}>
                 (Gerenciamento de equipe indisponível na edição rápida)
               </span>
             )}
           </legend>
 
           {fields.map((field, index) => (
-            <div key={field.id} className={styles.members} style={{ marginBottom: "1rem" }}>
-              <Controller
-                name={`projectTeam.${index}.email`}
-                control={control}
-                render={({ field: inputField }) => (
-                  <Input
-                    {...inputField}
-                    label="E-mail do membro"
-                    disabled={isEditMode} // Desabilita na edição
-                    type="email"
-                    placeholder="Digite o email"
-                    error={!!errors.projectTeam?.[index]?.email}
-                    helperText={errors.projectTeam?.[index]?.email?.message}
-                    required={!isEditMode}
-                  />
-                )}
-              />
-
-              <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", width: "100%" }}>
-                <div style={{ flex: 1 }}>
-                  <Controller
-                    name={`projectTeam.${index}.roleInProject`}
-                    control={control}
-                    render={({ field: inputField }) => (
-                      <Select
-                        {...inputField}
-                        label="Papel"
-                        disabled={isEditMode} // Desabilita na edição
-                        error={!!errors.projectTeam?.[index]?.roleInProject}
-                        helperText={errors.projectTeam?.[index]?.roleInProject?.message}
-                        options={ROLE_IN_PROJECT}
-                        required={!isEditMode}
-                        placeholder="Nível"
-                      />
-                    )}
-                  />
-                </div>
-
-                {/* Botão de remover só aparece se NÃO for edição e tiver mais de 1 */}
-                {!isEditMode && fields.length > 0 && (
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    onClick={() => remove(index)}
-                    style={{ marginTop: "32px", padding: "10px" }}
-                  >
-                    <Trash2 size={20} />
-                  </Button>
-                )}
+            <div key={field.id} className={styles.members}>
+              <div className={styles.emailInputWrapper}>
+                <Controller
+                  name={`projectTeam.${index}.email`}
+                  control={control}
+                  render={({ field: inputField }) => (
+                    <Input
+                      {...inputField}
+                      label="E-mail do membro"
+                      disabled={isEditMode}
+                      type="email"
+                      placeholder="exemplo@email.com"
+                      error={!!errors.projectTeam?.[index]?.email}
+                      helperText={errors.projectTeam?.[index]?.email?.message}
+                      required={!isEditMode}
+                    />
+                  )}
+                />
               </div>
+
+              <div className={styles.roleSelectWrapper}>
+                <Controller
+                  name={`projectTeam.${index}.roleInProject`}
+                  control={control}
+                  render={({ field: inputField }) => (
+                    <Select
+                      {...inputField}
+                      label="Papel dentro do projeto"
+                      disabled={isEditMode}
+                      error={!!errors.projectTeam?.[index]?.roleInProject}
+                      helperText={errors.projectTeam?.[index]?.roleInProject?.message}
+                      options={ROLE_IN_PROJECT}
+                      required={!isEditMode}
+                      placeholder="Selecione"
+                    />
+                  )}
+                />
+              </div>
+
+              {!isEditMode && fields.length > 0 && (
+                <button
+                  type="button"
+                  className={styles.deleteButton}
+                  onClick={() => remove(index)}
+                  title="Remover membro"
+                >
+                  <Trash2 />
+                </button>
+              )}
             </div>
           ))}
         </fieldset>
 
         <div className={styles.buttonGroup}>
-          {/* Botão Novo Membro oculto na edição */}
-          {!isEditMode && (
-            <Button
-              type="button"
-              icon={<Plus />}
-              iconPosition="end"
-              onClick={() => append({ email: "", roleInProject: "" })}
-            >
-              Novo Membro
-            </Button>
-          )}
-
           <div>
+            {!isEditMode && (
+              <Button
+                type="button"
+                icon={<Plus />}
+                iconPosition="start"
+                onClick={() => append({ email: "", roleInProject: "" })}
+              >
+                Novo Membro
+              </Button>
+            )}
+          </div>
+
+          <div className={styles.actions}>
             <Button
               type="reset"
               variant="outlined"
@@ -345,8 +309,9 @@ const CreateProject = () => {
             >
               Cancelar
             </Button>
+
             <Button type="submit" disabled={!isValid || isSubmitting}>
-              {isSubmitting ? "Salvando..." : isEditMode ? "Salvar Alterações" : "Cadastrar"}
+              {isSubmitting ? "Salvando..." : isEditMode ? "Salvar Atualização" : "Cadastrar"}
             </Button>
           </div>
         </div>

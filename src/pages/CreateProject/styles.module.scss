@@ -12,62 +12,85 @@
   color: black;
   gap: 10px;
   width: fit-content;
+  margin-bottom: 2rem;
 
   h2 {
     font-size: 1.5rem;
+    font-weight: 600;
   }
 }
 
 form {
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 
 legend {
-  font-weight: 800;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
 }
 
 fieldset {
   border: none;
   margin-bottom: 3rem;
+  padding: 0;
 }
 
 .project {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 24px;
+  max-width: 800px;
 }
 
 .members {
   display: flex;
-  gap: 20px;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.emailInputWrapper {
+  flex: 1;
+}
+
+.roleSelectWrapper {
+  width: 300px;
+  flex-shrink: 0;
 }
 
 .deleteButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  align-self: center;
-  border: 1px solid red;
-  background: none;
-  border-radius: 5px;
-  color: red;
+  background: transparent;
+  border: none;
+  color: #d32f2f;
   cursor: pointer;
-  padding: 10px;
+  padding: 12px;
+  margin-bottom: 2px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .buttonGroup {
   display: flex;
   justify-content: space-between;
-  margin-top: -10px;
+  align-items: center;
+  margin-top: 40px;
 
-  button {
-    width: fit-content;
-  }
-
-  div {
+  .actions {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
   }
 }
