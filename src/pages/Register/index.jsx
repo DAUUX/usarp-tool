@@ -31,7 +31,6 @@ const Register = () => {
   const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
   const { modalProps, openModal, closeModal } = useModal();
-
   const navigate = useNavigate();
 
   const schema = useMemo(
@@ -86,20 +85,42 @@ const Register = () => {
     [navigate]
   );
 
-  const modalError = useMemo(
-    () => ({
+  const getErrorModalConfig = (error) => {
+    const status = error?.response?.status;
+    const data = error?.response?.data;
+
+    // Erro 400 - Validação
+    if (status === 400 && data?.errors) {
+      const errorMessage = Array.isArray(data.errors) ? data.errors.join("\n") : "Verifique os dados informados.";
+
+      return {
+        type: "error",
+        title: "Dados Inválidos",
+        text: errorMessage,
+        buttonText: "Ok, fechar",
+        onButtonClick: () => closeModal(),
+      };
+    }
+
+    // Erro 500 - Servidor
+    if (status === 500) {
+      return {
+        type: "error",
+        title: "Erro no Servidor",
+        text: "Ocorreu um problema interno ao processar seu cadastro. Por favor, tente novamente mais tarde.",
+        buttonText: "Ok, fechar",
+        onButtonClick: () => closeModal(),
+      };
+    }
+
+    return {
       type: "error",
-      title: "Erro no cadastro",
-      text: "Ocorreu um erro ao criar sua conta. Por favor, tente novamente.",
-      buttonText: "Fechar",
-      onButtonClick: () => {
-        closeModal();
-        reset();
-        setActiveStep(0);
-      },
-    }),
-    [closeModal, reset]
-  );
+      title: "Erro ao realizar Cadastro",
+      text: `Falha na conexão ou erro desconhecido. Verifique sua internet.`,
+      buttonText: "Ok, fechar",
+      onButtonClick: () => closeModal(),
+    };
+  };
 
   const handleSubmitForm = async (data) => {
     const payload = {
@@ -107,13 +128,14 @@ const Register = () => {
       birthdate: formatDateToDMY(data.birthdate),
     };
 
-    await register(payload, {
-      openModal,
-      closeModal,
-      reset,
-      modalSuccess,
-      modalError,
-    });
+    try {
+      await register(payload);
+      openModal(modalSuccess);
+      reset();
+    } catch (error) {
+      const errorConfig = getErrorModalConfig(error);
+      openModal(errorConfig);
+    }
   };
 
   const handleNext = async () => {

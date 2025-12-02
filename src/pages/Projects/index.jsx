@@ -86,6 +86,47 @@ const Projects = () => {
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, isHidden: !p.isHidden } : p)));
   };
 
+  const handleDeleteProject = async (id) => {
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir este projeto? Essa ação não pode ser desfeita."
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      setIsLoading(true);
+
+      await axios.delete(`${config.baseUrl}/project/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProjects((prevProjects) => prevProjects.filter((p) => p.id !== id));
+
+      alert("Projeto excluído com sucesso.");
+    } catch (error) {
+      console.error("Erro ao excluir projeto:", error);
+
+      if (error.response) {
+        const { status, data } = error.response;
+
+        if (status === 400 && data.hasBrainstormings) {
+          alert("Não é possível excluir: Existem brainstormings vinculados a este projeto.");
+        } else if (status === 403) {
+          alert("Permissão negada: Apenas o criador pode excluir o projeto.");
+        } else if (status === 404) {
+          alert("Projeto não encontrado. Ele pode já ter sido excluído.");
+          setProjects((prev) => prev.filter((p) => p.id !== id));
+        } else {
+          alert(data.message || "Erro ao excluir o projeto.");
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
       if (filter === "Ocultos") {
@@ -150,6 +191,7 @@ const Projects = () => {
           rows={filteredProjects}
           onToggleFavorite={handleToggleFavorite}
           onHideProject={handleHideProject}
+          onDeleteProject={handleDeleteProject}
           filter={filter}
         />
       )}
