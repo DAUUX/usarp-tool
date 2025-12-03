@@ -12,7 +12,10 @@
       font-size: 20px;
       font-weight: 600;
     }
-    button {
+    input[type="file"] {
+      display: none;
+    }
+    .inputAvatar {
       padding: 16px 24px;
       border-radius: 16px;
       border: var(--th-border-secondary-button);
@@ -64,7 +67,7 @@
         color: var(--th-color-text-profile-label-edit);
         padding-bottom: 7px;
       }
-  
+
       input {
         width: 100%;
         height: 56px;
@@ -142,4 +145,8 @@
   &:focus {
     outline: 2px solid var(--th-color-button-focus);
   }
+}
+
+.loading {
+  color: red;
 }

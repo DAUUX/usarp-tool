@@ -8,6 +8,7 @@
   "loginAlertErrorDes": "Instabilidade no servidor",
   "loginAlertErrorTitle": "Falha ao realizar login",
   "loginAlertErrorBtn": "Ok, fechar",
+  "loginErrorSenhaRequerida": "Senha é um campo obrigatório!",
   "loginErrorSenhaMinima": "A senha deve conter pelo menos 8 caracteres!",
   "loginErrorSenhaMaxima": "A senha deve conter no máximo 15 caracteres!",
   "loginEsqueci": "Esqueci minha senha",
@@ -47,6 +48,8 @@
   "cadastrarCampoGeneroPN": "Prefiro não informar",
   "cadastrarCampoPerfil": "Perfil",
 
+  "possuiConta": "Já possui uma conta?",
+
   "cadastrarCampoPerfilEstudanteGraduação": "Estudante de Graduação",
   "cadastrarCampoPerfilEstudantePos": "Estudante de Pós-Graduação",
   "cadastrarCampoPerfilProfessor": "Professor",
@@ -70,5 +73,7 @@
   "homeButaoNovoBrainstorming": "Novo Brainstorming",
   "homeRecentes": "Recentes",
   "homeSemBrainstormingPart1": "Ainda não há nada aqui.",
-  "homeSemBrainstormingPart2": " Crie seu primeiro brainstorming agora."
+  "homeSemBrainstormingPart2": " Crie seu primeiro brainstorming agora.",
+
+  "loginButtonCarregando": "Entrando..."
 }

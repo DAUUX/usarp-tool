@@ -4,6 +4,7 @@
   "loginButton": "Login",
   "loginErrorEmail": "E-mail is a required field!",
   "loginErrorEmailValido": "Must be a valid e-mail!",
+  "loginErrorSenhaRequerida": "Password is a required field!",
   "loginErrorToast": "Incorrect email and/or password!",
   "loginAlertErrorDes": "Server instability",
   "loginAlertErrorTitle": "Login failed",
@@ -70,5 +71,8 @@
   "homeButaoNovoBrainstorming": "New Brainstorming",
   "homeRecentes": "Recent",
   "homeSemBrainstormingPart1": "There's nothing here yet.",
-  "homeSemBrainstormingPart2": " Create your first brainstorming now."
+  "homeSemBrainstormingPart2": " Create your first brainstorming now.",
+
+  "loginButtonCarregando": "Logging in...",
+  "possuiConta": "Already have an account?"
 }

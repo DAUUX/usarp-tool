@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "./styles.module.scss"
+import styles from "./styles.module.scss";
 import { DataView } from "./DataView";
 import { set, useForm } from "react-hook-form";
 import { useState, useContext, useEffect } from "react";
@@ -11,26 +11,29 @@ import { Modal } from "../../components/Modal";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
 import { URL as baseURL, URL } from "../../utils/base";
+import { images } from "../../assets/images/images";
 
 export function Profile() {
-  const navigate = useNavigate();  // Inicialize o hook useNavigate
+  const navigate = useNavigate(); // Inicialize o hook useNavigate
   const { user } = useAuth();
-  const [editMode, setEditMode] = useState(false);
   const [modalVisibility, setModalVisibility] = useState(false);
-  const [userData, setUserData] = useState('');
   const { setAlert } = useContext(FormSubmitContext);
-  
-  const createDateFromString = (dateString) =>{
+
+  const [userData, setUserData] = useState("");
+  const [editMode, setEditMode] = useState(false);
+
+  const createDateFromString = (dateString) => {
     // A string deve estar no formato "yyyy-MM-dd"
-    if(dateString === undefined || dateString === null || dateString ===""){
+    // dd/mm/yyyy
+    if (dateString === undefined || dateString === null || dateString === "") {
       return dateString;
-    } else{
-      const [ dia, mes, ano] = dateString.split("/");
+    } else {
+      const [dia, mes, ano] = dateString.split("/");
       return `${ano}-${mes}-${dia}`;
     }
-  }
+  };
 
-  function editarValores(mode){
+  const editarValores = (mode) => {
     setEditMode(mode);
     setUserData({
       fullName: userData.fullName,
@@ -41,19 +44,20 @@ export function Profile() {
       organization: userData.organization,
     });
     reset(userData);
-  }
-  
+  };
+
   useEffect(() => {
-    axios.get(baseURL + '/user', {
+    axios
+      .get(baseURL + "/user", {
         params: {
-          id: user.id
-        }
+          id: user.id,
+        },
       })
-      .then(res => {
-        res.data.birthdate = createDateFromString(res.data.birthdate)
+      .then((res) => {
+        res.data.birthdate = createDateFromString(res.data.birthdate);
         setUserData(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         setAlert(true);
       });
@@ -104,72 +108,105 @@ export function Profile() {
   // }, [setAlert]);
 
   const handleSubmitForm = (data) => {
+    // Converter a data para o formato DD/MM/AAAA
+    const formattedBirthdate = data.birthdate.split("-").reverse().join("/"); // "yyyy-MM-dd" -> "dd/MM/yyyy"
 
-  // Converter a data para o formato DD/MM/AAAA
-  const formattedBirthdate = data.birthdate.split('-').reverse().join('/'); // "yyyy-MM-dd" -> "dd/MM/yyyy"
-
-    axios.put(baseURL + '/user/update', {
-      email: data.email,
-      fullName: data.fullName,
-      gender: data.gender,
-      birthdate: formattedBirthdate,  // Envia a data no formato "DD/MM/AAAA"
-      profile: data.profile,
-      organization: data.organization,
-    })
-      .then(res => { 
+    axios
+      .put(baseURL + "/user/update", {
+        email: data.email,
+        fullName: data.fullName,
+        gender: data.gender,
+        birthdate: formattedBirthdate, // Envia a data no formato "DD/MM/AAAA"
+        profile: data.profile,
+        organization: data.organization,
+      })
+      .then((res) => {
         console.log(res.data);
-        res.data.birthdate = createDateFromString(res.data.birthdate)
+        res.data.birthdate = createDateFromString(res.data.birthdate);
         setUserData(res.data);
         setModalVisibility(true);
       })
-      .catch( err => {
+      .catch((err) => {
         setAlert({
           message: "Desculpe, servidor indisponível no momento",
           icon: "wifioff",
-          type: "warning"
-        })
-      })
+          type: "warning",
+        });
+      });
   };
 
-  if(userData === null) {
-    return <div>Carregando...</div>;
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const validTypes = ["image/jpeg", "image/png"];
+    const maxSize = 3 * 1024 * 1024; // 3MB
+
+    if (!validTypes.includes(file.type)) {
+      //validation message
+      return;
+    }
+
+    if (file.size > maxSize) {
+      //validation message
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    axios.put(`${URL}/user`, formData).then((response) => {
+      setUserData((prevData) =>
+        ({
+          ...prevData,
+          avatar: response.data.avatar, // Supondo que a resposta contenha a URL da nova imagem
+        }.catch((error) => {
+          setAlert({
+            message: "Erro ao fazer upload da imagem",
+            icon: "error",
+            type: "warning",
+          });
+        }))
+      );
+    });
+  };
+
+  if (userData === null) {
+    return <div className="loading">Carregando...</div>;
   }
 
   return (
     <div className={styles.Profile}>
       <header>
         <img
-          src="../../src/assets/icons/userPlaceholder.svg"
+          src={userData.avatar || images.defaultProfile}
           alt="Foto do usuário"
           width="80"
           height="80"
         />
         <p>{userData.fullName || "undefined"}</p>
-        <button>Editar foto de perfil</button>
+        <input
+          type="file"
+          id="avatar-input"
+          accept="image/jpeg, image/png"
+          onChange={handleAvatarUpload}
+          style={{ display: "none" }}
+        />
+        <label htmlFor="avatar-input" className={styles.inputAvatar}>
+          Editar foto de perfil
+        </label>
       </header>
-      <hr/>
+      <hr />
       {!editMode ? (
         <section>
-          <DataView
-            legend="E-mail"
-            data={userData.email}
-            id="viewEmail"
-          />
-          <DataView
-            legend="Gênero"
-            data={userData.gender}
-            id="viewGender"
-          />
+          <DataView legend="E-mail" data={userData.email} id="viewEmail" />
+          <DataView legend="Gênero" data={userData.gender} id="viewGender" />
           <DataView
             legend="Data de nascimento"
             data={userData.birthdate}
             id="viewBirthDate"
           />
-          <DataView
-            legend="Perfil"
-            data={userData.profile}
-            id="viewProfile"
-          />
+          <DataView legend="Perfil" data={userData.profile} id="viewProfile" />
           <DataView
             legend="Organização"
             data={userData.organization}
@@ -178,11 +215,12 @@ export function Profile() {
           <button
             onClick={() => editarValores(true)}
             className={styles.Profile__PrimaryButton}
-            type="button">
+            type="button"
+          >
             Editar dados
           </button>
         </section>
-        ) : (
+      ) : (
         <section>
           <form
             onSubmit={handleSubmit(handleSubmitForm)}
@@ -242,14 +280,21 @@ export function Profile() {
                 // ]}
 
                 data={[
-                  { label: "Estudante de Graduação", value: "Estudante de Graduação" },
-                  { label: "Estudante de Pós-Graduação", value: "Estudante de Pós-Graduação" },
+                  {
+                    label: "Estudante de Graduação",
+                    value: "Estudante de Graduação",
+                  },
+                  {
+                    label: "Estudante de Pós-Graduação",
+                    value: "Estudante de Pós-Graduação",
+                  },
                   { label: "Professor", value: "Professor" },
-                  { label: "Profissional da Indústria", value: "Profissional da Indústria" },
+                  {
+                    label: "Profissional da Indústria",
+                    value: "Profissional da Indústria",
+                  },
                 ]}
-
-              >
-              </InputDropdown>
+              ></InputDropdown>
             </div>
             <div>
               <InputDropdown
@@ -269,11 +314,12 @@ export function Profile() {
                   { label: "Feminino", value: "Feminino" },
                   { label: "Masculino", value: "Masculino" },
                   { label: "Não-binário", value: "Não binário" },
-                  { label: "Prefiro não informar", value: "Prefiro não informar" },
+                  {
+                    label: "Prefiro não informar",
+                    value: "Prefiro não informar",
+                  },
                 ]}
-              
-              >
-              </InputDropdown>
+              ></InputDropdown>
             </div>
             <div>
               <label htmlFor="organization">Organização</label>
@@ -285,19 +331,28 @@ export function Profile() {
                 required={errors.organization ? true : false}
               />
               {errors.organization && (
-                <p className={styles.card__error}>{errors.organization.message}</p>
+                <p className={styles.card__error}>
+                  {errors.organization.message}
+                </p>
               )}
             </div>
             <button
               onClick={() => editarValores(false)}
               className={styles.Profile__SecondaryButton}
-              type="button">
+              type="button"
+            >
               Cancelar
             </button>
-            <button className={styles.Profile__PrimaryButton}
+            <button
+              className={styles.Profile__PrimaryButton}
               type="submit"
-              disabled={!formState.isDirty || !formState.isValid || formState.isSubmitSuccessful}>
-                Salvar dados
+              disabled={
+                !formState.isDirty ||
+                !formState.isValid ||
+                formState.isSubmitSuccessful
+              }
+            >
+              Salvar dados
             </button>
           </form>
           <Modal.Root isOpen={modalVisibility}>
@@ -309,12 +364,12 @@ export function Profile() {
             <Modal.Button
               primaryButton={{
                 label: "Voltar para perfil",
-                onClick: () => setModalVisibility(false)
+                onClick: () => setModalVisibility(false),
               }}
             />
           </Modal.Root>
         </section>
       )}
     </div>
-  )
+  );
 }

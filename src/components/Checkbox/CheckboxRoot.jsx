@@ -1,5 +1,5 @@
-import { IconChoice } from "../../utils/IconChoice";
 import styles from "./styles.module.scss";
+import { Check } from "lucide-react";
 
 export function CheckboxRoot({ children, checked, ...props }) {
   return (
@@ -7,7 +7,7 @@ export function CheckboxRoot({ children, checked, ...props }) {
       <input type="checkbox" {...props} />
       <div className={styles.checkmark + ` ${checked ? styles.checked : ""}`}>
         <span className={styles.checkmark__icon}>
-          <IconChoice icon={"check"} />
+          <Check />
         </span>
       </div>
       {children}
