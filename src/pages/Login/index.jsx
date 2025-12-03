@@ -1,136 +1,141 @@
-import { useState, useMemo } from "react";
-
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useTranslation } from "react-i18next";
-
-import { useLogin } from "../../hooks/useLogin";
-
-import Wrapper from "../../layouts/Wrapper/Wrapper";
-
-import Input from "../../components/ui/Input/Input";
-import Button from "../../components/ui/Button/Button";
-import Link from "../../components/ui/Link/Link";
-import Alert from "../../components/ui/Alert/Alert";
-
-import { config } from "../../utils/config";
-
-import { images } from "../../assets/images/images";
-
 import styles from "./styles.module.scss";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Wrapper from "../../components/Wrapper";
+import InputPassword from "../../components/InputPassword";
+import { IconChoice } from "../../utils/IconChoice";
+import { Toast } from "../../components/Toast";
+import { FeedbackAlert } from "../../components/FeedbackAlert";
+import { useAlert } from "../../hooks/useAlert";
+import { useAuth } from "../../hooks/useAuth";
+import { URL as baseURL } from "../../utils/base";
+import { useTranslation } from "react-i18next";
+import LoginService from "./login.service";
+import { useState } from "react";
 
-const Login = () => {
+export default function Login() {
   const { t } = useTranslation();
-  const { login, isLoading } = useLogin(config.baseUrl);
-  const [toastError, setToastError] = useState(false);
+  const schema = Yup.object().shape({
+    email: Yup.string()
+      .email(t("loginErrorEmailValido"))
+      .required(t("loginErrorEmail")),
+    password: Yup.string()
+      .min(6, t("loginErrorSenhaMinima"))
+      .max(15, t("loginErrorSenhaMaxima"))
+      .required(),
+  });
+  const { register, handleSubmit, formState } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(schema),
+  });
+  const { user } = useAuth();
+  const { errors } = formState;
+  const { close } = useAlert();
+  const { Login } = LoginService(baseURL);
+  const [toastError, setToastError] = useState();
 
-  const schema = useMemo(
-    () =>
-      Yup.object().shape({
-        email: Yup.string().email(t("loginErrorEmailValido")).required(t("loginErrorEmail")),
-        password: Yup.string()
-          .min(8, t("loginErrorSenhaMinima"))
-          .max(15, t("loginErrorSenhaMaxima"))
-          .required(t("loginErrorSenhaRequerida")),
-      }),
-    [t]
+  const alertSuccess = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="checkcircle" />
+      <FeedbackAlert.Title
+        title={t("loginAlertSucesso")}
+        name={`, ${user.fullName}`}
+      />
+      <FeedbackAlert.Description description={t("loginAlertDescricao")} />
+    </FeedbackAlert.Root>
   );
 
-  const { control, handleSubmit, formState } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(schema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  const alertError = (
+    <FeedbackAlert.Root>
+      <FeedbackAlert.Icon icon="closecircle" />
+      <FeedbackAlert.Title title={t("loginAlertErrorTitle")} />
+      <FeedbackAlert.Description description={t("loginAlertErrorDes")} />
+      <FeedbackAlert.Button onClick={close} label={t("loginAlertErrorBtn")} />
+    </FeedbackAlert.Root>
+  );
 
-  const { errors, isValid, isSubmitting } = formState;
-
-  const handleSubmitForm = async (data) => {
+  const handleSubmitForm = async (body) => {
     try {
+      await Login(body, alertSuccess, alertError);
       setToastError(false);
-      await login(data);
     } catch (error) {
-      console.error("Form submission error:", error);
       setToastError(true);
+      setTimeout(() => {
+        setToastError(false);
+      }, 2000);
     }
   };
 
   const handleCloseToast = () => {
     setToastError(false);
   };
-
   return (
-    <div className={styles.container}>
-      <Wrapper>
-        <figure>
-          <img src={images.logo2} alt="logo USARP" style={{ width: "6.5rem" }} />
-        </figure>
-        <form onSubmit={handleSubmit(handleSubmitForm)} noValidate>
-          {toastError && (
-            <Alert
-              severity="error"
-              text={t("loginErrorToast")}
-              title={"Erro ao fazer Login"}
-              onClose={handleCloseToast}
-            />
-          )}
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                label={t("loginEmail")}
+    <Wrapper>
+      {toastError && (
+        <Toast
+          onClick={handleCloseToast}
+          type={"error"}
+          message={t("loginErrorToast")}
+        >
+          <IconChoice icon="close" />
+        </Toast>
+      )}
+      <div className={styles.card__container}>
+        <section className={styles.card__body}>
+          <form onSubmit={handleSubmit(handleSubmitForm)}>
+            <div>
+              <label htmlFor="email">{t("loginEmail")}</label>
+              <input
+                {...register("email")}
+                autoFocus={true}
                 type="email"
+                name="email"
+                id="email"
                 placeholder="exemplo@usarp.com"
                 required
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                disabled={isLoading}
               />
-            )}
-          />
-
-          <Controller
-            name="password"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                label={t("loginPassword")}
+              {errors.email && (
+                <p className={styles.card__error}>{errors.email.message}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="password">{t("loginPassword")}</label>
+              <InputPassword
+                label={"password"}
+                register={register}
                 type="password"
-                placeholder="••••••"
-                required
-                minLength={6}
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                showPasswordToggle={true}
-                disabled={isLoading}
+                name="password"
+                id="password"
+                minLength="6"
+                required={errors.password ? true : false}
+                placeholder="•••••••••"
               />
-            )}
-          />
+              {errors.password && (
+                <p className={styles.card__error}>{errors.password.message}</p>
+              )}
 
-          <div className={styles.forgotPasswordContainer}>
-            <Link to="/recover" bold underline="always">
-              {t("loginEsqueci")}
-            </Link>
-          </div>
-
-          <Button type="submit" variant="contained" disabled={!isValid || isSubmitting}>
-            {isLoading ? t("loginButtonCarregando") : t("loginButton")}
-          </Button>
-        </form>
-        <div>
+              <b>
+                <Link to="/recover">{t("loginEsqueci")}</Link>
+              </b>
+            </div>
+            <button
+              disabled={!formState.isValid}
+              className={styles.card__button}
+              type="submit"
+            >
+              {t("loginButton")}
+            </button>
+          </form>
+        </section>
+        <section className={styles.card__footer}>
           <p>
-            {t("cadastrarConta")} <Link to="/cadastro">{t("loginCriarAgora")}</Link>
+            {t("loginSemCadastro")}
+            <Link to="/cadastro">{t("loginCriarAgora")}</Link>
           </p>
-        </div>
-      </Wrapper>
-    </div>
+        </section>
+      </div>
+    </Wrapper>
   );
-};
-
-export default Login;
+}

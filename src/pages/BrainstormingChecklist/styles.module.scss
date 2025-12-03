@@ -108,8 +108,6 @@
   }
 
   .content {
-    display: flex;
-    gap: 2rem;
     padding: 1.5rem;
 
     .checklist__container {
@@ -123,8 +121,7 @@
       border-radius: 1rem;
       box-shadow: 4px 4px 24px 0px rgba(0, 0, 0, .05);
 
-      min-width: 375px;
-      max-width: 375px;
+      width: 375px;
 
       h6 {
         font-weight: 600;

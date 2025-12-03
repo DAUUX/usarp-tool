@@ -27,6 +27,7 @@ export const AlertProvider = ({ children }) => {
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAlert = () => useContext(AlertContext);
 
+
 AlertProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };

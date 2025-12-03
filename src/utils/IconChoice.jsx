@@ -1,11 +1,14 @@
+import Usarp from "../assets/icons/usarp_icon.svg?react";
 import PropTypes from "prop-types";
 import { Dash } from "../assets/icons/dash";
 import { EyeOn } from "../assets/icons/EyeOn";
 import { EyeOff } from "../assets/icons/EyeOff";
 import { Close } from "../assets/icons/close";
+import { Check } from "../assets/icons/Check";
 import { Brainstorming } from "../assets/icons/Brainstorming";
 import { Home } from "../assets/icons/Home";
 import { Project } from "../assets/icons/Project";
+import { Option } from "../assets/icons/Option";
 import { CloseCircle } from "../assets/icons/CloseCircle";
 import { CheckCircle } from "../assets/icons/CheckCircle";
 import { Gear } from "../assets/icons/Gear";
@@ -16,6 +19,7 @@ import { Plus } from "../assets/icons/Plus";
 import { Arrow } from "../assets/icons/Arrow";
 import { Calendar } from "../assets/icons/Calendar";
 import { Clock } from "../assets/icons/Clock";
+// import { WarningCircle } from "../assets/icons/WarningCircle";
 import { Info } from "../assets/icons/Info";
 import { ArrowUp } from "../assets/icons/ArrowUp";
 import { Develop } from "../assets/icons/Develop";
@@ -38,6 +42,7 @@ import { User03Orange } from "../assets/icons/User03_orange";
 import { User04Orange } from "../assets/icons/User04_orange";
 import { User05Orange } from "../assets/icons/User05_orange";
 import { User06Orange } from "../assets/icons/User06_orange";
+import { ChevronDown } from "../assets/icons/ChevronDown";
 import { ArrowRightShort } from "../assets/icons/ArrowRightShort";
 import { Information } from "../assets/icons/IInformation";
 
@@ -45,6 +50,8 @@ export function IconChoice({ icon, color, ...rest }) {
   switch (icon) {
     case "arrowRightShort":
       return <ArrowRightShort {...rest} />;
+    case "usarp":
+      return <Usarp {...rest} />;
     case "eyeOn":
       return <EyeOn color={color} {...rest} />;
     case "eyeOff":
@@ -53,16 +60,22 @@ export function IconChoice({ icon, color, ...rest }) {
       return <Dash color={color} {...rest} />;
     case "close":
       return <Close color={color} {...rest} />;
+    case "check":
+      return <Check color={color} {...rest} />;
     case "home":
       return <Home color={color} {...rest} />;
     case "project":
       return <Project color={color} {...rest} />;
     case "brainstorming":
       return <Brainstorming color={color} {...rest} />;
+    case "option":
+      return <Option color={color} {...rest} />;
     case "closecircle":
       return <CloseCircle color={color} {...rest} />;
     case "checkcircle":
       return <CheckCircle color={color} {...rest} />;
+    case "warningcircle":
+      return <WarningCircle color={color} {...rest} />;
     case "gear":
       return <Gear color={color} {...rest} />;
     case "lock":
@@ -123,9 +136,15 @@ export function IconChoice({ icon, color, ...rest }) {
       return <StatisticsLamp color={color} {...rest} />;
     case "statisticsUserStory":
       return <StatisticsUserStory color={color} {...rest} />;
+    case "chevronDown":
+      return <ChevronDown color={color} {...rest} />;
     case "information":
       return <Information color={color} {...rest} />;
     default:
       return null;
   }
 }
+IconChoice.propTypes = {
+  icon: PropTypes.node.isRequired,
+  color: PropTypes.string,
+};

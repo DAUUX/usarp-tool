@@ -1,3 +1,4 @@
+import { Dropdown } from "../../components/Dropdown";
 import { Input } from "../../components/Input/indes";
 import { IconChoice } from "../../utils/IconChoice";
 import styles from "./styles.module.scss";
@@ -26,11 +27,11 @@ export function ViewBrainstorming() {
       </header>
       <div className={styles.viewBrainstorming__content}>
         <div className={styles.viewBrainstorming__filter}>
-         {/*} <Dropdown.Root default={true}>
+          <Dropdown.Root default={true}>
             <Dropdown.Trigger title="Todos" />
-            {* <Dropdown.Menu>
+            {/* <Dropdown.Menu>
                 <Dropdown.Item value="todos">All</Dropdown.Item>
-              </Dropdown.Menu> *}
+              </Dropdown.Menu> */}
           </Dropdown.Root>
           <Dropdown.Root>
             <Dropdown.Trigger title="Recentes" />
@@ -62,7 +63,7 @@ export function ViewBrainstorming() {
               </Dropdown.Item>
               <Dropdown.Item value="Mais antigos">Mais antigos</Dropdown.Item>
             </Dropdown.Menu>
-          </Dropdown.Root> */}
+          </Dropdown.Root>
         </div>
         <div className={styles.viewBrainstorming__table}>
           <table>

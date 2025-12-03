@@ -24,12 +24,5 @@ export default ({ mode }) => {
     define: {
       "process.env.BASE_URL": JSON.stringify(env.BASE_URL),
     },
-
-    //testes
-    test: {
-      global: true,
-      environment: "jsdom",
-      setupFiles: "./.storybook/vitest.setup.js",
-    },
   });
 };

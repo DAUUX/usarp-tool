@@ -1,0 +1,121 @@
+/* src/styles/Dropdown.scss */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+  /* Gray colors/200 */
+  border: 0.06rem solid #e0e0e0;
+  border-radius: 1rem;
+  /* Neutrals/White */
+  background: #ffffff;
+  /* Body/Small */
+  color: #004548;
+  font-family: Inter;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: 0%;
+  text-align: left;
+}
+
+.dropdown__selected {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+  /* Gray colors/200 */
+  border-radius: 1rem;
+  color: #004548;
+  font-family: Inter;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: 0%;
+  text-align: left;
+
+  /* Primary/200 */
+  border: 0.06rem solid rgb(153, 222, 225);
+  border-radius: 1rem;
+  /* Primary/100 */
+  background: rgb(204, 239, 240);
+}
+
+.dropdown_trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  svg {
+    fill: #757575;
+  }
+
+  .clear_button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.dropdown_close {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: transparent;
+  // box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+.dropdown_open {
+  position: absolute;
+  // left: 0;
+  // transform: translateX(0%) translateY(0px);
+  box-sizing: border-box;
+  border: 0.06rem solid #e0e0e0;
+  border-radius: 1rem;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  z-index: 1;
+  margin-top: 1.2rem;
+  max-width: 18rem;
+  min-width: 16rem;
+  
+  .dropdown_menu_item {
+    cursor: pointer;
+    /* Body/Small */
+    color: #757575;
+    font-family: Inter;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 150%;
+    text-align: left;
+    width: 100%;
+    padding: 0.4rem 1rem;
+    
+    &:first-child{
+      border-top-left-radius: 14px;
+      border-top-right-radius: 14px;
+    }
+    &:last-child{
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+    }
+    &:hover {
+      background-color: #cceff0;
+      color: #004548;
+    }
+  }
+
+}
