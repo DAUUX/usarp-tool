@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 
+import useModal from "./useModal";
+import Modal from "../layouts/Modal/Modal";
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
@@ -31,12 +34,33 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(initialUserState);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { openModal, modalProps, closeModal } = useModal();
+
   const handleLogout = useCallback(() => {
     setTokenState("");
     setUser(initialUserState);
     localStorage.removeItem("@AccessToken");
     delete axios.defaults.headers.common["Authorization"];
   }, []);
+
+  const handleSessionExpired = useCallback(() => {
+    const currentToken = localStorage.getItem("@AccessToken");
+    if (!currentToken) return;
+
+    openModal({
+      type: "warning",
+      title: "Sessão Expirada",
+      text: "Seu tempo de acesso acabou. Por favor, faça login novamente para continuar.",
+      buttonText: "Voltar para Login",
+      onButtonClick: () => {
+        closeModal();
+        handleLogout();
+      },
+      onClose: () => {
+        handleLogout();
+      },
+    });
+  }, [openModal, closeModal, handleLogout]);
 
   const setToken = useCallback(
     (newToken) => {
@@ -71,6 +95,38 @@ export const AuthProvider = ({ children }) => {
   );
 
   useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          const isLoginRoute = error.config.url && error.config.url.includes("/auth/signin");
+
+          if (!isLoginRoute) {
+            handleSessionExpired();
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [handleSessionExpired]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedToken = localStorage.getItem("@AccessToken");
+
+      if (storedToken && !validateToken(storedToken)) {
+        handleSessionExpired();
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [handleSessionExpired]);
+
+  useEffect(() => {
     const initializeAuth = () => {
       const storedToken = localStorage.getItem("@AccessToken");
 
@@ -98,7 +154,12 @@ export const AuthProvider = ({ children }) => {
     [user, token, isLoading, setToken, handleLogout]
   );
 
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={contextValue}>
+      {children}
+      <Modal {...modalProps} />
+    </AuthContext.Provider>
+  );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
