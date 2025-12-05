@@ -2,30 +2,34 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import dotenv from "dotenv";
+import path from "path"; // Import necessário para o alias funcionar bem
 
 export default ({ mode }) => {
-  // Carrega variáveis de ambiente correspondentes ao modo
   const env = dotenv.config({ path: `./.env.${mode}` }).parsed;
 
   return defineConfig({
     base: "/",
     plugins: [svgr(), react()],
+
+    resolve: {
+      alias: {
+        "@mui/styled-engine": "@mui/styled-engine-sc",
+      },
+    },
+
     server: {
-      port: env.PORT || 3000, // Usa a porta definida nas variáveis de ambiente ou 3000 por padrão
+      port: env?.PORT || 3000,
       strictPort: true,
       host: true,
-      origin: env.ORIGIN || "http://localhost:3000", // Usa o origin definido nas variáveis de ambiente ou localhost:3000 por padrão
+      origin: env?.ORIGIN || "http://localhost:3000",
     },
-    // Configuração da visualização
     preview: {
-      port: env.PREVIEW_PORT || 3000, // Usa a porta definida nas variáveis de ambiente ou 3001 por padrão
+      port: env?.PREVIEW_PORT || 3000,
       strictPort: true,
     },
     define: {
-      "process.env.BASE_URL": JSON.stringify(env.BASE_URL),
+      "process.env.BASE_URL": JSON.stringify(env?.BASE_URL),
     },
-
-    //testes
     test: {
       global: true,
       environment: "jsdom",
