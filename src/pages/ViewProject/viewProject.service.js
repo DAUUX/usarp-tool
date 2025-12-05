@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { api } from "../../utils/axios.config";
+import { api } from "../../utils/api";
 import { formatDateToDDMMYYYY } from "../../utils/formatDate";
 
 const ViewProjectService = (url) => {

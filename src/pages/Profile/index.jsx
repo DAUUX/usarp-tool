@@ -10,7 +10,7 @@ import { FormSubmitContext } from "../../components/ConfigurationsLayout";
 import { Modal } from "../../components/Modal";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
-import { URL as baseURL, URL } from "../../utils/base";
+import { config } from "../../utils/config";
 import { images } from "../../assets/images/images";
 
 export function Profile() {
@@ -48,7 +48,7 @@ export function Profile() {
 
   useEffect(() => {
     axios
-      .get(baseURL + "/user", {
+      .get(config.baseUrl + "/user", {
         params: {
           id: user.id,
         },
@@ -65,9 +65,7 @@ export function Profile() {
 
   const schema = Yup.object().shape({
     fullName: Yup.string().required("Nome Completo é um campo obrigatório!"),
-    email: Yup.string()
-      .email("Deve ser um E-mail válido!")
-      .required("E-mail é um campo obrigatório!"),
+    email: Yup.string().email("Deve ser um E-mail válido!").required("E-mail é um campo obrigatório!"),
     organization: Yup.string().required("Organização é um campo obrigatório!"),
   });
 
@@ -87,7 +85,7 @@ export function Profile() {
   const { errors } = formState;
 
   // useEffect(() => {
-  //   axios.get(baseURL + '/user', {
+  //   axios.get(config.baseUrl + '/user', {
   //       params: {
   //         id: user.id
   //       }
@@ -112,7 +110,7 @@ export function Profile() {
     const formattedBirthdate = data.birthdate.split("-").reverse().join("/"); // "yyyy-MM-dd" -> "dd/MM/yyyy"
 
     axios
-      .put(baseURL + "/user/update", {
+      .put(config.baseUrl + "/user/update", {
         email: data.email,
         fullName: data.fullName,
         gender: data.gender,
@@ -178,12 +176,7 @@ export function Profile() {
   return (
     <div className={styles.Profile}>
       <header>
-        <img
-          src={userData.avatar || images.defaultProfile}
-          alt="Foto do usuário"
-          width="80"
-          height="80"
-        />
+        <img src={userData.avatar || images.defaultProfile} alt="Foto do usuário" width="80" height="80" />
         <p>{userData.fullName || "undefined"}</p>
         <input
           type="file"
@@ -201,31 +194,16 @@ export function Profile() {
         <section>
           <DataView legend="E-mail" data={userData.email} id="viewEmail" />
           <DataView legend="Gênero" data={userData.gender} id="viewGender" />
-          <DataView
-            legend="Data de nascimento"
-            data={userData.birthdate}
-            id="viewBirthDate"
-          />
+          <DataView legend="Data de nascimento" data={userData.birthdate} id="viewBirthDate" />
           <DataView legend="Perfil" data={userData.profile} id="viewProfile" />
-          <DataView
-            legend="Organização"
-            data={userData.organization}
-            id="viewOrganization"
-          />
-          <button
-            onClick={() => editarValores(true)}
-            className={styles.Profile__PrimaryButton}
-            type="button"
-          >
+          <DataView legend="Organização" data={userData.organization} id="viewOrganization" />
+          <button onClick={() => editarValores(true)} className={styles.Profile__PrimaryButton} type="button">
             Editar dados
           </button>
         </section>
       ) : (
         <section>
-          <form
-            onSubmit={handleSubmit(handleSubmitForm)}
-            className={styles.Profile__EditForm}
-          >
+          <form onSubmit={handleSubmit(handleSubmitForm)} className={styles.Profile__EditForm}>
             <div>
               <label htmlFor="fullName">Nome Completo</label>
               <input
@@ -235,9 +213,7 @@ export function Profile() {
                 id="fullName"
                 required={errors.fullName ? true : false}
               />
-              {errors.fullName && (
-                <p className={styles.card__error}>{errors.fullName.message}</p>
-              )}
+              {errors.fullName && <p className={styles.card__error}>{errors.fullName.message}</p>}
             </div>
             <div>
               <label htmlFor="email">E-mail</label>
@@ -248,9 +224,7 @@ export function Profile() {
                 id="email"
                 required={errors.email ? true : false}
               />
-              {errors.email && (
-                <p className={styles.card__error}>{errors.email.message}</p>
-              )}
+              {errors.email && <p className={styles.card__error}>{errors.email.message}</p>}
             </div>
             <div>
               <label htmlFor="birthdate">Data de nascimento</label>
@@ -261,9 +235,7 @@ export function Profile() {
                 id="birthdate"
                 required={errors.birthdate ? true : false}
               />
-              {errors.birthdate && (
-                <p className={styles.card__error}>{errors.birthdate.message}</p>
-              )}
+              {errors.birthdate && <p className={styles.card__error}>{errors.birthdate.message}</p>}
             </div>
             <div>
               <InputDropdown
@@ -330,37 +302,22 @@ export function Profile() {
                 id="organization"
                 required={errors.organization ? true : false}
               />
-              {errors.organization && (
-                <p className={styles.card__error}>
-                  {errors.organization.message}
-                </p>
-              )}
+              {errors.organization && <p className={styles.card__error}>{errors.organization.message}</p>}
             </div>
-            <button
-              onClick={() => editarValores(false)}
-              className={styles.Profile__SecondaryButton}
-              type="button"
-            >
+            <button onClick={() => editarValores(false)} className={styles.Profile__SecondaryButton} type="button">
               Cancelar
             </button>
             <button
               className={styles.Profile__PrimaryButton}
               type="submit"
-              disabled={
-                !formState.isDirty ||
-                !formState.isValid ||
-                formState.isSubmitSuccessful
-              }
+              disabled={!formState.isDirty || !formState.isValid || formState.isSubmitSuccessful}
             >
               Salvar dados
             </button>
           </form>
           <Modal.Root isOpen={modalVisibility}>
             <Modal.Icon icon="checkcircle" color="var(--white)" />
-            <Modal.Text
-              title="Perfil Atualizado"
-              description="Mudanças salvas com sucesso"
-            />
+            <Modal.Text title="Perfil Atualizado" description="Mudanças salvas com sucesso" />
             <Modal.Button
               primaryButton={{
                 label: "Voltar para perfil",
