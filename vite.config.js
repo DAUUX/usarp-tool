@@ -1,14 +1,22 @@
+/* eslint-env node */
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 
 export default ({ mode }) => {
-  // eslint-disable-next-line no-undef
   const env = loadEnv(mode, process.cwd(), "");
 
   return defineConfig({
     base: "/",
     plugins: [svgr(), react()],
+
+    optimizeDeps: {
+      include: [
+        "@emotion/react",
+        "@emotion/styled",
+        "@mui/material/Tooltip",
+      ],
+    },
 
     server: {
       port: parseInt(env.PORT) || 3000,
