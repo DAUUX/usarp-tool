@@ -108,7 +108,18 @@ const ProjectTable = ({ rows = [], onToggleFavorite, onHideProject, onDeleteProj
           <TableBody>
             {visibleRows.map((row) => (
               <TableRow key={row.id} hover className={styles.row}>
-                <TableCell component="th" scope="row" className={styles.nameCell}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className={styles.nameCell}
+                  onClick={() => navigate(`/project/${row.id}`)}
+                  style={{
+                    cursor: "pointer",
+                    color: "var(--primary-600)",
+                    fontWeight: "bold",
+                  }}
+                  title="Ver detalhes do projeto" 
+                >
                   {row.name}
                 </TableCell>
 
