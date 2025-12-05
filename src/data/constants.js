@@ -35,3 +35,9 @@ export const PASSWORD_STRENGTH = {
   ATLEASTONESPECIALCHAR: /[#?!@$%^&*-]/,
   EIGHTCHARSORMORE: /.{8,}/,
 };
+
+export const PROJECT_STATUS = [
+  { value: "Novo", label: "Novo" },
+  { value: "Excluído", label: "Excluído" },
+  { value: "Mais antigo", label: "Mais antigo" },
+];

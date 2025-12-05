@@ -15,13 +15,8 @@ import { config } from "../../utils/config";
 import { useAuth } from "../../hooks/useAuth";
 
 import { ROLE_IN_PROJECT } from "../../data/constants";
+import { PROJECT_STATUS } from "../../data/constants";
 import styles from "./styles.module.scss";
-
-const PROJECT_STATUS_OPTIONS = [
-  { value: "Novo", label: "Novo" },
-  { value: "Excluído", label: "Excluído" },
-  { value: "Mais antigo", label: "Mais antigo" },
-];
 
 const CreateProject = () => {
   const navigate = useNavigate();
@@ -38,7 +33,6 @@ const CreateProject = () => {
       Yup.object().shape({
         projectName: Yup.string().required("Nome do Projeto é Obrigatório"),
         description: Yup.string().optional(),
-        // Status é obrigatório apenas na edição
         status: isEditMode ? Yup.string().required("Status é obrigatório") : Yup.string().optional(),
         projectTeam: Yup.array().of(
           Yup.object().shape({
@@ -73,9 +67,6 @@ const CreateProject = () => {
       const fetchProjectData = async () => {
         setIsLoadingData(true);
         try {
-          // Nota: O endpoint correto para buscar UM projeto específico para edição
-          // geralmente é GET /project/:id ou filtrar na lista.
-          // Mantive sua lógica de filtrar a lista 'owned-projects'.
           const response = await axios.get(`${config.baseUrl}/project/owned-projects`, {
             headers: { Authorization: `Bearer ${token}` },
             params: { id: id },
@@ -87,7 +78,7 @@ const CreateProject = () => {
             reset({
               projectName: project.projectName,
               description: project.description,
-              status: project.status, // O valor vindo do banco deve ser "Novo", "Excluído" ou "Mais antigo"
+              status: project.status,
               projectTeam: project.projectTeam.map((member) => ({
                 email: member.email,
                 roleInProject: member.roleInProject || "",
@@ -112,7 +103,6 @@ const CreateProject = () => {
     setApiError("");
     try {
       if (isEditMode) {
-        // MODO EDIÇÃO: Envia status, nome e descrição
         const updatePayload = {
           projectName: data.projectName,
           description: data.description,
@@ -122,9 +112,6 @@ const CreateProject = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        // MODO CRIAÇÃO:
-        // Removemos o 'status' do payload pois o banco define "Novo" automaticamente.
-        // O controller createProject espera: { projectName, description, projectTeam }
         const { status, ...createPayload } = data;
 
         await axios.post(`${config.baseUrl}/project/create`, createPayload, {
@@ -136,10 +123,8 @@ const CreateProject = () => {
     } catch (error) {
       console.error("Erro ao salvar projeto:", error);
       if (error.response) {
-        // Tenta capturar mensagem de erro específica do backend
         setApiError(error.response.data.message || "Erro ao salvar.");
         if (error.response.data.errors) {
-          // Se houver array de erros de validação (Sequelize)
           setApiError(error.response.data.errors.join(", "));
         }
       } else {
@@ -221,7 +206,7 @@ const CreateProject = () => {
                   <Select
                     {...field}
                     label="Status do Projeto"
-                    options={PROJECT_STATUS_OPTIONS}
+                    options={PROJECT_STATUS}
                     required
                     error={!!errors.status}
                     helperText={errors.status?.message}
