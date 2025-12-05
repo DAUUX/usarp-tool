@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../hooks/useAlert";
 import { formatProjectDataSelection } from "../../utils/formatProjectDataSelection";
-import { api } from "../../utils/axios.config";
+import { api } from "../../utils/api";
 import { formatUserStoriesDataSelection } from "../../utils/formatUserStoriesDataSelection";
 import { formatDateToDDMMYYYY } from "../../utils/formatDate";
 
@@ -18,7 +18,7 @@ const RegisterBrainstormingService = (url) => {
     close(null);
     navigate(-1);
   };
-  
+
   const RegisterBrainstorming = (body, success, error, warning) => {
     const formattedBody = {
       brainstormingTitle: body.title,
@@ -51,7 +51,6 @@ const RegisterBrainstormingService = (url) => {
     hasDataLoss ? open(contentAlert) : handleBackBackCloseALert();
   };
 
-
   useEffect(() => {
     const fetchListProject = async () => {
       try {
@@ -68,12 +67,8 @@ const RegisterBrainstormingService = (url) => {
   useEffect(() => {
     const fetchListUserStoriesByProject = async () => {
       try {
-        const { data } = await api.get(
-          `/userstories/${projectId}/user-stories`
-        );
-        setListUserStoriesByProject(
-          formatUserStoriesDataSelection(data.userStories)
-        );
+        const { data } = await api.get(`/userstories/${projectId}/user-stories`);
+        setListUserStoriesByProject(formatUserStoriesDataSelection(data.userStories));
       } catch (error) {
         setError(error);
       }
@@ -81,7 +76,6 @@ const RegisterBrainstormingService = (url) => {
 
     fetchListUserStoriesByProject();
   }, [projectId]);
-
 
   return {
     listProjects,

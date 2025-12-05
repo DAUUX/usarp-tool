@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../hooks/useAlert";
-import { api } from "../../utils/axios.config";
+import { api } from "../../utils/api";
 import { formatProjectDataSelection } from "../../utils/formatProjectDataSelection";
 
 const RegisterUserstoryService = () => {
@@ -15,7 +15,6 @@ const RegisterUserstoryService = () => {
     navigate(-1);
   };
 
-
   const handleBackButton = (formValues, contentAlert) => {
     const hasDataLoss = Object.values(formValues).some((value) => {
       if (Array.isArray(value)) {
@@ -28,8 +27,8 @@ const RegisterUserstoryService = () => {
   };
   const registerUserstory = (body, success, error, warning) => {
     api
-    .post("/userstories/register", body)
-    .then(() => {
+      .post("/userstories/register", body)
+      .then(() => {
         open(success);
       })
       .catch((err) => {
@@ -39,12 +38,11 @@ const RegisterUserstoryService = () => {
         // handleOpenToastError();
       });
   };
-  
 
   useEffect(() => {
     const fetchListProject = async () => {
       try {
-        const {data} = await api.get("/project/owned-projects");
+        const { data } = await api.get("/project/owned-projects");
         setProjectList(formatProjectDataSelection(data.projects));
       } catch (error) {
         setError(error);
@@ -53,8 +51,6 @@ const RegisterUserstoryService = () => {
 
     fetchListProject();
   }, []);
-
-
 
   return {
     registerUserstory,

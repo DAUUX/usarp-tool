@@ -1,15 +1,8 @@
 import styles from "./styles.module.scss";
-import BrainstormingPng from "../../assets/images/brainstorming.png";
-import { IconChoice } from "../../utils/IconChoice";
 import PropTypes from "prop-types";
-export function BrainstormingCard({
-  brainstormingName,
-  projectName,
-  date,
-  hour,
-  userStory,
-  ...rest
-}) {
+import { images } from "../../assets/images/images";
+import { EllipsisVertical } from "lucide-react";
+export function BrainstormingCard({ brainstormingName, projectName, date, hour, userStory, ...rest }) {
   const style = [
     { background: "#FFE8B2", color: "#33270D" },
     { background: "#FFE1D6", color: "#983E1E" },
@@ -22,13 +15,13 @@ export function BrainstormingCard({
     <div className={styles.brainstormingcard__container} {...rest}>
       <div className={styles.brainstormingcard__header}>
         <h6>{brainstormingName}</h6>
-        <IconChoice icon="option" />
+        <EllipsisVertical />
       </div>
       <span>
         {date} - {hour}
       </span>
       <figure>
-        <img src={BrainstormingPng} alt="" />
+        <img src={images.yellowBrain} alt="" />
       </figure>
       <div className={styles.brainstormingcard__project}>
         <h6>Projeto</h6>
