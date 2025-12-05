@@ -3,12 +3,9 @@ import { images } from "../../assets/images/images";
 
 const cssVariables = {
   "--font-inter": '"Inter", sans-serif',
-
-  // Primary Palette (Cyans)
   "--primary-100": "#cceff0",
   "--primary-200": "#99dee1",
   "--primary-800": "#004548",
-
   "--tertiary-100": "#fff3d9",
   "--tertiary-200": "#ffe8b2",
   "--tertiary-800": "#664f19",
@@ -18,7 +15,6 @@ const meta = {
   title: "Components/ActionCard",
   component: ActionCard,
   tags: ["autodocs"],
-
   argTypes: {
     variant: {
       control: "inline-radio",
@@ -37,15 +33,11 @@ const meta = {
     image: {
       control: "select",
       options: Object.keys(images),
-      mapping: {
-        folder: images.folder,
-        lightbulb: images.lightBulb,
-      },
+      mapping: images,
       description: "Ícone do card.",
     },
     onClick: { action: "clicked" },
   },
-
   decorators: [
     (Story) => (
       <div
@@ -66,12 +58,10 @@ const meta = {
 
 export default meta;
 
-// --- Stories ---
-
 export const NovoProjeto = {
   args: {
     label: "Novo Projeto",
-    image: images.folder,
+    image: "folder",
     alt: "Pasta azul",
     variant: "primary",
   },
@@ -80,7 +70,7 @@ export const NovoProjeto = {
 export const NovoBrainstorm = {
   args: {
     label: "Novo Brainstorm",
-    image: images.lightBulb,
+    image: "lightBulb",
     alt: "Lâmpada acesa",
     variant: "secondary",
   },
@@ -89,7 +79,7 @@ export const NovoBrainstorm = {
 export const Desabilitado = {
   args: {
     label: "Funcionalidade Bloqueada",
-    image: images.folder,
+    image: "folder",
     variant: "primary",
     disabled: true,
   },

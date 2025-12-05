@@ -1,6 +1,6 @@
 import Alert from "./Alert";
 
-export default {
+const meta = {
   title: "UI/Alert",
   component: Alert,
   tags: ["autodocs"],
@@ -32,6 +32,8 @@ export default {
     text: "Esta é a mensagem principal do alerta. Use os controles para testar.",
   },
 };
+
+export default meta;
 
 export const Default = {
   args: {

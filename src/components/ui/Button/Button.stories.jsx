@@ -48,93 +48,60 @@ export default {
   },
 };
 
-const Template = (args) => <Button {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  children: "Botão Padrão",
-  variant: "contained",
-  sx: { ...baseSx },
-};
-Default.parameters = {
-  docs: {
-    description: {
-      story: "Botão padrão na variante contained (preenchido).",
+export const Default = {
+  args: {
+    children: "Botão Padrão",
+    variant: "contained",
+    sx: { ...baseSx },
+  },
+  parameters: {
+    docs: {
+      description: { story: "Botão padrão na variante contained." },
     },
   },
 };
 
-export const WithStartIcon = Template.bind({});
-WithStartIcon.args = {
-  children: "Adicionar Item",
-  icon: <Add />,
-  iconPosition: "start",
-  variant: "contained",
-  sx: { ...baseSx },
-};
-WithStartIcon.parameters = {
-  docs: {
-    description: {
-      story: "Botão com ícone posicionado antes do texto.",
-    },
+export const WithStartIcon = {
+  args: {
+    children: "Adicionar Item",
+    icon: <Add />,
+    iconPosition: "start",
+    variant: "contained",
+    sx: { ...baseSx },
   },
 };
 
-export const WithEndIcon = Template.bind({});
-WithEndIcon.args = {
-  children: "Enviar",
-  icon: <Send />,
-  iconPosition: "end",
-  variant: "contained",
-  sx: { ...baseSx },
-};
-WithEndIcon.parameters = {
-  docs: {
-    description: {
-      story: "Botão com ícone posicionado depois do texto.",
-    },
+export const WithEndIcon = {
+  args: {
+    children: "Enviar",
+    icon: <Send />,
+    iconPosition: "end",
+    variant: "contained",
+    sx: { ...baseSx },
   },
 };
 
-export const Outlined = Template.bind({});
-Outlined.args = {
-  children: "Botão Outlined",
-  variant: "outlined",
-  sx: { ...outlineSx },
-};
-Outlined.parameters = {
-  docs: {
-    description: {
-      story: "Botão na variante outlined (com borda).",
-    },
+export const Outlined = {
+  args: {
+    children: "Botão Outlined",
+    variant: "outlined",
+    sx: { ...outlineSx },
   },
 };
 
-export const Text = Template.bind({});
-Text.args = {
-  children: "Botão Text",
-  variant: "text",
-  sx: { ...textSx },
-};
-Text.parameters = {
-  docs: {
-    description: {
-      story: "Botão na variante text (apenas texto).",
-    },
+export const Text = {
+  args: {
+    children: "Botão Text",
+    variant: "text",
+    sx: { ...textSx },
   },
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  children: "Botão Desabilitado",
-  disabled: true,
-  variant: "contained",
-  sx: { ...disableSx },
-};
-Disabled.parameters = {
-  docs: {
-    description: {
-      story: "Botão em estado desabilitado - não pode ser clicado.",
-    },
+export const Disabled = {
+  args: {
+    children: "Botão Desabilitado",
+    disabled: true,
+    variant: "contained",
+    sx: { ...disableSx },
   },
 };

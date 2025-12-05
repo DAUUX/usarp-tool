@@ -1,7 +1,7 @@
 import { MemoryRouter } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
-export default {
+const meta = {
   title: "Layouts/Sidebar",
   component: Sidebar,
   tags: ["autodocs"],
@@ -17,31 +17,34 @@ export default {
   ],
 };
 
-const Template = (args) => <Sidebar {...args} />;
+export default meta;
 
-export const HomeActive = Template.bind({});
-HomeActive.decorators = [
-  (Story) => (
-    <MemoryRouter initialEntries={["/home"]}>
-      <Story />
-    </MemoryRouter>
-  ),
-];
+export const HomeActive = {
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={["/home"]}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
+};
 
-export const ProjectsActive = Template.bind({});
-ProjectsActive.decorators = [
-  (Story) => (
-    <MemoryRouter initialEntries={["/project"]}>
-      <Story />
-    </MemoryRouter>
-  ),
-];
+export const ProjectsActive = {
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={["/project"]}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
+};
 
-export const BrainstormingActive = Template.bind({});
-BrainstormingActive.decorators = [
-  (Story) => (
-    <MemoryRouter initialEntries={["/brainstorming"]}>
-      <Story />
-    </MemoryRouter>
-  ),
-];
+export const BrainstormingActive = {
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={["/brainstorming"]}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
+};

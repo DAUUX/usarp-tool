@@ -1,12 +1,25 @@
 import Select from "./Select";
 
-export default {
+const defaultOptions = [
+  { value: 1, label: "Opção 1" },
+  { value: 2, label: "Opção 2" },
+  { value: 3, label: "Opção 3" },
+];
+
+const meta = {
   title: "UI/Select",
   component: Select,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: "300px" }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     label: {
       control: "text",
@@ -51,100 +64,72 @@ export default {
   },
 };
 
-const Template = (args) => (
-  <div style={{ width: "300px" }}>
-    <Select {...args} />
-  </div>
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  label: "Selecione uma opção",
-  options: [
-    { value: 1, label: "Opção 1" },
-    { value: 2, label: "Opção 2" },
-    { value: 3, label: "Opção 3" },
-  ],
-};
-Default.parameters = {
-  docs: {
-    description: {
-      story: "Select básico com opções simples.",
+export const Default = {
+  args: {
+    label: "Selecione uma opção",
+    options: defaultOptions,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Select básico com opções simples." },
     },
   },
 };
 
-export const WithValue = Template.bind({});
-WithValue.args = {
-  label: "Selecione uma opção",
-  value: 2,
-  options: [
-    { value: 1, label: "Opção 1" },
-    { value: 2, label: "Opção 2" },
-    { value: 3, label: "Opção 3" },
-  ],
-};
-WithValue.parameters = {
-  docs: {
-    description: {
-      story: "Select com um valor pré-selecionado.",
+export const WithValue = {
+  args: {
+    label: "Selecione uma opção",
+    value: 2,
+    options: defaultOptions,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Select com um valor pré-selecionado." },
     },
   },
 };
 
-export const WithError = Template.bind({});
-WithError.args = {
-  label: "Selecione uma opção",
-  error: true,
-  helperText: "Este campo é obrigatório",
-  options: [
-    { value: 1, label: "Opção 1" },
-    { value: 2, label: "Opção 2" },
-    { value: 3, label: "Opção 3" },
-  ],
-};
-WithError.parameters = {
-  docs: {
-    description: {
-      story: "Select em estado de erro com mensagem de validação.",
+export const WithError = {
+  args: {
+    label: "Selecione uma opção",
+    error: true,
+    helperText: "Este campo é obrigatório",
+    options: defaultOptions,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Select em estado de erro com mensagem de validação." },
     },
   },
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  label: "Selecione uma opção",
-  disabled: true,
-  value: 2,
-  options: [
-    { value: 1, label: "Opção 1" },
-    { value: 2, label: "Opção 2" },
-    { value: 3, label: "Opção 3" },
-  ],
-};
-Disabled.parameters = {
-  docs: {
-    description: {
-      story: "Select desabilitado - usuário não pode interagir.",
+export const Disabled = {
+  args: {
+    label: "Selecione uma opção",
+    disabled: true,
+    value: 2,
+    options: defaultOptions,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Select desabilitado - usuário não pode interagir." },
     },
   },
 };
 
-export const Required = Template.bind({});
-Required.args = {
-  label: "Selecione uma opção",
-  required: true,
-  helperText: "Este campo é obrigatório",
-  options: [
-    { value: 1, label: "Opção 1" },
-    { value: 2, label: "Opção 2" },
-    { value: 3, label: "Opção 3" },
-  ],
-};
-Required.parameters = {
-  docs: {
-    description: {
-      story: "Select marcado como obrigatório.",
+export const Required = {
+  args: {
+    label: "Selecione uma opção",
+    required: true,
+    helperText: "Este campo é obrigatório",
+    options: defaultOptions,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Select marcado como obrigatório." },
     },
   },
 };
+
