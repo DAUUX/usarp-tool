@@ -4,7 +4,7 @@
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
-  
+
   .Configuration__Header {
     background-color: var(--th-color-background-configuration-header);
     width: 100%;
@@ -18,7 +18,7 @@
   .Configuration__BackLink {
     width: 937px;
     margin: 32px 0 16px 24px;
-    
+
     a {
       display: inline flex;
       align-items: center;
@@ -47,7 +47,7 @@
       background-color: var(--th-color-background-configurations-sidebar);
       border-radius: 16px;
       border: var(--th-border-configurations-sidebar);
-      
+
       .Configuration__Button {
         background-color: var(--th-color-background-configurations-sidebar);
         display: flex;
@@ -55,22 +55,23 @@
         border-radius: 16px;
         padding: 16px;
         border: var(--th-button-primary-background);
-        color: #D32F2F;
+        color: #d32f2f;
 
-        span{
+        span {
           padding-left: 16px;
         }
       }
+
       .Configuration__Button:hover {
         background-color: var(--th-button-sidebar-hover);
       }
-      .Configuration__IconButton{
+
+      .Configuration__IconButton {
         width: 20px;
         height: 20px;
       }
-      
     }
-  
+
     .Configuration__Content {
       width: 612px;
       height: fit-content;
@@ -80,6 +81,144 @@
       border-radius: 16px;
       border: var(--th-border-configurations);
     }
-    
   }
+}
+
+// Modal base
+.ModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.ModalContent {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  max-width: 480px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    color: #d32f2f;
+    margin: 16px 0;
+    font-size: 24px;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+}
+
+.ModalIcon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+}
+
+.ModalActions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+
+  button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    min-width: 120px;
+  }
+}
+
+.CancelButton {
+  background: #f5f5f5;
+  color: #333;
+
+  &:hover {
+    background: #e0e0e0;
+  }
+}
+
+.ConfirmButton {
+  background: #d32f2f;
+  color: white;
+
+  &:hover {
+    background: #00796b;
+  }
+}
+
+.PasswordInput {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 24px;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: #1976d2;
+  }
+}
+
+.ErrorMessage {
+  background-color: #00796b;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+// Sucesso
+.ModalSuccess {
+  h2 {
+    color: #00796b;
+  }
+
+  p {
+    color: #555;
+  }
+}
+
+// Erro
+.ModalError {
+  h2 {
+    color: #00796b;
+  }
+
+  p {
+    color: #555;
+  }
+
+  .ConfirmButton {
+    background-color: #00796b;
+
+    &:hover {
+      background-color: #00695c;
+    }
+  }
+}
+
+.ErrorMessage {
+  background-color: #00796b;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  text-align: center;
 }
