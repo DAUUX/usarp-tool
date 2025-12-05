@@ -2,14 +2,15 @@ import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
 import { AuthService } from "../services/authService";
+import { config } from "../utils/config";
 
-export const useLogin = (baseURL) => {
+export const useLogin = () => {
   const navigate = useNavigate();
   const { setToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const authService = useMemo(() => new AuthService(baseURL), [baseURL]);
+  const authService = useMemo(() => new AuthService(config.baseUrl), []);
 
   const login = useCallback(
     async (credentials) => {

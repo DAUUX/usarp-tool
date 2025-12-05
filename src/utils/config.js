@@ -1,16 +1,17 @@
 export const config = {
-  /** A URL base da sua API (Backend) */
   baseUrl: import.meta.env.VITE_BASE_URL,
 
   /** A origem do seu frontend */
   origin: import.meta.env.VITE_ORIGIN,
 
-  /** O modo atual (Vite preenche isso automaticamente) */
-  nodeEnv: import.meta.env.MODE, // 'development' ou 'production'
+  /** * O modo atual.
+   * O Vite define isso automaticamente como 'development' ou 'production'.
+   */
+  nodeEnv: import.meta.env.MODE,
 
-  /** Útil para saber se estamos em produção */
+  /** Booleano: true se estivermos rodando build de produção */
   isProduction: import.meta.env.PROD,
 
-  /** Útil para saber se estamos em desenvolvimento */
+  /** Booleano: true se estivermos rodando servidor de desenvolvimento */
   isDevelopment: import.meta.env.DEV,
 };

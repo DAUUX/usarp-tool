@@ -14,7 +14,7 @@ import Button from "../../components/ui/Button/Button";
 import Link from "../../components/ui/Link/Link";
 import Alert from "../../components/ui/Alert/Alert";
 
-import { URL as baseURL } from "../../utils/base";
+import { config } from "../../utils/config";
 
 import { images } from "../../assets/images/images";
 
@@ -22,7 +22,7 @@ import styles from "./styles.module.scss";
 
 const Login = () => {
   const { t } = useTranslation();
-  const { login, isLoading } = useLogin(baseURL);
+  const { login, isLoading } = useLogin(config.baseUrl);
   const [toastError, setToastError] = useState(false);
 
   const schema = useMemo(

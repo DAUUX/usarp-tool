@@ -7,7 +7,7 @@ import styles from "./styles.module.scss";
 import { useForm } from "react-hook-form";
 import { InputCombobox } from "../../components/InputCombobox";
 import RegisterBrainstormingService from "./registerBrainstorming.service";
-import { URL as baseURL } from "../../utils/base";
+import { config } from "../../utils/config";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,10 +17,7 @@ export function RegisterBrainstorming() {
   const schema = Yup.object().shape({
     title: Yup.string()
       .required("Título do Brainstorming e um campo obrigatório!")
-      .matches(
-        /^[A-Za-z0-9 ]+$/,
-        "O título deve conter apenas letras e números"
-      ),
+      .matches(/^[A-Za-z0-9 ]+$/, "O título deve conter apenas letras e números"),
     date: Yup.string().required("Data e um campo obrigatório!"),
     hours: Yup.string().required("Horário e um campo obrigatório!"),
     project: Yup.string()
@@ -34,12 +31,14 @@ export function RegisterBrainstorming() {
     userStory: Yup.string()
       .transform((value, originalValue) => {
         if (Array.isArray(originalValue)) {
-          return originalValue.map((item) =>{
-            if (typeof item === "object") {
-              return item.label;
-            }
-            return item;
-          }).join(", ");
+          return originalValue
+            .map((item) => {
+              if (typeof item === "object") {
+                return item.label;
+              }
+              return item;
+            })
+            .join(", ");
         }
         return value;
       })
@@ -52,7 +51,7 @@ export function RegisterBrainstorming() {
     handleBackButton,
     RegisterBrainstorming,
     handleBackBackCloseALert,
-  } = RegisterBrainstormingService(baseURL);
+  } = RegisterBrainstormingService(config.baseUrl);
 
   const {
     register,
@@ -71,7 +70,7 @@ export function RegisterBrainstorming() {
 
   const handleSubmitForm = () => {
     const body = getValues();
-    RegisterBrainstorming(body, contentSuccess,null,contentWarning);
+    RegisterBrainstorming(body, contentSuccess, null, contentWarning);
   };
 
   useEffect(() => {
@@ -82,24 +81,18 @@ export function RegisterBrainstorming() {
     }
   }, [selectedProjectId, setProjectId]);
 
-    const navegateBrainstorming = () => {
-      close(null);
-      navigate(`/brainstorming`, { replace: true });
-    };
+  const navegateBrainstorming = () => {
+    close(null);
+    navigate(`/brainstorming`, { replace: true });
+  };
 
   // alertas
   const contentSuccess = (
     <FeedbackAlert.Root>
       <FeedbackAlert.Icon icon="checkcircle" />
       <FeedbackAlert.Title title="Excelente" />
-      <FeedbackAlert.Description
-        style={{ textAlign: "center" }}
-        description="Novo Brainstorming registrado!"
-      />
-      <FeedbackAlert.Button
-        onClick={() => navegateBrainstorming()}
-        label="Visualizar"
-      />
+      <FeedbackAlert.Description style={{ textAlign: "center" }} description="Novo Brainstorming registrado!" />
+      <FeedbackAlert.Button onClick={() => navegateBrainstorming()} label="Visualizar" />
     </FeedbackAlert.Root>
   );
   const contentWarning = (
@@ -111,10 +104,7 @@ export function RegisterBrainstorming() {
         <Button.Root data-type="danger" onClick={close}>
           <Button.Text>Cancelar</Button.Text>
         </Button.Root>
-        <Button.Root
-          data-type="primary"
-          onClick={() => handleBackBackCloseALert()}
-        >
+        <Button.Root data-type="primary" onClick={() => handleBackBackCloseALert()}>
           <Button.Text>Sim, continuar</Button.Text>
         </Button.Root>
       </div>
@@ -125,10 +115,7 @@ export function RegisterBrainstorming() {
     <div className={styles.brainstorming__container}>
       <header>
         <span title="voltar">
-          <IconChoice
-            onClick={() => handleBackButton(watch(), contentWarning)}
-            icon="back"
-          />
+          <IconChoice onClick={() => handleBackButton(watch(), contentWarning)} icon="back" />
           <h4>Novo Brainstorming</h4>
         </span>
       </header>
@@ -145,9 +132,7 @@ export function RegisterBrainstorming() {
                 id="title"
                 required={errors.title ? true : false}
               >
-                {errors.title && (
-                  <Input.Error>{errors.title.message}</Input.Error>
-                )}
+                {errors.title && <Input.Error>{errors.title.message}</Input.Error>}
               </Input.Root>
             </fieldset>
             <fieldset>
@@ -160,25 +145,13 @@ export function RegisterBrainstorming() {
                   control={control}
                   options={listProjects}
                 />
-                {errors.project && (
-                  <InputCombobox.Error>
-                    {errors.project.message}
-                  </InputCombobox.Error>
-                )}
+                {errors.project && <InputCombobox.Error>{errors.project.message}</InputCombobox.Error>}
               </InputCombobox.Root>
             </fieldset>
             <fieldset>
               <h6>Data do Brainstorming</h6>
-              <Input.Root
-                {...register("date")}
-                name="date"
-                id="date"
-                type="date"
-                required={errors.date ? true : false}
-              >
-                {errors.date && (
-                  <Input.Error>{errors.date.message}</Input.Error>
-                )}
+              <Input.Root {...register("date")} name="date" id="date" type="date" required={errors.date ? true : false}>
+                {errors.date && <Input.Error>{errors.date.message}</Input.Error>}
               </Input.Root>
             </fieldset>
             <fieldset>
@@ -190,9 +163,7 @@ export function RegisterBrainstorming() {
                 type="time"
                 required={errors.hours ? true : false}
               >
-                {errors.hours && (
-                  <Input.Error>{errors.hours.message}</Input.Error>
-                )}
+                {errors.hours && <Input.Error>{errors.hours.message}</Input.Error>}
               </Input.Root>
             </fieldset>
           </div>
@@ -211,21 +182,13 @@ export function RegisterBrainstorming() {
                   required={errors.userStory ? true : false}
                   options={listUserStoriesByProject}
                 />
-                {errors.userStory && (
-                  <InputCombobox.Error>
-                    {errors.userStory.message}
-                  </InputCombobox.Error>
-                )}
+                {errors.userStory && <InputCombobox.Error>{errors.userStory.message}</InputCombobox.Error>}
               </InputCombobox.Root>
             </fieldset>
           </div>
         </div>
         <div className={styles.buttons__container}>
-          <Button.Root
-            type="button"
-            onClick={() => handleBackButton(watch(), contentWarning)}
-            data-type="secondary"
-          >
+          <Button.Root type="button" onClick={() => handleBackButton(watch(), contentWarning)} data-type="secondary">
             <Button.Text>Cancelar</Button.Text>
           </Button.Root>
           <Button.Root disabled={!isValid} data-type="primary" type="submit">
