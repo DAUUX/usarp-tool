@@ -10,6 +10,7 @@ import Link from "../../components/ui/Link/Link";
 
 import styles from "./styles.module.scss";
 import { config } from "../../utils/config";
+import Container from "../../layouts/Container/Container";
 
 const Home = () => {
   const { user, handleLogout } = useAuth();
@@ -52,7 +53,7 @@ const Home = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <Container>
       <header className={styles.header}>
         <h1>
           Bem vindo(a), <span>{user.fullName}</span>
@@ -107,7 +108,7 @@ const Home = () => {
           )}
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

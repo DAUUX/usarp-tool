@@ -11,6 +11,7 @@ import styles from "./styles.module.scss";
 
 import { config } from "../../utils/config";
 import { useAuth } from "../../hooks/useAuth";
+import Container from "../../layouts/Container/Container";
 
 const Projects = () => {
   const navigate = useNavigate();
@@ -146,7 +147,7 @@ const Projects = () => {
   const filters = ["Todos", "Ativo", "Favoritos", "Ocultos"];
 
   return (
-    <div className={styles.container}>
+    <Container>
       <header>
         <h2>Projetos</h2>
         <div>
@@ -195,7 +196,7 @@ const Projects = () => {
           filter={filter}
         />
       )}
-    </div>
+    </Container>
   );
 };
 
