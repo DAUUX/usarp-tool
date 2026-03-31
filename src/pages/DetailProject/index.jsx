@@ -151,7 +151,7 @@ export function DetailProject() {
         </span>
       </header>
       <main>
-        <session className={styles.card}>
+        <section className={styles.card}>
           <div className={styles.card__header}>
             <h5>{projects?.projectName || ""}</h5>
             <div>
@@ -243,14 +243,15 @@ export function DetailProject() {
                       }
                       email={member.email}
                       organization={member.roleInProject}
+                      color="#664F19"
                     />
                   ))}
                 </ul>
               </li>
             </div>
           </div>
-        </session>
-        <session className={styles.meansurement}>
+        </section>
+        <section className={styles.meansurement}>
           <CardMeansurement
             icon={"statisticsLamp"}
             button={"yellow"}
@@ -271,7 +272,7 @@ export function DetailProject() {
             btnSeeAll={"/userStories"}
             btnNew={"/registerUserstory"}
           />
-        </session>
+        </section>
       </main>
     </div>
   );

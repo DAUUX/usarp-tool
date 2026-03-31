@@ -5,15 +5,25 @@ const HomeService = (url) => {
   const [listBrainstorming, setListBrainstorming] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const router = "/brainstorming/countAllBrainstormings";
 
+  //const router = "/brainstorming/countAllBrainstormings";
+  //axios.get(url + router)
   useEffect(() => {
+    const token = localStorage.getItem("token"); // <<< pega o token
+
+    const axiosConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
     const getProjectName = async (brainstorming) => {
       await Promise.all(
         brainstorming.map(async (item) => {
           const projectName = item.project;
           const response = await axios.get(
-            url + `/projects-details?id=${projectName}`
+            `${url}/projects-details?id=${projectName}`,
+            axiosConfig
           );
           item.projectName = response.data.projects[0].projectName;
         })
@@ -23,10 +33,14 @@ const HomeService = (url) => {
 
     const fetchListBrainstorming = async () => {
       try {
-        const response = await axios.get(url + router);
-        const firstFourItems = response.data.getAllBrainstormingsAndCount.rows.slice(0, 4);
+        const response = await axios.get(url + router, axiosConfig);
+
+        const firstFourItems =
+          response.data.getAllBrainstormingsAndCount.rows.slice(0, 4);
+
         const listBrainstorming = await getProjectName(firstFourItems);
         setListBrainstorming(listBrainstorming);
+
       } catch (error) {
         setError(error);
       } finally {
@@ -37,7 +51,6 @@ const HomeService = (url) => {
     fetchListBrainstorming();
   }, [url]);
 
-  
   return {
     listBrainstorming,
     loading,

@@ -15,7 +15,7 @@ const LoginService = (url) => {
         .then((response) => {
           const token = response.data.token;
           setToken(token);
-          localStorage.setItem("@AccessToken", token);
+          localStorage.setItem("token", token);
           open(success);
           setTimeout(() => {
             close();

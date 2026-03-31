@@ -9,8 +9,9 @@ import { formatDateToDDMMYYYY } from "../../utils/formatDate";
 const RegisterBrainstormingService = (url) => {
   const [listProjects, setListProjects] = useState([]);
   const [listUserStoriesByProject, setListUserStoriesByProject] = useState([]);
-  const [projectId, setProjectId] = useState();
+  const [projectId, setProjectId] = useState(null);
   const [error, setError] = useState(null);
+
   const { open, close } = useAlert();
   const navigate = useNavigate();
 
@@ -18,8 +19,8 @@ const RegisterBrainstormingService = (url) => {
     close(null);
     navigate(-1);
   };
-  
-  const RegisterBrainstorming = (body, success, error, warning) => {
+
+  const RegisterBrainstorming = (body, success, errorAlert, warning) => {
     const formattedBody = {
       brainstormingTitle: body.title,
       project: body.project.value,
@@ -27,23 +28,25 @@ const RegisterBrainstormingService = (url) => {
       brainstormingTime: body.hours,
       userStories: body.userStory.map((item) => item.value),
     };
+
     api
-      .post(url + "/brainstorming/create", formattedBody)
-      .then(() => {
-        open(success);
+      .post(`${url}/brainstorming/create`, formattedBody)
+      .then((response) => {
+        open(success(response.data.id));
       })
       .catch((err) => {
         if (err.code === "ERR_NETWORK") {
           open(warning);
+          return;
         }
-        open(error);
+        open(errorAlert);
       });
   };
 
   const handleBackButton = (formValues, contentAlert) => {
     const hasDataLoss = Object.values(formValues).some((value) => {
       if (Array.isArray(value)) {
-        return value.some((item) => Object.values(item).some((val) => val));
+        return value.length > 0;
       }
       return Boolean(value);
     });
@@ -51,21 +54,24 @@ const RegisterBrainstormingService = (url) => {
     hasDataLoss ? open(contentAlert) : handleBackBackCloseALert();
   };
 
-
+  // 🔹 BUSCA PROJETOS
   useEffect(() => {
     const fetchListProject = async () => {
       try {
         const { data } = await api.get("/project/owned-projects");
         setListProjects(formatProjectDataSelection(data.projects));
-      } catch (error) {
-        setError(error);
+      } catch (err) {
+        setError(err);
       }
     };
 
     fetchListProject();
   }, []);
 
+  // 🔹 BUSCA USER STORIES (SÓ SE TIVER projectId)
   useEffect(() => {
+    if (!projectId) return;
+
     const fetchListUserStoriesByProject = async () => {
       try {
         const { data } = await api.get(
@@ -74,14 +80,13 @@ const RegisterBrainstormingService = (url) => {
         setListUserStoriesByProject(
           formatUserStoriesDataSelection(data.userStories)
         );
-      } catch (error) {
-        setError(error);
+      } catch (err) {
+        setError(err);
       }
     };
 
     fetchListUserStoriesByProject();
   }, [projectId]);
-
 
   return {
     listProjects,

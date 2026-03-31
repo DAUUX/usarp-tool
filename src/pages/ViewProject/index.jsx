@@ -55,7 +55,7 @@ export function ViewProject() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(baseURL + "/projeto/" + id);
+      await axios.delete(baseURL + "/project/" + id);
       // Atualiza a lista de projetos após a deleção
       // setProjects((prevProjects) =>
       //   prevProjects.filter((project) => project.id !== id)

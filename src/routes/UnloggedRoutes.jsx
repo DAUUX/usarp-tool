@@ -10,7 +10,7 @@ export function UnloggedRoutes() {
       <Route path="login" element={<Login />} />
       <Route path="cadastro" element={<Register />} />
       <Route path="recover" element={<PasswordRecover />} />
-      <Route path="auth/reset_password/:userId/:token" element={<ResetPassword />} />
+      <Route path="auth/reset_password/:token/:userId" element={<ResetPassword/>} />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );

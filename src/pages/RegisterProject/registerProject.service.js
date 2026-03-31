@@ -12,7 +12,7 @@ const RegisterProjectService = (url) => {
 
   const path = "/project/create";
   const getPath= "/project/owned-projects";
-  const pathUpdate = "/project/update/";
+  const pathUpdate = "/project/";
   const pathById = "/project/owned-projects?id=";
 
   const handleBackBackCloseALert = () => {

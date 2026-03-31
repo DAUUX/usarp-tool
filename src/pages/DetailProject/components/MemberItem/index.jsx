@@ -42,4 +42,5 @@ MemberItem.defaultProps = {
   icon: "user01",
   email: "E-mail não informado",
   organization: "Organização não informada",
+  color: "#664F19",
 };

@@ -9,49 +9,43 @@ import { InputCombobox } from "../../components/InputCombobox";
 import RegisterBrainstormingService from "./registerBrainstorming.service";
 import { URL as baseURL } from "../../utils/base";
 import { FeedbackAlert } from "../../components/FeedbackAlert";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../hooks/useAlert";
 
 export function RegisterBrainstorming() {
+  const navigate = useNavigate();
+  const { close } = useAlert();
+  const [brainstormingId, setBrainstormingId] = useState(null);
+
+  // ✅ Schema
   const schema = Yup.object().shape({
     title: Yup.string()
-      .required("Título do Brainstorming e um campo obrigatório!")
-      .matches(
-        /^[A-Za-z0-9 ]+$/,
-        "O título deve conter apenas letras e números"
-      ),
-    date: Yup.string().required("Data e um campo obrigatório!"),
-    hours: Yup.string().required("Horário e um campo obrigatório!"),
+      .required("Título do Brainstorming é obrigatório!")
+      .matches(/^[A-Za-z0-9 ]+$/, "Use apenas letras e números"),
+    date: Yup.string().required("Data é obrigatória!"),
+    hours: Yup.string().required("Horário é obrigatório!"),
     project: Yup.string()
-      .transform((value, originalValue) => {
-        if (originalValue && typeof originalValue === "object") {
-          return originalValue.label;
-        }
-        return value;
-      })
-      .required("O projeto é um campo obrigatório"),
+      .transform((value, originalValue) =>
+        typeof originalValue === "object" ? originalValue.label : value
+      )
+      .required("Projeto é obrigatório!"),
     userStory: Yup.string()
-      .transform((value, originalValue) => {
-        if (Array.isArray(originalValue)) {
-          return originalValue.map((item) =>{
-            if (typeof item === "object") {
-              return item.label;
-            }
-            return item;
-          }).join(", ");
-        }
-        return value;
-      })
-      .required("Histórias de Usuário é um campo obrigatório!"),
+      .transform((value, originalValue) =>
+        Array.isArray(originalValue)
+          ? originalValue.map((i) => i.label).join(", ")
+          : value
+      )
+      .required("História de Usuário é obrigatória!"),
   });
+
+  // ✅ Service CORRETO (sem config)
   const {
     listProjects,
     listUserStoriesByProject,
     setProjectId,
     handleBackButton,
     RegisterBrainstorming,
-    handleBackBackCloseALert,
   } = RegisterBrainstormingService(baseURL);
 
   const {
@@ -65,100 +59,84 @@ export function RegisterBrainstorming() {
     mode: "all",
     resolver: yupResolver(schema),
   });
-  const selectedProjectId = watch("project");
-  const navigate = useNavigate();
-  const { close } = useAlert();
 
-  const handleSubmitForm = () => {
-    const body = getValues();
-    RegisterBrainstorming(body, contentSuccess,null,contentWarning);
-  };
+  const selectedProject = watch("project");
 
+  // ✅ Atualiza projectId
   useEffect(() => {
-    if (selectedProjectId) {
-      setProjectId(selectedProjectId.value);
+    if (selectedProject?.value) {
+      setProjectId(selectedProject.value);
     } else {
       setProjectId(null);
     }
-  }, [selectedProjectId, setProjectId]);
+  }, [selectedProject, setProjectId]);
 
-    const navegateBrainstorming = () => {
-      close(null);
-      navigate(`/brainstorming`, { replace: true });
-    };
+  // ✅ Submit correto
+  const handleSubmitForm = async () => {
+    const body = getValues();
 
-  // alertas
-  const contentSuccess = (
-    <FeedbackAlert.Root>
-      <FeedbackAlert.Icon icon="checkcircle" />
-      <FeedbackAlert.Title title="Excelente" />
-      <FeedbackAlert.Description
-        style={{ textAlign: "center" }}
-        description="Novo Brainstorming registrado!"
-      />
-      <FeedbackAlert.Button
-        onClick={() => navegateBrainstorming()}
-        label="Visualizar"
-      />
-    </FeedbackAlert.Root>
-  );
-  const contentWarning = (
-    <FeedbackAlert.Root>
-      <FeedbackAlert.Icon icon="warningcircle" />
-      <FeedbackAlert.Title title="Aviso!" />
-      <FeedbackAlert.Description description="Ao sair da pagina as informações serão perdidas, deseja continuar?" />
-      <div className={styles.alert__buttons}>
-        <Button.Root data-type="danger" onClick={close}>
-          <Button.Text>Cancelar</Button.Text>
-        </Button.Root>
-        <Button.Root
-          data-type="primary"
-          onClick={() => handleBackBackCloseALert()}
-        >
-          <Button.Text>Sim, continuar</Button.Text>
-        </Button.Root>
-      </div>
-    </FeedbackAlert.Root>
-  );
+    try {
+      const id = await RegisterBrainstorming(body);
+      setBrainstormingId(id);
+      openSuccessAlert(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ✅ Alerts
+  const openSuccessAlert = (id) => {
+    close(
+      <FeedbackAlert.Root>
+        <FeedbackAlert.Icon icon="checkcircle" />
+        <FeedbackAlert.Title title="Brainstorming criado!" />
+        <FeedbackAlert.Description description="Deseja seguir para as cartas?" />
+        <FeedbackAlert.Button
+          label="Ir para as cartas"
+          onClick={() => {
+            close(null);
+            navigate(`/brainstorming/${id}/cards`);
+          }}
+        />
+      </FeedbackAlert.Root>
+    );
+  };
 
   return (
     <div className={styles.brainstorming__container}>
       <header>
         <span title="voltar">
           <IconChoice
-            onClick={() => handleBackButton(watch(), contentWarning)}
             icon="back"
+            onClick={() => handleBackButton(watch(), null)}
           />
           <h4>Novo Brainstorming</h4>
         </span>
       </header>
+
       <form onSubmit={handleSubmit(handleSubmitForm)}>
         <div className={styles.generaldata__container}>
           <h4>Dados gerais</h4>
+
           <div className={styles.generaldata__input}>
             <fieldset>
-              <h6>Título do Brainstorming</h6>
-              <Input.Root
-                {...register("title")}
-                type="text"
-                name="title"
-                id="title"
-                required={errors.title ? true : false}
-              >
+              <h6>Título</h6>
+              <Input.Root {...register("title")} id="title">
                 {errors.title && (
                   <Input.Error>{errors.title.message}</Input.Error>
                 )}
               </Input.Root>
             </fieldset>
+
             <fieldset>
               <h6>Projeto</h6>
               <InputCombobox.Root>
                 <InputCombobox.Select
                   name="project"
                   placeholder="Selecione o projeto"
-                  error={errors.project}
                   control={control}
                   options={listProjects}
+                  error={errors.project}
                 />
                 {errors.project && (
                   <InputCombobox.Error>
@@ -167,29 +145,19 @@ export function RegisterBrainstorming() {
                 )}
               </InputCombobox.Root>
             </fieldset>
+
             <fieldset>
-              <h6>Data do Brainstorming</h6>
-              <Input.Root
-                {...register("date")}
-                name="date"
-                id="date"
-                type="date"
-                required={errors.date ? true : false}
-              >
+              <h6>Data</h6>
+              <Input.Root type="date" {...register("date")}>
                 {errors.date && (
                   <Input.Error>{errors.date.message}</Input.Error>
                 )}
               </Input.Root>
             </fieldset>
+
             <fieldset>
               <h6>Horário</h6>
-              <Input.Root
-                {...register("hours")}
-                name="hours"
-                id="hours"
-                type="time"
-                required={errors.hours ? true : false}
-              >
+              <Input.Root type="time" {...register("hours")}>
                 {errors.hours && (
                   <Input.Error>{errors.hours.message}</Input.Error>
                 )}
@@ -197,38 +165,39 @@ export function RegisterBrainstorming() {
             </fieldset>
           </div>
         </div>
+
         <div className={styles.selectUserStory__container}>
-          <h4>Histórias de Usuário do Brainstorming</h4>
-          <div>
-            <fieldset>
-              <InputCombobox.Root>
-                <InputCombobox.MultiSelect
-                  name="userStory"
-                  placeholder="Selecione a História de Usuário"
-                  defaultValue={[]}
-                  error={errors.userStory}
-                  control={control}
-                  required={errors.userStory ? true : false}
-                  options={listUserStoriesByProject}
-                />
-                {errors.userStory && (
-                  <InputCombobox.Error>
-                    {errors.userStory.message}
-                  </InputCombobox.Error>
-                )}
-              </InputCombobox.Root>
-            </fieldset>
-          </div>
+          <h4>Histórias de Usuário</h4>
+          <InputCombobox.Root>
+            <InputCombobox.MultiSelect
+              name="userStory"
+              placeholder="Selecione a história"
+              control={control}
+              options={listUserStoriesByProject}
+              error={errors.userStory}
+            />
+            {errors.userStory && (
+              <InputCombobox.Error>
+                {errors.userStory.message}
+              </InputCombobox.Error>
+            )}
+          </InputCombobox.Root>
         </div>
+
         <div className={styles.buttons__container}>
           <Button.Root
             type="button"
-            onClick={() => handleBackButton(watch(), contentWarning)}
             data-type="secondary"
+            onClick={() => handleBackButton(watch(), null)}
           >
             <Button.Text>Cancelar</Button.Text>
           </Button.Root>
-          <Button.Root disabled={!isValid} data-type="primary" type="submit">
+
+          <Button.Root
+            type="submit"
+            data-type="primary"
+            disabled={!isValid}
+          >
             <Button.Text>Agendar Brainstorming</Button.Text>
           </Button.Root>
         </div>

@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../../services/api";
 
 export default function ResetPassword() {
-  const { userId, token } = useParams();
+  const { token, userId } = useParams();
   const { open, close } = useAlert();
   const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ export default function ResetPassword() {
       console.log("userId:", userId, "token:", token);
 
       // POST para o backend
-      await api.post(`/auth/reset_password/${userId}/${token}`, {
+      await api.post(`/auth/reset_password/${token}/${userId}`, {
         password: data.password,
       });
 

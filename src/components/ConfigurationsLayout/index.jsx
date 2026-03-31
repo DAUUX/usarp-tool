@@ -1,18 +1,20 @@
 import styles from "./styles.module.scss";
 import { SidebarOption } from "./SidebarOption";
 import { AlertBox } from "./AlertBox";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useState, createContext } from "react";
 import { Dropdown } from "../DropdownMenu";
 import { Button } from "../Button";
+import { api } from "../../utils/axios.config";
+import successIcon from "../../assets/icons/sucesS.png";
 import attentionIcon from "../../assets/icons/att.jpg";
 import errorIcon from "../../assets/icons/xx3.png";
-
-
+import logo from "../../assets/images/logo.png";
 
 export const FormSubmitContext = createContext(null);
 
 export function ConfigurationsLayout() {
+
   const [alert, setAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalStep, setModalStep] = useState(1);
@@ -21,7 +23,7 @@ export function ConfigurationsLayout() {
   const [pasteError, setPasteError] = useState(false);
 
   const MAX_ATTEMPTS = 3;
-  const CORRECT_PASSWORD = "1234";
+  const navigate = useNavigate();
 
   function handleDeleteClick() {
     setShowModal(true);
@@ -36,20 +38,27 @@ export function ConfigurationsLayout() {
     setAttempts(0);
   }
 
-  function handleConfirmPassword() {
-    if (password === CORRECT_PASSWORD) {
+  async function handleConfirmPassword() {
+    try {
+      await api.delete("/user/delete", {
+        data: { password },
+      });
+
       setModalStep(3);
+
       setTimeout(() => {
         setShowModal(false);
-      }, 3000);
-    } else {
+        navigate("/"); // ajuste aqui se quiser outra rota
+      }, 1500);
+
+    } catch (error) {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
 
       if (newAttempts >= MAX_ATTEMPTS) {
-        setModalStep(4); // Limite de senhas atingido
+        setModalStep(4);
       } else {
-        setModalStep(2); // Senha incorreta, mantém no passo 2
+        setModalStep(2);
       }
     }
   }
@@ -58,8 +67,8 @@ export function ConfigurationsLayout() {
     <>
       <main className={styles.Configuration}>
         <header className={styles.Configuration__Header}>
-          <img src="../../../src/assets/images/logo.png" alt="USARP Tool Logo" />
-          <Dropdown />
+          <img src={logo} />
+           <Dropdown />
         </header>
 
         <div className={styles.Configuration__BackLink}>
@@ -89,6 +98,7 @@ export function ConfigurationsLayout() {
               link="./privacity"
               icon="lock"
             />
+
             <Button.Root
               className={styles.Configuration__Button}
               onClick={handleDeleteClick}
@@ -109,32 +119,23 @@ export function ConfigurationsLayout() {
         </div>
       </main>
 
-      {/* Modal */}
       {showModal && (
         <div className={styles.ModalOverlay}>
           <div className={styles.ModalContent}>
-            {/* Etapa 1 - Confirmação inicial */}
+            
             {modalStep === 1 && (
               <>
-                <img
-                  src={attentionIcon}
-                  alt="Atenção"
-                  className={styles.ModalIcon}
-                />
+                <img src={attentionIcon} alt="Atenção" className={styles.ModalIcon} />
+
                 <h2>Atenção!</h2>
                 <p>
-                  Você tem certeza que deseja apagar o <strong>update?</strong>{" "}
-                  Excluindo a sua conta agora, você estará excluindo os seus
-                  projetos e os usuários vinculados a eles perderão o acesso.
+                  Você tem certeza que deseja apagar a conta?
                   <br />
-                  Excluindo o seu perfil, <strong>10</strong> projetos serão
-                  apagados.
+                  Excluindo o seu perfil, <strong>todos os seus projetos</strong> serão apagados.
                 </p>
+
                 <div className={styles.ModalActions}>
-                  <button
-                    onClick={closeModal}
-                    className={styles.CancelButton}
-                  >
+                  <button onClick={closeModal} className={styles.CancelButton}>
                     Cancelar
                   </button>
                   <button
@@ -147,7 +148,6 @@ export function ConfigurationsLayout() {
               </>
             )}
 
-            {/* Etapa 2 - Confirmação de senha */}
             {modalStep === 2 && (
               <>
                 <h2>Excluir Conta</h2>
@@ -183,10 +183,7 @@ export function ConfigurationsLayout() {
                 </form>
 
                 <div className={styles.ModalActions}>
-                  <button
-                    onClick={closeModal}
-                    className={styles.CancelButton}
-                  >
+                  <button onClick={closeModal} className={styles.CancelButton}>
                     Cancelar
                   </button>
                   <button
@@ -199,35 +196,29 @@ export function ConfigurationsLayout() {
               </>
             )}
 
-            {/* Etapa 3 - Sucesso */}
             {modalStep === 3 && (
               <div className={styles.ModalSuccess}>
-                <img
-                  src="assets/icons/success.png"
-                  alt="Sucesso"
-                  className={styles.ModalIcon}
-                />
+                <img src={successIcon} alt="Sucesso" className={styles.ModalIcon} />
                 <h2>Conta excluída!</h2>
                 <p>
-                  Conta deletada com sucesso! <br />
-                  Redirecionando para a página de login.
+                  Conta deletada com sucesso!
+                  <br />
+                  Redirecionando…
                 </p>
               </div>
             )}
 
-            {/* Etapa 4 - Limite de tentativas atingido */}
             {modalStep === 4 && (
               <div className={styles.ModalError}>
-                <img
-                  src={errorIcon}
-                  alt="Erro"
-                  className={styles.ModalIcon}
-                />
+                <img src={errorIcon} alt="Erro" className={styles.ModalIcon} />
+
                 <h2>Erro ao Excluir Conta</h2>
                 <p>
-                  Você ultrapassou seu limite de tentativas. <br />
+                  Você ultrapassou seu limite de tentativas.
+                  <br />
                   Tente novamente após 24 horas.
                 </p>
+
                 <div className={styles.ModalActions}>
                   <button
                     onClick={closeModal}
@@ -239,6 +230,7 @@ export function ConfigurationsLayout() {
                 </div>
               </div>
             )}
+
           </div>
         </div>
       )}
