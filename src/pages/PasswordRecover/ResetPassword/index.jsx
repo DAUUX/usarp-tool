@@ -125,6 +125,7 @@ export default function ResetPassword() {
 
         <p>Digite a mesma senha do campo anterior</p>
 
+
         <PasswordStrengthLevel password={getValues("password")} />
 
         <button

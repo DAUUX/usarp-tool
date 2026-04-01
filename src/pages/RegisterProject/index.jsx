@@ -12,6 +12,8 @@ import { InputTextarea } from "../../components/InputTextarea/indes";
 import RegisterProjectService from "./registerProject.service";
 import { useEffect } from "react";
 
+
+
 export function RegisterProject() {
   const { id } = useParams();
   const {
