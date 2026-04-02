@@ -36,7 +36,9 @@ const Register = () => {
   const schema = useMemo(
     () =>
       Yup.object().shape({
-        email: Yup.string().email("digite um email valido").required("Email é obrigatório"),
+        email: Yup.string()
+          .required("Email é obrigatório")
+          .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "digite um email valido"),
         fullName: Yup.string().min(3, "nome muito curto").max(50, "nome muito grande").required("Nome é obrigatório"),
         password: Yup.string()
           .required("Senha é obrigatória")
@@ -51,7 +53,7 @@ const Register = () => {
         profile: Yup.string().required("Perfil é obrigatório"),
         organization: Yup.string().max(100, "nome da organização muito grande"),
       }),
-    []
+    [],
   );
 
   const { control, handleSubmit, formState, trigger, watch, reset } = useForm({
@@ -326,3 +328,4 @@ const Register = () => {
 };
 
 export default Register;
+
