@@ -1,12 +1,19 @@
 import InputDate from "./InputDate";
 
-export default {
+const meta = {
   title: "UI/InputDate",
   component: InputDate,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: "300px" }}>
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     label: {
       control: "text",
@@ -43,63 +50,55 @@ export default {
   },
 };
 
-const Template = (args) => (
-  <div style={{ width: "300px" }}>
-    <InputDate {...args} />
-  </div>
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  label: "Data de nascimento",
-};
-Default.parameters = {
-  docs: {
-    description: {
-      story: "Campo de data padrão com label flutuante.",
+export const Default = {
+  args: {
+    label: "Data de nascimento",
+  },
+  parameters: {
+    docs: {
+      description: { story: "Campo de data padrão com label flutuante." },
     },
   },
 };
 
-export const WithError = Template.bind({});
-WithError.args = {
-  label: "Data de expiração",
-  error: true,
-  helperText: "Data não pode ser no passado",
-  value: "2023-01-01",
-};
-WithError.parameters = {
-  docs: {
-    description: {
-      story: "Campo de data em estado de erro com mensagem de validação.",
+export const WithError = {
+  args: {
+    label: "Data de expiração",
+    error: true,
+    helperText: "Data não pode ser no passado",
+    value: "2023-01-01",
+  },
+  parameters: {
+    docs: {
+      description: { story: "Campo de data em estado de erro com mensagem de validação." },
     },
   },
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  label: "Data de contratação",
-  value: "2024-03-20",
-  disabled: true,
-};
-Disabled.parameters = {
-  docs: {
-    description: {
-      story: "Campo de data desabilitado - usuário não pode interagir.",
+export const Disabled = {
+  args: {
+    label: "Data de contratação",
+    value: "2024-03-20",
+    disabled: true,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Campo de data desabilitado." },
     },
   },
 };
 
-export const Required = Template.bind({});
-Required.args = {
-  label: "Data de entrega",
-  required: true,
-  helperText: "Este campo é obrigatório",
-};
-Required.parameters = {
-  docs: {
-    description: {
-      story: "Campo de data marcado como obrigatório.",
+export const Required = {
+  args: {
+    label: "Data de entrega",
+    required: true,
+    helperText: "Este campo é obrigatório",
+  },
+  parameters: {
+    docs: {
+      description: { story: "Campo de data marcado como obrigatório." },
     },
   },
 };

@@ -10,7 +10,7 @@ const mockAuthContextValue = {
   user: { name: "Usuário Teste" },
 };
 
-export default {
+const meta = {
   title: "Components/ProfileDropdown",
   component: ProfileDropdown,
   tags: ["autodocs"],
@@ -33,6 +33,8 @@ export default {
     ),
   ],
 };
+
+export default meta;
 
 export const Default = {
   args: {

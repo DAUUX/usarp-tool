@@ -5,6 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 
+import Skeleton from "@mui/material/Skeleton";
+
 import { useLogin } from "../../hooks/useLogin";
 
 import Wrapper from "../../layouts/Wrapper/Wrapper";
@@ -24,6 +26,7 @@ const Login = () => {
   const { t } = useTranslation();
   const { login, isLoading } = useLogin(config.baseUrl);
   const [toastError, setToastError] = useState(false);
+  const [isLogoLoading, setIsLogoLoading] = useState(true);
 
   const schema = useMemo(
     () =>
@@ -66,8 +69,26 @@ const Login = () => {
     <div className={styles.container}>
       <Wrapper>
         <figure>
-          <img src={images.logo2} alt="logo USARP" style={{ width: "6.5rem" }} />
+          {isLogoLoading && (
+            <Skeleton
+              variant="rectangular"
+              width="6.5rem"
+              height="6.5rem"
+              style={{ margin: "0 auto" }}
+            />
+          )}
+
+          <img
+            src={images.logo2}
+            alt="logo USARP"
+            onLoad={() => setIsLogoLoading(false)}
+            style={{
+              width: "6.5rem",
+              display: isLogoLoading ? "none" : "block",
+            }}
+          />
         </figure>
+
         <form onSubmit={handleSubmit(handleSubmitForm)} noValidate>
           {toastError && (
             <Alert

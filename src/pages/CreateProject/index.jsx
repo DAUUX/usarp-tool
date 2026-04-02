@@ -17,6 +17,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ROLE_IN_PROJECT } from "../../data/constants";
 import { PROJECT_STATUS } from "../../data/constants";
 import styles from "./styles.module.scss";
+import Container from "../../layouts/Container/Container";
 
 const CreateProject = () => {
   const navigate = useNavigate();
@@ -135,14 +136,14 @@ const CreateProject = () => {
 
   if (isLoadingData) {
     return (
-      <div className={styles.container}>
+      <Container>
         <p>Carregando dados do projeto...</p>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <Container>
       <div>
         <NavLink to="/projects" className={styles.header}>
           <MoveLeft />
@@ -315,7 +316,7 @@ const CreateProject = () => {
           </div>
         </div>
       </form>
-    </div>
+    </Container>
   );
 };
 

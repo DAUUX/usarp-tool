@@ -1,10 +1,11 @@
+import Container from "../../layouts/Container/Container";
 import styles from "./styles.module.scss";
 
 const ProjectDetails = () => {
   return (
-    <div className={styles.container}>
+    <Container>
       <header> v- Projetos</header>
-    </div>
+    </Container>
   );
 };
 
