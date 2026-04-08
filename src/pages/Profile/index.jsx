@@ -202,7 +202,7 @@ const Index = () => {
                 <option value="Feminino">Feminino</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Não binário">Não binário</option>
-                <option value="Prefiro não Informar">Prefiro não Informar</option>
+                <option value="Prefiro não informar">Prefiro não Informar</option>
               </select>
             ) : (
               <span className={styles.value}>{userData.gender}</span>
