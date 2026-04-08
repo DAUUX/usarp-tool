@@ -4,7 +4,7 @@ export const GENDER = [
   { value: "Feminino", label: "Feminino" },
   { value: "Masculino", label: "Masculino" },
   { value: "Não binário", label: "Não Binário" },
-  { value: "Prefiro não Informar", label: "Prefiro não informar" },
+  { value: "Prefiro não informar", label: "Prefiro não informar" },
 ];
 
 export const PROFILE = [
