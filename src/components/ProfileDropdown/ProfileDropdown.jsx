@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useAuth } from "../../hooks/useAuth";
 
 const ProfileDropdown = ({ avatarUrl }) => {
-  const { handleLogout } = useAuth();
+  const { user, handleLogout } = useAuth();
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,7 +40,7 @@ const ProfileDropdown = ({ avatarUrl }) => {
       mt: 1.5,
       borderRadius: "8px",
       border: "1px solid rgba(0,0,0,0.15)",
-      boxShadow: "0px 4px 12px rgba(0,0,0,0.15)",
+      boxShadow: "10px 10px 12px rgba(0,0,0,0.15)",
       "& .MuiAvatar-root": {
         width: 32,
         height: 32,
@@ -72,7 +72,16 @@ const ProfileDropdown = ({ avatarUrl }) => {
         aria-expanded={open ? "true" : undefined}
         sx={{ display: "flex", alignItems: "center", gap: "4px" }}
       >
-        <Avatar alt="User Avatar" src={avatarUrl} />
+        <Avatar
+          alt="User Avatar"
+          src={avatarUrl}
+          sx={{
+            bgcolor: "var(--th-bigbutton-background)",
+            color: "var(--th-bigbutton-text)",
+          }}
+        >
+          {user.avatar ? user.avatar : user.fullName?.substring(0, 2).toUpperCase()}
+        </Avatar>
         {open ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
       </IconButton>
 
