@@ -17,6 +17,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ROLE_IN_PROJECT } from "../../data/constants";
 import { PROJECT_STATUS } from "../../data/constants";
 import styles from "./styles.module.scss";
+import Container from "../../layouts/Container/Container";
 
 const CreateProject = () => {
   const navigate = useNavigate();
@@ -135,14 +136,14 @@ const CreateProject = () => {
 
   if (isLoadingData) {
     return (
-      <div className={styles.container}>
+      <Container>
         <p>Carregando dados do projeto...</p>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <Container>
       <div>
         <NavLink to="/projects" className={styles.header}>
           <MoveLeft />
@@ -220,12 +221,7 @@ const CreateProject = () => {
 
         <fieldset>
           <legend>
-            Equipe do projeto{" "}
-            {isEditMode && (
-              <span style={{ fontSize: "0.8rem", color: "#666", fontWeight: "400" }}>
-                (Gerenciamento de equipe indisponível na edição rápida)
-              </span>
-            )}
+            Equipe do projeto
           </legend>
 
           {fields.map((field, index) => (
@@ -238,7 +234,7 @@ const CreateProject = () => {
                     <Input
                       {...inputField}
                       label="E-mail do membro"
-                      disabled={isEditMode}
+                      disabled={!isEditMode}
                       type="email"
                       placeholder="exemplo@email.com"
                       error={!!errors.projectTeam?.[index]?.email}
@@ -257,7 +253,7 @@ const CreateProject = () => {
                     <Select
                       {...inputField}
                       label="Papel dentro do projeto"
-                      disabled={isEditMode}
+                      disabled={!isEditMode}
                       error={!!errors.projectTeam?.[index]?.roleInProject}
                       helperText={errors.projectTeam?.[index]?.roleInProject?.message}
                       options={ROLE_IN_PROJECT}
@@ -315,7 +311,7 @@ const CreateProject = () => {
           </div>
         </div>
       </form>
-    </div>
+    </Container>
   );
 };
 

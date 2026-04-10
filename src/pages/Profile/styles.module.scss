@@ -1,152 +1,86 @@
-.Profile {
-  header {
-    display: grid;
-    justify-content: start;
-    grid-template-columns: 96px 2fr auto;
-    align-items: center;
-    img {
-      border-radius: 100%;
-    }
-    p {
-      color: var(--th-color-text-profile-user-name);
-      font-size: 20px;
-      font-weight: 600;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    .inputAvatar {
-      padding: 16px 24px;
-      border-radius: 16px;
-      border: var(--th-border-secondary-button);
-      background-color: transparent;
-      color: var(--th-color-secondary-button);
-      font-size: 16px;
-      cursor: pointer;
-      &:hover {
-        background-color: var(--th-color-secondary-button-hover);
-      }
-      &:focus {
-        outline: 2px solid var(--th-color-button-focus);
-      }
-    }
-  }
+.profileContainer {
+  max-width: 900px;
 
-  hr {
-    margin: 32px 0;
-    border: var(--th-border-divider-profile);
-  }
-
-  .Profile__EditForm {
+  .header {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
 
-    div {
-      width: 262px;
-      padding-bottom: 24px;
+    .userInfo {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      min-width: 0;
 
-      fieldset {
-        label {
-          margin: 0;
-          line-height: 1;
-        }
-        select {
-          height: 56px;
-          &:focus-within {
-            outline: 0.89px solid var(--th-color-input-focus);
-            border: none;
-            color: var(--th-color-text-input);
-          }
-        }
-      }
-
-      label {
-        display: block;
-        font-size: 12.39px;
-        color: var(--th-color-text-profile-label-edit);
-        padding-bottom: 7px;
-      }
-
-      input {
-        width: 100%;
-        height: 56px;
-        margin: 0;
-        background: transparent;
-        border-radius: 1rem;
-        border: 0.89px solid var(--th-color-text-input);
-        padding: 1rem;
-        font-size: 0.875rem;
-        color: var(--th-color-text-input);
-        &[type="date"] {
-          height: 56px;
-        }
-        &:invalid {
-          outline: 0.89px solid var(--th-color-focus-error);
-          color: var(--th-color-focus-error);
-          border-color: transparent;
-        }
-        &:focus-within {
-          outline: 0.89px solid var(--th-color-input-focus);
-          border: none;
-          color: var(--th-color-text-input);
-          svg {
-            color: var(--th-color-input-focus);
-          }
-        }
-      }
-
-      .card__error {
-        padding-left: 5px;
-        font-size: 0.875rem;
-        color: var(--th-color-text-error);
+      .userName {
+        color: var(--th-color-text-profile-user-name);
+        font-size: 1.3rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
-}
 
-.Profile__PrimaryButton {
-  padding: 16px 24px;
-  border: none;
-  border-radius: 16px;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--th-color-text-primary-button);
-  background-color: var(--th-color-primary-button);
-  margin-top: 8px;
-  font-size: 1rem;
-
-  &:hover {
-    background-color: var(--th-color-primary-button-hover);
-  }
-  &:focus {
-    outline: 2px solid var(--th-color-button-focus);
-  }
-  &:disabled {
+  .divider {
     border: none;
-    background-color: var(--th-color-button-disabled);
-    color: var(--th-color-text-button-disabled);
-    cursor: not-allowed;
+    border-top: var(--th-border-divider-profile);
   }
-}
 
-.Profile__SecondaryButton {
-  padding: 16px 24px;
-  border-radius: 16px;
-  border: var(--th-border-secondary-button);
-  background-color: transparent;
-  color: var(--th-color-secondary-button);
-  font-size: 1rem;
-  margin-top: 8px;
-  cursor: pointer;
-  &:hover {
-    background-color: var(--th-color-secondary-button-hover);
+  .infoGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
-  &:focus {
-    outline: 2px solid var(--th-color-button-focus);
-  }
-}
 
-.loading {
-  color: red;
+  .infoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+
+    .label {
+      color: var(--th-color-text-profile-label-view);
+      font-size: 1rem;
+    }
+
+    .value {
+      color: var(--th-color-text-profile-span-view);
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .input, .select {
+      width: 50%;
+      padding: 0.5rem;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-family: var(--th-font-inter);
+
+      &:focus {
+        border-color: var(--th-color-input-focus);
+        outline: none;
+      }
+    }
+
+    .inputError {
+      @extend .input;
+      border-color: var(--th-color-text-error);
+    }
+  }
+
+  .actionArea {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
 }

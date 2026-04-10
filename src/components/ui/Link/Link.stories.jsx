@@ -1,7 +1,7 @@
 import { MemoryRouter } from "react-router-dom";
 import Link from "./Link";
 
-export default {
+const meta = {
   title: "UI/Link",
   component: Link,
   tags: ["autodocs"],
@@ -57,60 +57,56 @@ export default {
   },
 };
 
-const Template = (args) => <Link {...args} />;
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  children: "Link padrão",
-  to: "/default",
-};
-Default.parameters = {
-  docs: {
-    description: {
-      story: "Link padrão com configurações básicas.",
+export const Default = {
+  args: {
+    children: "Link padrão",
+    to: "/default",
+  },
+  parameters: {
+    docs: {
+      description: { story: "Link padrão com configurações básicas." },
     },
   },
 };
 
-export const AlwaysUnderline = Template.bind({});
-AlwaysUnderline.args = {
-  children: "Link sempre sublinhado",
-  to: "/always",
-  underline: "always",
-  sx: { ...{ textDecoration: "underline" } },
-};
-AlwaysUnderline.parameters = {
-  docs: {
-    description: {
-      story: "Link que está sempre sublinhado.",
+export const AlwaysUnderline = {
+  args: {
+    children: "Link sempre sublinhado",
+    to: "/always",
+    underline: "always",
+    sx: { textDecoration: "underline" },
+  },
+  parameters: {
+    docs: {
+      description: { story: "Link que está sempre sublinhado." },
     },
   },
 };
 
-export const Bold = Template.bind({});
-Bold.args = {
-  children: "Link em negrito",
-  to: "/bold",
-  bold: true,
-};
-Bold.parameters = {
-  docs: {
-    description: {
-      story: "Link com texto em negrito.",
+export const Bold = {
+  args: {
+    children: "Link em negrito",
+    to: "/bold",
+    bold: true,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Link com texto em negrito." },
     },
   },
 };
 
-export const External = Template.bind({});
-External.args = {
-  children: "Link externo",
-  to: "https://example.com",
-  external: true,
-};
-External.parameters = {
-  docs: {
-    description: {
-      story: "Link externo que abre em nova aba.",
+export const External = {
+  args: {
+    children: "Link externo",
+    to: "https://example.com",
+    external: true,
+  },
+  parameters: {
+    docs: {
+      description: { story: "Link externo que abre em nova aba." },
     },
   },
 };

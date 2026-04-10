@@ -10,6 +10,7 @@ import Link from "../../components/ui/Link/Link";
 
 import styles from "./styles.module.scss";
 import { config } from "../../utils/config";
+import Container from "../../layouts/Container/Container";
 
 const Home = () => {
   const { user, handleLogout } = useAuth();
@@ -18,32 +19,32 @@ const Home = () => {
   const [recentBrainstorms, setRecentBrainstorms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const fetchRecentBrainstorms = async () => {
-  //     if (!user?.id) return;
+  useEffect(() => {
+    const fetchRecentBrainstorms = async () => {
+      if (!user?.id) return;
 
-  //     try {
-  //       const url = `${config.baseUrl}/brainstorming/getAllUserBrainstormingsGrid/${user.id}?page=1&limit=4`;
+      try {
+        const url = `${config.baseUrl}/brainstorming/getAllUserBrainstormingsGrid/${user.id}?page=1&limit=4`;
 
-  //       const response = await axios.get(url);
-  //       setRecentBrainstorms(response.data.brainstormings || []);
-  //     } catch (error) {
-  //       if (error.response) {
-  //         if (error.response.status === 404) {
-  //           setRecentBrainstorms([]);
-  //         } else if (error.response.status === 401) {
-  //           handleLogout();
-  //         } else {
-  //           console.error("Erro ao buscar brainstormings:", error);
-  //         }
-  //       }
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+        const response = await axios.get(url);
+        setRecentBrainstorms(response.data.brainstormings || []);
+      } catch (error) {
+        if (error.response) {
+          if (error.response.status === 404) {
+            setRecentBrainstorms([]);
+          } else if (error.response.status === 401) {
+            handleLogout();
+          } else {
+            console.error("Erro ao buscar brainstormings:", error);
+          }
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  //   fetchRecentBrainstorms();
-  // }, [user.id, handleLogout]);
+    fetchRecentBrainstorms();
+  }, [user.id, handleLogout]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -52,7 +53,7 @@ const Home = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <Container>
       <header className={styles.header}>
         <h1>
           Bem vindo(a), <span>{user.fullName}</span>
@@ -68,6 +69,7 @@ const Home = () => {
           variant="primary"
           onClick={() => navigate("/registerProject")}
         />
+
         <ActionCard
           label="Novo Brainstorm"
           image={images.lightBulb}
@@ -107,7 +109,7 @@ const Home = () => {
           )}
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

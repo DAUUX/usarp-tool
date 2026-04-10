@@ -1,17 +1,16 @@
 import { MemoryRouter } from "react-router-dom";
 import Navbar from "./index";
-
 import { AuthContext } from "../../hooks/useAuth";
 
 const defaultAvatar = "https://i.pravatar.cc/150?img=12";
 
 const mockAuthContextValue = {
-  handleLogout: () => console.log("Logout acionado via Navbar -> Dropdown"),
+  handleLogout: () => console.log("Logout acionado via Navbar"),
   isAuthenticated: true,
   user: { name: "Usuário da Navbar", email: "teste@usarp.com" },
 };
 
-export default {
+const meta = {
   title: "Layouts/Navbar",
   component: Navbar,
   tags: ["autodocs"],
@@ -46,6 +45,8 @@ export default {
     ),
   ],
 };
+
+export default meta;
 
 export const Default = {
   args: {
