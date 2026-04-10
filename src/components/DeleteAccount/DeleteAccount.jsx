@@ -5,6 +5,7 @@ import axios from "axios";
 import useModal from "../../hooks/useModal";
 import Modal from "../../layouts/Modal/Modal";
 import { config } from "../../utils/config";
+import { useAuth } from "../../hooks/useAuth.jsx";
 
 import styles from "./styles.module.scss";
 
@@ -12,6 +13,7 @@ const DeleteAccount = ({ onCancel }) => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const { modalProps, openModal, closeModal } = useModal();
+  const { handleLogout } = useAuth();
 
   const handleConfirmDelete = () => {
     if (!password) {
@@ -21,6 +23,7 @@ const DeleteAccount = ({ onCancel }) => {
         text: "Por favor, informe a sua senha para confirmar a exclusão.",
         buttonText: "Entendi",
       });
+
       return;
     }
 
@@ -36,7 +39,10 @@ const DeleteAccount = ({ onCancel }) => {
           autoCloseDuration: 3000,
         });
 
-        setTimeout(() => navigate("/login"), 3000);
+        setTimeout(() => {
+          handleLogout();
+          navigate("/login");
+        }, 3000);
       })
       .catch((err) => {
         const status = err.response?.status;
