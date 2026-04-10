@@ -234,7 +234,6 @@ const CreateProject = () => {
                     <Input
                       {...inputField}
                       label="E-mail do membro"
-                      disabled={!isEditMode}
                       type="email"
                       placeholder="exemplo@email.com"
                       error={!!errors.projectTeam?.[index]?.email}
@@ -253,7 +252,6 @@ const CreateProject = () => {
                     <Select
                       {...inputField}
                       label="Papel dentro do projeto"
-                      disabled={!isEditMode}
                       error={!!errors.projectTeam?.[index]?.roleInProject}
                       helperText={errors.projectTeam?.[index]?.roleInProject?.message}
                       options={ROLE_IN_PROJECT}
