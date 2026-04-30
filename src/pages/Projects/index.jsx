@@ -60,7 +60,6 @@ const Projects = () => {
       setProjects(normalizedProjects);
     } catch (error) {
       console.error("Erro ao buscar projetos:", error);
-      // Aqui você pode adicionar um toast/notificação de erro
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +73,6 @@ const Projects = () => {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, token]);
 
   const handleToggleFavorite = (id) => {

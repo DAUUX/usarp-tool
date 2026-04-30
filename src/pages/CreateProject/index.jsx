@@ -10,12 +10,12 @@ import * as Yup from "yup";
 import Input from "../../components/ui/Input/Input";
 import Select from "../../components/ui/Select/Select";
 import Button from "../../components/ui/Button/Button";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 
 import { config } from "../../utils/config";
 import { useAuth } from "../../hooks/useAuth";
 
-import { ROLE_IN_PROJECT } from "../../data/constants";
-import { PROJECT_STATUS } from "../../data/constants";
+import { ROLE_IN_PROJECT, PROJECT_STATUS } from "../../data/constants";
 import styles from "./styles.module.scss";
 import Container from "../../layouts/Container/Container";
 
@@ -28,6 +28,9 @@ const CreateProject = () => {
 
   const [apiError, setApiError] = useState("");
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const schema = useMemo(
     () =>
@@ -39,8 +42,12 @@ const CreateProject = () => {
           : Yup.string().optional(),
         projectTeam: Yup.array().of(
           Yup.object().shape({
-            email: Yup.string().email("Digite um Email Valido").required("Email é Obrigatório"),
-            roleInProject: Yup.string().required("O Nivel de Acesso é Obrigatório"),
+            email: Yup.string()
+              .email("Digite um Email Valido")
+              .required("Email é Obrigatório"),
+            roleInProject: Yup.string().required(
+              "O Nivel de Acesso é Obrigatório"
+            ),
           })
         ),
       }),
@@ -54,7 +61,7 @@ const CreateProject = () => {
       projectName: "",
       description: "",
       status: "",
-      projectTeam: [{ email: "", roleInProject: "" }],
+      projectTeam: [{ email: "", roleInProject: "", memberId: null }],
     },
   });
 
@@ -80,25 +87,29 @@ const CreateProject = () => {
         );
 
         const project = (response.data.projects || []).find(
-          (p) => p.id === id
+          (p) => String(p.id) === String(id)
         );
 
         if (!project) {
-          setApiError("Projeto não encontrado ou você não tem permissão.");
+          setApiError("Projeto não encontrado.");
           return;
         }
 
         reset({
-          projectName: project.projectName || "",
-          description: project.description || "",
-          status: project.status || "",
+          projectName: project.projectName,
+          description: project.description,
+          status: project.status,
           projectTeam: project.projectTeam?.length
-            ? project.projectTeam
-            : [{ email: "", roleInProject: "" }],
+            ? project.projectTeam.map((m) => ({
+                email: m.email,
+                roleInProject: m.roleInProject,
+                memberId: m.memberId,
+              }))
+            : [{ email: "", roleInProject: "", memberId: null }],
         });
       } catch (error) {
-        console.error("Erro ao buscar dados do projeto", error);
-        setApiError("Erro ao carregar dados do projeto.");
+        console.error(error);
+        setApiError("Erro ao carregar dados.");
       } finally {
         setIsLoadingData(false);
       }
@@ -107,40 +118,84 @@ const CreateProject = () => {
     fetchProjectData();
   }, [isEditMode, id, token, reset]);
 
+  const updateRole = async (memberId, role) => {
+    if (!memberId) return;
+
+    try {
+      await axios.put(
+        `${config.baseUrl}/project/${id}/members/${memberId}`,
+        { roleInProject: role },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    } catch {
+      alert("Erro ao atualizar papel");
+    }
+  };
+
   const handleSubmitForm = async (data) => {
     setApiError("");
 
     try {
       if (isEditMode) {
-        const updatePayload = {
-          projectName: data.projectName,
-          description: data.description,
-          status: data.status,
-        };
+        await axios.put(
+          `${config.baseUrl}/project/${id}`,
+          {
+            projectName: data.projectName,
+            description: data.description,
+            status: data.status,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-        await axios.put(`${config.baseUrl}/project/${id}`, updatePayload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        for (const member of data.projectTeam) {
+          if (!member.memberId && member.email) {
+            await axios.post(
+              `${config.baseUrl}/project/${id}/addMember`,
+              { memberEmail: member.email, 
+                role: "Participante"
+
+              },
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+          }
+        }
       } else {
-        const { status, ...createPayload } = data;
+        const { status, ...payload } = data;
 
-        await axios.post(`${config.baseUrl}/project/create`, createPayload, {
+        await axios.post(`${config.baseUrl}/project/create`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        window.dispatchEvent(new Event("project-created"));
       }
 
-      reset();
-      navigate("/projects");
+      setShowSuccess(true);
     } catch (error) {
-      console.error("Erro ao salvar projeto:", error);
+      console.log("STATUS:", error.response?.status);
+      console.log("DATA:", error.response?.data);
+      console.log("ERRO COMPLETO:", error);
+      console.log(error.response?.data);
+      setApiError(error.response?.data?.message || "Erro ao salvar projeto");
+    }
+  };
 
-      setApiError(
-        error.response?.data?.message ||
-          error.response?.data?.errors?.join(", ") ||
-          "Erro de conexão"
+  const handleDeleteMember = async () => {
+    if (!memberToDelete?.memberId) return;
+
+    try {
+      await axios.delete(
+        `${config.baseUrl}/project/${id}/removeMember/${memberToDelete.memberId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
+
+      setMemberToDelete(null);
+      window.location.reload();
+    } catch {
+      alert("Erro ao remover membro");
     }
   };
 
@@ -154,19 +209,29 @@ const CreateProject = () => {
 
   return (
     <Container>
+      {/* HEADER */}
       <div>
-        <NavLink to="/projects" className={styles.header}>
+        <NavLink
+          to="#"
+          className={styles.header}
+          onClick={(e) => {
+            e.preventDefault();
+            setShowExitModal(true);
+          }}
+        >
           <MoveLeft />
           <h2>{isEditMode ? "Editar Projeto" : "Novo Projeto"}</h2>
         </NavLink>
       </div>
 
+      {/* ERROR */}
       {apiError && (
         <div className={styles.errorBox}>
           {apiError}
         </div>
       )}
 
+      {/* FORM */}
       <form onSubmit={handleSubmit(handleSubmitForm)} noValidate>
         <fieldset>
           <legend>Dados Gerais</legend>
@@ -184,7 +249,7 @@ const CreateProject = () => {
               name="description"
               control={control}
               render={({ field }) => (
-                <Input {...field} label="Descrição do Projeto (Opcional)" />
+                <Input {...field} label="Descrição (Opcional)" />
               )}
             />
 
@@ -195,7 +260,7 @@ const CreateProject = () => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    label="Status do Projeto"
+                    label="Status"
                     options={PROJECT_STATUS}
                   />
                 )}
@@ -207,13 +272,17 @@ const CreateProject = () => {
         <fieldset>
           <legend>Equipe do projeto</legend>
 
-          {fields.map((field, index) => (
-            <div key={field.id} className={styles.members}>
+          {fields.map((member, index) => (
+            <div key={member.id} className={styles.members}>
               <Controller
                 name={`projectTeam.${index}.email`}
                 control={control}
                 render={({ field }) => (
-                  <Input {...field} label="E-mail do membro" />
+                  <Input
+                    {...field}
+                    label="Email"
+                    disabled={isEditMode && !!member.memberId}
+                  />
                 )}
               />
 
@@ -221,35 +290,108 @@ const CreateProject = () => {
                 name={`projectTeam.${index}.roleInProject`}
                 control={control}
                 render={({ field }) => (
-                  <Select {...field} options={ROLE_IN_PROJECT} />
+                  <Select
+                    {...field}
+                    label="Papel"
+                    options={ROLE_IN_PROJECT}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      if (member.memberId) {
+                        updateRole(member.memberId, e.target.value);
+                      }
+                    }}
+                  />
                 )}
               />
 
-              {!isEditMode && (
-                <button
-                  type="button"
-                  onClick={() => remove(index)}
-                >
-                  <Trash2 />
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  if (isEditMode) {
+                    setMemberToDelete(member);
+                  } else {
+                    remove(index);
+                  }
+                }}
+              >
+                <Trash2 />
+              </button>
             </div>
           ))}
         </fieldset>
 
-        <Button
-          type="button"
-          onClick={() =>
-            append({ email: "", roleInProject: "" })
-          }
-        >
-          <Plus /> Novo Membro
-        </Button>
+        {/* BUTTONS */}
+        <div className={styles.buttonGroup}>
+          <Button
+            type="button"
+            onClick={() =>
+              append({ email: "", roleInProject: "", memberId: null })
+            }
+          >
+            <Plus /> Novo Membro
+          </Button>
 
-        <Button type="submit" disabled={!isValid || isSubmitting}>
-          {isSubmitting ? "Salvando..." : isEditMode ? "Atualizar" : "Cadastrar"}
-        </Button>
+          <div className={styles.actions}>
+            <Button
+              type="reset"
+              variant="outlined"
+              onClick={() => {
+                reset();
+                navigate("/projects");
+              }}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              {isSubmitting
+                ? "Salvando..."
+                : isEditMode
+                ? "Atualizar"
+                : "Cadastrar"}
+            </Button>
+          </div>
+        </div>
       </form>
+
+      {/* MODAIS */}
+      {showExitModal && (
+        <ConfirmModal
+          type="warning"
+          title="Atenção!"
+          message="Deseja sair sem salvar?"
+          confirmText="Continuar aqui"
+          cancelText="Sair"
+          onConfirm={() => setShowExitModal(false)}
+          onCancel={() => navigate("/projects")}
+        />
+      )}
+
+      {memberToDelete && (
+        <ConfirmModal
+          type="warning"
+          title="Remover membro?"
+          message="Ele perderá acesso ao projeto."
+          confirmText="Excluir"
+          cancelText="Cancelar"
+          onConfirm={handleDeleteMember}
+          onCancel={() => setMemberToDelete(null)}
+        />
+      )}
+
+      {showSuccess && (
+        <ConfirmModal
+          type="success"
+          title="Sucesso!"
+          message="Projeto salvo com sucesso!"
+          confirmText="OK"
+          onConfirm={() => {
+            setShowSuccess(false);
+            navigate("/projects");
+          }}
+        />
+      )}
     </Container>
   );
 };
